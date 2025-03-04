@@ -1,0 +1,102 @@
+// Breakpoints
+$screen-sm: 577px;
+$screen-md: 769px;
+$screen-lg: 993px;
+
+// Media Query Mixin
+@mixin respond-to($breakpoint) {
+  @if $breakpoint == sm {
+    @media (max-width: #{$screen-sm}) { @content; }
+  } @else if $breakpoint == md {
+    @media (max-width: #{$screen-md}) { @content; }
+  } @else if $breakpoint == lg {
+    @media (max-width: #{$screen-lg}) { @content; }
+  }
+}
+
+.nav-bar{
+  justify-content: space-between;
+  align-items: center;
+  gap: var(--padding-8);
+  padding: var(--padding-3) var(--padding-8);
+  background-color: var(--color-nav-bar);
+  position: sticky;
+  top: 0;
+  left: 0;
+  z-index: var(--z-10);
+
+  .logo-wrapper{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    max-width: 220px;
+    min-width: 200px;
+    background-image: url(../../../../../public/assets/images/logo/top-w.webp);
+    background-size: cover;
+    background-position: center center;
+    background-repeat: no-repeat;
+    height: 60px;
+    cursor: pointer;
+
+    @media screen and (max-width: 360px) {
+      min-width: 140px;
+    }
+  }
+
+  .btn-o-1{
+    background-color: var(--color-nav-bar);
+
+    &:hover{
+      background-color: var(--color-white);
+      color: var(--color-nav-bar);
+    }
+  }
+
+  .btn-f-1{
+    color: var(--color-nav-bar);
+
+    &:hover{
+      background-color: var(--color-nav-bar);
+      color: var(--color-white);
+    }
+  }
+
+  .s-bar{
+    width: 100%;
+    min-height: 50px;
+    border-radius: 50px;
+    border: 1px solid var(--color-white);
+    background-color: var(--color-white);
+    padding: 0 16px;
+    position: relative;
+
+    input{
+      width: 100%;
+      outline: none;
+      border: none;
+      color: var(--color-black);
+      background-color: transparent;
+      &:focus{
+        outline: none;
+      }
+    }
+
+    i{
+      color: var(--color-text-500);
+      margin-right: 5px;
+    }
+
+    @include respond-to(lg) {
+      min-height: 40px;
+    }
+
+    @include respond-to(md) {
+      min-height: 35px;
+    }
+
+    @include respond-to(sm) {
+      min-height: 30px;
+    }
+  }
+}
