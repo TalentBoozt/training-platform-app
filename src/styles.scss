@@ -1,1 +1,427 @@
-/* You can add global styles to this file, and also import other style files */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+
+.theme-light {
+  --color-primary-100: #AF7AC5;
+
+  --color-secondary-100: #6B4F9C;
+
+  --color-surface-100: #EAEEF2;
+  --color-surface-200: #F5F7F9;
+  --color-surface-300: #FFFFFF;
+
+  --color-surface-mixed-100: #B7B7B7;
+
+  --color-text-100: #000000;
+  --color-text-200: #3D3D3D;
+  --color-text-300: #3C3C3C;
+  --color-text-400: #606060;
+  --color-text-500: #7D7D7D;
+  --color-text-600: #53616D;
+  --color-text-700: #C8C8C8;
+  --color-text-800: #F2F2F2;
+
+  --color-danger-100: #9E0000;
+  --color-danger-200: #970000;
+
+  --color-highlight-100: #CEB700;
+
+  --color-white: #fff;
+  --color-black: #000;
+
+  --color-nav-bar: #AF7AC5;
+}
+
+.theme-dark {
+  --color-primary-100: #D0A8E5;
+
+  --color-secondary-100: #8A70B8;
+
+  --color-surface-100: #1E1E1E;
+  --color-surface-200: #292929;
+  --color-surface-300: #000000;
+
+  --color-surface-mixed-100: #0B0B0B;
+
+  --color-text-100: #FFFFFF;
+  --color-text-200: #E0E0E0;
+  --color-text-300: #CCCCCC;
+  --color-text-400: #B0B0B0;
+  --color-text-500: #999999;
+  --color-text-600: #7A7A7A;
+  --color-text-700: #606060;
+  --color-text-800: #3D3D3D;
+
+  --color-danger-100: #FF6B6B;
+  --color-danger-200: #E63946;
+
+  --color-highlight-100: #FFD700;
+
+  --color-white: #FFFFFF;
+  --color-black: #000000;
+
+  --color-nav-bar: #AF7AC5;
+}
+
+.common-styles{
+  //font sizes
+  --fs-10: 10px;
+  --fs-12: 12px;
+  --fs-14: 14px;
+  --fs-16: 16px;
+  --fs-18: 18px;
+  --fs-20: 20px;
+  --fs-22: 22px;
+  --fs-24: 24px;
+  --fs-26: 26px;
+  --fs-28: 28px;
+  --fs-30: 30px;
+  --fs-32: 32px;
+  --fs-34: 34px;
+  --fs-36: 36px;
+  --fs-38: 38px;
+  --fs-40: 40px;
+  --fs-42: 42px;
+  --fs-44: 44px;
+  --fs-46: 46px;
+  --fs-48: 48px;
+  --fs-50: 50px;
+  --fs-52: 52px;
+  --fs-54: 54px;
+  --fs-56: 56px;
+  --fs-58: 58px;
+  --fs-60: 60px;
+
+  //font weights
+  --fw-100: 100;
+  --fw-200: 200;
+  --fw-300: 300;
+  --fw-400: 400;
+  --fw-500: 500;
+  --fw-600: 600;
+  --fw-700: 700;
+  --fw-800: 800;
+  --fw-900: 900;
+
+  //line heights
+  --lh-10: 10px;
+  --lh-12: 12px;
+  --lh-14: 14px;
+  --lh-16: 16px;
+  --lh-18: 18px;
+  --lh-20: 20px;
+  --lh-22: 22px;
+  --lh-24: 24px;
+  --lh-26: 26px;
+  --lh-28: 28px;
+  --lh-30: 30px;
+  --lh-32: 32px;
+
+  //letter spacing
+  --ls-1: 1px;
+  --ls-2: 2px;
+  --ls-3: 3px;
+  --ls-4: 4px;
+  --ls-5: 5px;
+  --ls-6: 6px;
+  --ls-7: 7px;
+  --ls-8: 8px;
+  --ls-9: 9px;
+  --ls-10: 10px;
+
+  //z-index
+  --z-1: 1;
+  --z-2: 2;
+  --z-3: 3;
+  --z-4: 4;
+  --z-5: 5;
+  --z-6: 6;
+  --z-7: 7;
+  --z-8: 8;
+  --z-9: 9;
+  --z-10: 10;
+
+  //transition
+  --transition-1: 0.3s ease;
+  --transition-2: 0.6s ease;
+  --transition-3: 0.9s ease;
+  --transition-4: 1.2s ease;
+
+  //border radius
+  --br-2: 2px;
+  --br-5: 5px;
+  --br-10: 10px;
+  --br-15: 15px;
+  --br-20: 20px;
+  --br-full: 50%;
+
+  //box shadow
+  --box-shadow-1: 0px 2px 4px rgba(0, 0, 0, 0.25);
+  --box-shadow-2: 0px 4px 8px rgba(0, 0, 0, 0.25);
+  --box-shadow-3: 0px 8px 16px rgba(0, 0, 0, 0.25);
+  --box-shadow-4: 0px 12px 24px rgba(0, 0, 0, 0.25);
+  --box-shadow-5: 0px 16px 32px rgba(0, 0, 0, 0.25);
+  --box-shadow-6: 0px 20px 40px rgba(0, 0, 0, 0.25);
+  --box-shadow-7: 0px 0px 4px rgba(0, 0, 0, 0.25);
+
+  // padding
+  --padding-0: 0px;
+  --padding-0-2: 2px;
+  --padding-0-3: 3px;
+  --padding-1: 5px;
+  --padding-2: 10px;
+  --padding-3: 15px;
+  --padding-4: 20px;
+  --padding-5: 25px;
+  --padding-6: 30px;
+  --padding-7: 35px;
+  --padding-8: 40px;
+  --padding-9: 45px;
+  --padding-10: 50px;
+
+  // margin
+  --margin-1: 5px;
+  --margin-2: 10px;
+  --margin-3: 15px;
+  --margin-4: 20px;
+  --margin-5: 25px;
+  --margin-6: 30px;
+  --margin-7: 35px;
+  --margin-8: 40px;
+  --margin-9: 45px;
+  --margin-10: 50px;
+}
+
+html, body { height: 100%; }
+body { margin: 0; font-family: "Poppins", sans-serif; }
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+// Breakpoints
+$screen-sm: 577px;
+$screen-md: 769px;
+$screen-lg: 993px;
+$screen-xl: 1201px;
+$screen-xxl: 1401px;
+
+// Media Query Mixin
+@mixin respond-to($breakpoint) {
+  @if $breakpoint == sm {
+    @media (max-width: #{$screen-sm}) { @content; }
+  } @else if $breakpoint == md {
+    @media (max-width: #{$screen-md}) { @content; }
+  } @else if $breakpoint == lg {
+    @media (max-width: #{$screen-lg}) { @content; }
+  } @else if $breakpoint == xl {
+    @media (max-width: #{$screen-xl}) { @content; }
+  } @else if $breakpoint == xxl {
+    @media (max-width: #{$screen-xxl}) { @content; }
+  }
+}
+
+// buttons
+.btn-fill, .btn-outline{
+  white-space: nowrap;
+  font-size: var(--fs-16);
+  font-weight: var(--fw-500);
+  padding: var(--padding-2) var(--padding-7);
+
+  @include respond-to(xl) {
+    padding: var(--padding-2) var(--padding-4);
+    font-size: var(--fs-16);
+    font-weight: var(--fw-500);
+  }
+
+  @include respond-to(lg) {
+    padding: var(--padding-1) var(--padding-3);
+    font-size: var(--fs-14);
+    font-weight: var(--fw-500);
+  }
+
+  @include respond-to(md) {
+    padding: var(--padding-0-3) var(--padding-2);
+    font-size: var(--fs-14);
+    font-weight: var(--fw-400);
+  }
+
+  @include respond-to(sm) {
+    padding: var(--padding-0-2) var(--padding-1);
+    font-size: var(--fs-14);
+    font-weight: var(--fw-400);
+  }
+}
+.btn-outline{
+  width: fit-content;
+  cursor: pointer;
+  outline: none;
+  border-radius: var(--br-5);
+  transition: all var(--transition-1);
+}
+.btn-o-1{
+  border: 2px solid var(--color-white);
+  color: var(--color-white);
+  background-color: var(--color-primary-100);
+
+  &:hover{
+    background-color: var(--color-white);
+    color: var(--color-primary-100);
+  }
+}
+.btn-o-2{
+  border: 2px solid var(--color-primary-100);
+  color: var(--color-text-100);
+  background-color: transparent;
+
+  &:hover{
+    background-color: var(--color-primary-100);
+    color: var(--color-white);
+  }
+}
+.btn-o-3{
+  border: 2px solid var(--color-text-500);
+  color: var(--color-text-500);
+  background-color: transparent;
+
+  &:hover{
+    color: var(--color-text-300);
+  }
+}
+
+.btn-fill{
+  width: fit-content;
+  cursor: pointer;
+  border: 2px solid transparent;
+  outline: none;
+  border-radius: var(--br-5);
+  transition: all var(--transition-1);
+}
+.btn-f-1{
+  color: var(--color-primary-100);
+  background-color: var(--color-white);
+
+  &:hover{
+    background-color: var(--color-primary-100);
+    border: 2px solid var(--color-white);
+    color: var(--color-white);
+  }
+}
+.btn-f-2{
+  color: var(--color-white);
+  background-color: var(--color-secondary-100);
+
+  &:hover{
+    background-color: var(--color-white);
+    border: 2px solid var(--color-secondary-100);
+    color: var(--color-secondary-100);
+  }
+}
+
+// texts
+.title-1{
+  font-size: var(--fs-50);
+  font-weight: var(--fw-700);
+  text-align: center;
+  line-height: 1.2;
+  color: var(--color-text-100);
+}
+
+.title-2{
+  font-size: var(--fs-32);
+  font-weight: var(--fw-600);
+  line-height: var(--lh-32);
+  color: var(--color-text-100);
+
+  @include respond-to(xl) {
+    font-size: var(--fs-28);
+  }
+
+  @include respond-to(lg) {
+    font-size: var(--fs-24);
+  }
+
+  @include respond-to(md) {
+    font-size: var(--fs-20);
+  }
+}
+
+.paragraph-1{
+  font-size: var(--fs-18);
+  font-weight: var(--fw-400);
+  text-align: left;
+  line-height: 1.2;
+  color: var(--color-text-100);
+
+  .bold{
+    font-weight: var(--fw-500);
+  }
+
+  @include respond-to(md) {
+    font-size: var(--fs-16);
+  }
+
+  @include respond-to(sm) {
+    font-size: var(--fs-14);
+  }
+}
+
+// selects
+.form-select{
+  font-size: var(--fs-16);
+  font-weight: var(--fw-400);
+  color: var(--color-text-100);
+  width: fit-content;
+
+  @include respond-to(xl) {
+    font-size: var(--fs-16);
+  }
+
+  @include respond-to(lg) {
+    font-size: var(--fs-14);
+  }
+
+  option{
+    font-size: var(--fs-14);
+    background-color: var(--color-surface-200);
+
+    @include respond-to(xl) {
+      font-size: var(--fs-12);
+    }
+
+    @include respond-to(lg) {
+      font-size: var(--fs-10);
+    }
+  }
+
+  &:active, &:focus{
+    border-color: var(--color-text-500);
+    outline: none;
+    box-shadow: none;
+  }
+}
+
+// Other
+.result-not-found{
+  width: 100%;
+  min-height: 20vh;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: var(--padding-2);
+
+  p{
+    margin: 0;
+    color: var(--color-text-100);
+  }
+
+  .img-wrapper{
+    width: max(100px, 8vw);
+
+    img{
+      width: 100%;
+    }
+  }
+}

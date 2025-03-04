@@ -1,0 +1,42 @@
+<div class="toolbar">
+  <button (click)="applyStyle('bold')" [class.active]="isActive('bold')" title="Bold">
+    <b>B</b>
+  </button>
+  <button (click)="applyStyle('italic')" [class.active]="isActive('italic')" title="Italic">
+    <i>I</i>
+  </button>
+  <button (click)="applyStyle('underline')" [class.active]="isActive('underline')" title="Underline">
+    <u>U</u>
+  </button>
+
+  <button (click)="insertList(false)" title="Bullet List">• List</button>
+  <button (click)="insertList(true)" title="Numbered List">1. List</button>
+
+  <button (click)="applyAlignment('left')" [class.active]="isActive('alignLeft')" title="Align Left">
+    ⬅
+  </button>
+  <button (click)="applyAlignment('center')" [class.active]="isActive('alignCenter')" title="Align Center">
+    ⬆
+  </button>
+  <button (click)="applyAlignment('right')" [class.active]="isActive('alignRight')" title="Align Right">
+    ➡
+  </button>
+
+  <select (change)="applyFontSize($event)" title="Font Size">
+    <option value="12px">12</option>
+    <option value="14px">14</option>
+    <option value="16px" selected>16</option>
+    <option value="18px">18</option>
+    <option value="20px">20</option>
+  </select>
+
+  <input type="color" (change)="applyColor($event)" title="Text Color" />
+
+  <button (click)="insertLink()" title="Insert Link">🔗</button>
+
+  <button (click)="undo()" title="Undo">↩</button>
+  <button (click)="redo()" title="Redo">↪</button>
+</div>
+
+<div #editor contenteditable="true" class="editor" (keyup)="updateActiveStyles()" (mouseup)="updateActiveStyles()">
+</div>
