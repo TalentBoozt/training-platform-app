@@ -425,3 +425,129 @@ $screen-xxl: 1401px;
     }
   }
 }
+
+.form-card-1{
+  width: 100%;
+  max-width: 600px;
+  margin: max(30px, 5vw) auto;
+  padding: 30px;
+  border-radius: 8px;
+  background-color: var(--color-surface-200);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 20px;
+
+  .form-wrapper{
+    row-gap: 20px;
+
+    label{
+      color: var(--color-text-300);
+    }
+
+    input, select, textarea{
+      border: 1px solid var(--color-text-500);
+      padding: 8px 15px;
+      border-radius: 5px;
+      width: 100%;
+      background-color: var(--color-surface-200);
+      color: var(--color-text-100);
+      font-size: var(--fs-14);
+
+      &::placeholder{
+        color: var(--color-text-300);
+      }
+
+      &:active, &:focus{
+        border-color: var(--color-text-500);
+        outline: none;
+        box-shadow: none;
+      }
+    }
+
+    select{
+      option{
+        color: var(--color-text-100);
+        background-color: var(--color-surface-200);
+        border: none;
+        outline: none;
+        padding: 0 5px;
+        cursor: pointer;
+      }
+    }
+
+    input[type=file]::file-selector-button {
+      background-color: var(--color-primary-100);
+      color: var(--color-white);
+      transition: all var(--transition-1);
+
+      &:hover{
+        background-color: var(--color-primary-100);
+      }
+    }
+
+    .input-group{
+      .input-group-text{
+        background-color: var(--color-surface-200);
+        border: 1px solid var(--color-text-500);
+      }
+
+      input{
+        border-left: none;
+      }
+
+      .btn.btn-outline-secondary{
+        outline: none!important;
+        border: 1px solid var(--color-text-500)!important;
+      }
+    }
+  }
+
+  h5{
+    width: 100%;
+    text-align: left;
+  }
+
+  .notification-text{
+    margin: 0;
+  }
+  .form-check-input{
+    border: 1px solid var(--color-text-500);
+    //width: auto!important;
+  }
+  .form-check-input:checked{
+    background-color: var(--color-primary-100);
+    border-color: var(--color-primary-100);
+  }
+  .form-check-label{
+    color: var(--color-text-100);
+  }
+  .form-check{
+    gap: 5px;
+  }
+
+  .form-radio-input{
+    width: 12px;
+    height: 12px;
+    border: 1px solid var(--color-text-500);
+  }
+  .form-radio-input:checked{
+    background-color: var(--color-primary-100);
+    border-color: var(--color-primary-100);
+  }
+  .form-radio-label{
+    color: var(--color-text-100);
+  }
+  .form-radio{
+    gap: 5px;
+  }
+
+  hr{
+    width: 100%;
+    border: none;
+    height: 1px;
+    background-color: var(--color-text-400);
+    margin: 0;
+  }
+}
