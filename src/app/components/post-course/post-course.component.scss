@@ -130,7 +130,15 @@
   }
 
   @media screen and (max-width: 992px) {
-    top: -40px;
+    top: 10px;
+  }
+}
+
+.cmp-wrapper{
+  width: 100%;
+
+  @media screen and (max-width: 992px) {
+    padding-top: 50px;
   }
 }
 

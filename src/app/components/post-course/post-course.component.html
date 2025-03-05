@@ -3,7 +3,25 @@
     <i class="material-icons">arrow_back</i>Back to Dashboard
   </div>
 
-  <div class="d-lg-flex align-items-start justify-content-center w-100 gap-2 flex-row-reverse">
+  <div class="d-lg-flex align-items-start justify-content-center w-100 gap-2">
+
+    <div class="w-100 cmp-wrapper">
+      <div class="stepper">
+        <button class="d-none d-sm-block" (click)="prevStep()" [disabled]="currentStep === 0">Previous</button>
+        <button class="d-block d-sm-none" (click)="prevStep()" [disabled]="currentStep === 0">&lt;</button>
+        <span>Step {{ currentStep + 1 }} of {{ steps.length }}</span>
+        <button class="d-none d-sm-block" (click)="nextStep()" [disabled]="currentStep === steps.length - 1">Next</button>
+        <button class="d-block d-sm-none" (click)="nextStep()" [disabled]="currentStep === steps.length - 1">&gt;</button>
+      </div>
+
+      <div [ngSwitch]="currentStep">
+        <app-basic-details *ngSwitchCase="0"></app-basic-details>
+        <app-course-details *ngSwitchCase="1"></app-course-details>
+        <app-relavant-details *ngSwitchCase="2"></app-relavant-details>
+        <app-payment-details *ngSwitchCase="3"></app-payment-details>
+        <app-module-details *ngSwitchCase="4"></app-module-details>
+      </div>
+    </div>
 
     <div style="margin: max(50px, 5vw) auto; width: 100%; max-width: 400px;">
       <div class="form-card-2">
@@ -39,22 +57,6 @@
           </div>
         </div>
 
-      </div>
-    </div>
-
-    <div class="w-100" style="max-width: 800px">
-      <div class="stepper">
-        <button (click)="prevStep()" [disabled]="currentStep === 0">Previous</button>
-        <span>Step {{ currentStep + 1 }} of {{ steps.length }}</span>
-        <button (click)="nextStep()" [disabled]="currentStep === steps.length - 1">Next</button>
-      </div>
-
-      <div [ngSwitch]="currentStep">
-        <app-basic-details *ngSwitchCase="0"></app-basic-details>
-        <app-course-details *ngSwitchCase="1"></app-course-details>
-        <app-relavant-details *ngSwitchCase="2"></app-relavant-details>
-        <app-payment-details *ngSwitchCase="3"></app-payment-details>
-        <app-module-details *ngSwitchCase="4"></app-module-details>
       </div>
     </div>
 

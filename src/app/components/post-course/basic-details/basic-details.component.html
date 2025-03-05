@@ -1,1 +1,56 @@
-<p>basic-details works!</p>
+<div class="form-card-1">
+  <form (ngSubmit)="saveData()" class="w-100">
+
+    <div class="d-flex align-items-center justify-content-between gap-2">
+      <h5>Basic Details :</h5>
+      <div class="form-group">
+        <button type="submit" class="btn-fill btn-f-2">Save</button>
+      </div>
+    </div>
+
+    <div class="row form-wrapper">
+      <div class="col-12">
+        <div class="form-group">
+          <label for="name">Course Title *</label>
+          <input type="text" class="form-control" id="name" placeholder="SQL Programming - Complete Introduction" [(ngModel)]="basicDetails.name" required [ngModelOptions]="{standalone: true}">
+        </div>
+      </div>
+      <div class="col-12">
+        <div class="form-group">
+          <label for="overview">Course Overview(summary) *</label>
+          <textarea class="form-control" id="overview" rows="5" placeholder="Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor" [(ngModel)]="basicDetails.overview" [ngModelOptions]="{standalone: true}"></textarea>
+        </div>
+      </div>
+      <div class="col-12">
+        <div class="form-group">
+          <label for="lecturer">Lecturers *</label>
+          <input type="text" class="form-control" id="lecturer" placeholder="John Doe" [(ngModel)]="basicDetails.lecturer" required [ngModelOptions]="{standalone: true}">
+        </div>
+      </div>
+      <div class="col-12 col-md-6">
+        <div class="form-group">
+          <label for="language">Language *</label>
+          <input type="text" class="form-control" id="language" placeholder="English" [(ngModel)]="basicDetails.language" required [ngModelOptions]="{standalone: true}">
+        </div>
+      </div>
+      <div class="col-12 col-md-6">
+        <div class="form-group">
+          <label for="level">Experience *</label>
+          <input type="text" class="form-control" id="level" placeholder="Beginner" [(ngModel)]="basicDetails.level" [ngModelOptions]="{standalone: true}">
+        </div>
+      </div>
+      <div class="col-12 col-md-6">
+        <div class="form-group">
+          <label for="duration">Duration *</label>
+          <input type="text" class="form-control" id="duration" placeholder="3 months" [(ngModel)]="basicDetails.duration" [ngModelOptions]="{standalone: true}">
+        </div>
+      </div>
+      <div class="col-12 col-md-6">
+        <div class="form-group">
+          <label for="email">Contact Email *</label>
+          <input type="text" class="form-control" id="email" placeholder="mDd0i@example.com" [(ngModel)]="basicDetails.email" required [ngModelOptions]="{standalone: true}">
+        </div>
+      </div>
+    </div>
+  </form>
+</div>
