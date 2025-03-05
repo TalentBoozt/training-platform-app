@@ -1,302 +1,62 @@
-<div class="container">
-  <div class="form-card-1">
-    <form [formGroup]="jobPostForm">
-      <h5>Job details:</h5>
-      <div class="row form-wrapper">
-        <div class="col-12">
-          <div class="form-group">
-            <label for="title">Job Title *</label>
-            <input type="text" class="form-control" id="title" placeholder="web developer" formControlName="title">
-          </div>
-        </div>
-
-        <div class="col-12">
-          <div class="form-group">
-            <label for="description">Job Description *</label>
-            <textarea class="form-control" id="description" rows="5" placeholder="Job Description"
-                      formControlName="description"></textarea>
-          </div>
-        </div>
-
-        <div class="row">
-          <div class="col-12 col-md-6">
-            <div class="form-group">
-              <label for="category">Categories *</label>
-              <select id="category" [(ngModel)]="selectedCategory" [ngModelOptions]="{standalone: true}"
-                      (change)="onCategoryChange()">
-                <option *ngFor="let c of filterCategories()" [value]="c.name">{{c.name}}</option>
-              </select>
-              <div class="collapse" [ngClass]="{'show': isOtherCategorySelected}" id="otherCollapseCat">
-                <div class="d-flex justify-content-end my-2">
-                  <input type="text" class="form-control" placeholder="Enter new category" formControlName="category">
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <div class="col-12 col-md-6">
-            <div class="form-group">
-              <label for="jobType">Job Type *</label>
-              <select id="jobType" [(ngModel)]="selectedJobType" [ngModelOptions]="{standalone: true}"
-                      (change)="onJobTypeChange()">
-                <option *ngFor="let j of filterJobTypes(selectedCategory)" [value]="j.name">{{j.name}}</option>
-              </select>
-              <div class="collapse" [ngClass]="{'show': isOtherJobTypeSelected}" id="otherCollapseJob">
-                <div class="d-flex justify-content-end my-2">
-                  <input type="text" class="form-control" placeholder="Enter new job type" formControlName="jobType">
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div class="row">
-          <div class="col-12 col-md-6">
-            <div class="form-group">
-              <label for="salary">Salary</label>
-              <select class="form-control" id="salary" formControlName="salary">
-                <option>Hourly</option>
-                <option>Monthly</option>
-              </select>
-            </div>
-          </div>
-
-          <div class="col-6 col-md-3">
-            <div class="form-group">
-              <label></label>
-              <div class="input-group flex-nowrap">
-                <span class="input-group-text">$</span>
-                <input type="text" class="form-control" placeholder="Min" formControlName="minSalary">
-              </div>
-            </div>
-          </div>
-
-          <div class="col-6 col-md-3">
-            <div class="form-group">
-              <label></label>
-              <div class="input-group flex-nowrap">
-                <span class="input-group-text">$</span>
-                <input type="text" class="form-control" placeholder="Max" formControlName="maxSalary">
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div class="row">
-          <div class="col-12 col-md-6">
-            <div class="form-group">
-              <label for="totalOpenings">Total Openings *</label>
-              <input type="number" id="totalOpenings" class="form-control" placeholder="5"
-                     formControlName="totalOpenings">
-            </div>
-          </div>
-
-          <div class="col-12 col-md-6">
-            <div class="form-group">
-              <label for="ageRange">Age Range</label>
-              <select class="form-control" id="ageRange" formControlName="ageRange">
-                <option>18-</option>
-                <option>18-30</option>
-                <option>20-40</option>
-                <option>25-50</option>
-                <option>50+</option>
-              </select>
-            </div>
-          </div>
-        </div>
-
-        <div class="row">
-          <div class="col-12 col-md-6">
-            <div class="form-group">
-              <label for="employeeType">Employement Type *</label>
-              <select class="form-control" id="employeeType" formControlName="employeeType">
-                <option>Full Time</option>
-                <option>Part Time</option>
-                <option>Fixed Term Contract</option>
-                <option>Internship</option>
-                <option>Volunteer</option>
-                <option>Other</option>
-              </select>
-            </div>
-          </div>
-
-          <div class="col-12 col-md-6">
-            <div class="form-group">
-              <label for="locationType">Location Type *</label>
-              <select class="form-control" id="locationType" formControlName="locationType">
-                <option>On Site</option>
-                <option>Remote</option>
-                <option>Hybrid</option>
-                <option>Other</option>
-              </select>
-            </div>
-          </div>
-        </div>
-
-        <h5>Skill and Experience:</h5>
-
-        <div class="row">
-          <div class="col-12 col-md-6">
-            <div class="form-group">
-              <label for="skills">Skills</label>
-              <textarea class="form-control" id="skills" rows="5" placeholder="Press enter to add a new skill"
-                        formControlName="skills"></textarea>
-            </div>
-          </div>
-
-          <div class="col-12 col-md-6">
-            <div class="form-group">
-              <label for="qualifications">Qualifications</label>
-              <textarea class="form-control" id="qualifications" rows="5" placeholder="Press enter to add a new qualification"
-                        formControlName="qualifications"></textarea>
-            </div>
-          </div>
-        </div>
-
-        <div class="row">
-          <div class="col-12 col-md-6">
-            <div class="form-group">
-              <label for="education">Education</label>
-              <textarea class="form-control" id="education" rows="5" placeholder="Press enter to add a new Educational Qualification"
-                        formControlName="education"></textarea>
-            </div>
-          </div>
-
-          <div class="col-12 col-md-6">
-            <div class="form-group">
-              <label for="experience">Experience</label>
-              <textarea class="form-control" id="experience" rows="5" placeholder="Press enter to add a new Experience"
-                        formControlName="experience"></textarea>
-            </div>
-          </div>
-        </div>
-
-        <div class="row">
-          <div class="col-12 col-md-6">
-            <div class="form-group">
-              <label for="es">Education (short) *</label>
-              <select class="form-control" id="es" formControlName="es">
-                <option value="BSc">Bachelor's Degree</option>
-                <option value="MSc">Master's Degree</option>
-                <option value="O/L">Ordinary Level</option>
-                <option value="A/L">Advances level</option>
-                <option value="not specified">Other</option>
-              </select>
-            </div>
-          </div>
-
-          <div class="col-12 col-md-6">
-            <div class="form-group">
-              <label for="es">Experience (short) *</label>
-              <select class="form-control" id="exs" formControlName="exs">
-                <option value="0-2 years">0-2 years</option>
-                <option value="3-5 years">3-5 years</option>
-                <option value="5-10 years">5-10 years</option>
-                <option value="10-15 years">10-15 years</option>
-                <option value="above 15 years">above 15 years</option>
-              </select>
-            </div>
-          </div>
-        </div>
-
-        <h5>Requirements and Responsibilities:</h5>
-
-        <div class="row">
-          <div class="col-12 col-md-6">
-            <div class="form-group">
-              <label for="requirements">Requirements</label>
-              <textarea class="form-control" id="requirements" rows="5" placeholder="Press enter to add a new requirement"
-                        formControlName="requirements"></textarea>
-            </div>
-          </div>
-
-          <div class="col-12 col-md-6">
-            <div class="form-group">
-              <label for="responsibilities">Responsibilities</label>
-              <textarea class="form-control" id="responsibilities" rows="5" placeholder="Press enter to add a new responsibility"
-                        formControlName="responsibilities"></textarea>
-            </div>
-          </div>
-        </div>
-
-        <h5>what we offer</h5>
-
-        <div class="row">
-          <div class="col-12">
-            <div class="form-group">
-              <label for="offer">our package includes,</label>
-              <textarea class="form-control" id="offer" rows="5" placeholder="Press enter to add a new offering"
-                        formControlName="offer"></textarea>
-            </div>
-          </div>
-        </div>
-
-        <h5>Address:</h5>
-
-        <div class="col-12">
-          <div class="form-group">
-            <label for="address">Address</label>
-            <input class="form-control" id="address" placeholder="Address" formControlName="address">
-          </div>
-        </div>
-
-        <div class="row">
-          <div class="col-6">
-            <div class="form-group">
-              <label for="country">Country *</label>
-              <input class="form-control" id="country" placeholder="Country" formControlName="country">
-            </div>
-          </div>
-          <div class="col-6">
-            <div class="form-group">
-              <label for="state">City/State *</label>
-              <input class="form-control" id="state" placeholder="State" formControlName="state">
-            </div>
-          </div>
-        </div>
-
-        <h5>Other:</h5>
-
-        <div class="row" *ngIf="companyLevel >= 3">
-          <div class="col-12">
-            <div class="form-group">
-              <label for="banner">Upload a Custom Banner</label>
-              <input type="file" class="form-control" id="banner" (change)="uploadFile($event, 'portal/jobs/banners/' + generateRandomId())">
-            </div>
-          </div>
-        </div>
-
-        <div class="row">
-          <div class="col-6">
-            <div class="form-group">
-              <label for="postdate">Date Posted *</label>
-              <input type="date" class="form-control" id="postdate" formControlName="postdate">
-            </div>
-          </div>
-          <div class="col-6">
-            <div class="form-group">
-              <label for="expdate">Closing Date <i class="fa fa-question-circle" data-bs-toggle="tooltip"
-                                                   data-bs-placement="top"
-                                                   data-bs-custom-class="custom-tooltip"
-                                                   data-bs-title="Only pro version can set a custom expiration date. Your job ad will expire after 10 days. "></i></label>
-              <input type="date" class="form-control" id="expdate" formControlName="expdate">
-            </div>
-          </div>
-        </div>
-
-        <div class="col-12">
-          <div class="d-flex align-items-center justify-content-start gap-2">
-            <div class="form-group">
-              <button type="submit" [disabled]="formLocked" class="btn-1"
-                      (click)="jobId ? updateJob() : saveJobPost()">{{formLocked ? 'Locked' : jobId ? 'Update' : 'Post Now'}}</button>
-            </div>
-            <div class="form-group">
-              <button type="submit" [disabled]="formLocked" class="btn-1" (click)="preview()">Preview</button>
-            </div>
-          </div>
-        </div>
-      </div>
-    </form>
+<div class="container" style="position: relative;">
+  <div class="back-btn">
+    <i class="material-icons">arrow_back</i>Back to Dashboard
   </div>
 
+  <div class="d-lg-flex align-items-start justify-content-center w-100 gap-2 flex-row-reverse">
+
+    <div style="margin: max(50px, 5vw) auto; width: 100%; max-width: 400px;">
+      <div class="form-card-2">
+        <div class="pro-title">
+          <h5>Copy from existing Course:</h5>
+          <div class="pro-tag" *ngIf="false">pro</div>
+        </div>
+        <div class="d-flex align-items-center justify-content-end w-100 h-100 s-bar">
+          <input type="text" placeholder="Search..."/>
+          <i class="material-icons">search</i>
+        </div>
+
+        <div class="search-results-wrapper" *ngIf="false">
+          <div class="not-found">Not Found :(</div>
+        </div>
+      </div>
+
+      <div class="form-card-2">
+        <div class="pro-title">
+          <h5>Copy from drafts:</h5>
+          <div class="pro-tag" *ngIf="false">pro</div>
+        </div>
+        <div class="d-flex align-items-center justify-content-end w-100 h-100 drafts-wrapper">
+          <div class="d-flex align-items-center justify-content-between w-100 draft" *ngIf="false">
+            <div class="draft-name">Load Draft</div>
+            <i class="material-icons clear">delete</i>
+          </div>
+          <div class="draft-not-found" *ngIf="true">
+            <i class="material-icons">drafts</i>
+            <div class="d-flex align-items-center justify-content-center">
+              <p>No Drafts Found</p>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <div class="w-100" style="max-width: 800px">
+      <div class="stepper">
+        <button (click)="prevStep()" [disabled]="currentStep === 0">Previous</button>
+        <span>Step {{ currentStep + 1 }} of {{ steps.length }}</span>
+        <button (click)="nextStep()" [disabled]="currentStep === steps.length - 1">Next</button>
+      </div>
+
+      <div [ngSwitch]="currentStep">
+        <app-basic-details *ngSwitchCase="0"></app-basic-details>
+        <app-course-details *ngSwitchCase="1"></app-course-details>
+        <app-relavant-details *ngSwitchCase="2"></app-relavant-details>
+        <app-payment-details *ngSwitchCase="3"></app-payment-details>
+        <app-module-details *ngSwitchCase="4"></app-module-details>
+      </div>
+    </div>
+
+  </div>
 </div>
