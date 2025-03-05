@@ -1,4 +1,5 @@
 @import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+@import 'ngx-toastr/toastr';
 
 .theme-light {
   --color-primary-100: #AF7AC5;
@@ -226,10 +227,10 @@ $screen-xxl: 1401px;
   white-space: nowrap;
   font-size: var(--fs-16);
   font-weight: var(--fw-500);
-  padding: var(--padding-2) var(--padding-7);
+  padding: var(--padding-1) var(--padding-6);
 
   @include respond-to(xl) {
-    padding: var(--padding-2) var(--padding-4);
+    padding: var(--padding-1) var(--padding-3);
     font-size: var(--fs-16);
     font-weight: var(--fw-500);
   }
@@ -429,7 +430,7 @@ $screen-xxl: 1401px;
 .form-card-1{
   width: 100%;
   max-width: 600px;
-  margin: max(30px, 5vw) auto;
+  margin: max(20px, 2.2vw) auto;
   padding: 30px;
   border-radius: 8px;
   background-color: var(--color-surface-200);
