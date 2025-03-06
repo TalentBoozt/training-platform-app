@@ -1,4 +1,4 @@
-import {AfterViewInit, Component} from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {AlertsService} from '../../../services/alerts.service';
 import {ResumeStorageService} from '../../../services/resume-storage.service';
 import {FormsModule} from '@angular/forms';
@@ -12,7 +12,7 @@ import {FormsModule} from '@angular/forms';
   styleUrl: './basic-details.component.scss',
   standalone: true
 })
-export class BasicDetailsComponent implements AfterViewInit {
+export class BasicDetailsComponent implements OnInit {
   basicDetails = {
     name: '',
     overview: '',
@@ -25,7 +25,7 @@ export class BasicDetailsComponent implements AfterViewInit {
 
   constructor(private resumeStorage: ResumeStorageService, private alertService: AlertsService) {}
 
-  ngAfterViewInit(): void {
+  ngOnInit(): void {
     const savedData = this.resumeStorage.getData();
     if (savedData?.basicDetails) {
       this.basicDetails = savedData.basicDetails;
