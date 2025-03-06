@@ -1,3 +1,8 @@
+<div style="width: 100%; display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 10px;">
+  <h5>{{title || 'Rich Text Editor'}}</h5>
+  <button type="submit" class="btn-fill btn-f-2" (click)="saveContent()">Save</button>
+</div>
+
 <div class="toolbar">
   <button (click)="applyStyle('bold')" [class.active]="isActive('bold')" title="Bold">
     <b>B</b>

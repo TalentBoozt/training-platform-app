@@ -6,7 +6,7 @@ import {WindowService} from './common/window.service';
 })
 export class ResumeStorageService {
 
-  private storageKey = 'resumeData';
+  private storageKey = 'courseData';
 
   constructor(private windowService: WindowService ) {}
 

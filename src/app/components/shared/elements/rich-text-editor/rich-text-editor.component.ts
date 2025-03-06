@@ -1,4 +1,4 @@
-import {Component, ElementRef, ViewChild} from '@angular/core';
+import {AfterViewInit, Component, ElementRef, EventEmitter, Input, OnChanges, Output, ViewChild} from '@angular/core';
 
 @Component({
   selector: 'app-rich-text-editor',
@@ -7,8 +7,12 @@ import {Component, ElementRef, ViewChild} from '@angular/core';
   styleUrl: './rich-text-editor.component.scss',
   standalone: true
 })
-export class RichTextEditorComponent {
+export class RichTextEditorComponent implements AfterViewInit{
   @ViewChild('editor') editor!: ElementRef<HTMLDivElement>;
+  @Input('title') title: string = '';
+  @Input('setContent') setContent: any;
+  @Output('content') content: any = new EventEmitter<any>();
+
   private undoStack: string[] = [];
   private redoStack: string[] = [];
 
@@ -20,6 +24,12 @@ export class RichTextEditorComponent {
     alignCenter: false,
     alignRight: false
   };
+
+  ngAfterViewInit() {
+    if (this.setContent) {
+      this.editor.nativeElement.innerHTML = this.setContent;
+    }
+  }
 
   saveState() {
     this.undoStack.push(this.editor.nativeElement.innerHTML);
@@ -162,5 +172,10 @@ export class RichTextEditorComponent {
 
   isActive(style: string): boolean {
     return this.activeStyles[style as keyof typeof this.activeStyles];
+  }
+
+  saveContent() {
+    const content = this.editor.nativeElement.innerHTML;
+    this.content.emit(content);
   }
 }
