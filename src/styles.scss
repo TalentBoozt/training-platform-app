@@ -507,6 +507,7 @@ $screen-xxl: 1401px;
   h5{
     width: 100%;
     text-align: left;
+    color: var(--color-text-100);
   }
 
   .notification-text{
@@ -550,4 +551,9 @@ $screen-xxl: 1401px;
     background-color: var(--color-text-400);
     margin: 0;
   }
+}
+
+.error-msg{
+  color: var(--color-danger-200);
+  font-size: var(--fs-12);
 }

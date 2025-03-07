@@ -1,1 +1,103 @@
-<p>relavant-details works!</p>
+<div class="form-card-1">
+  <form (ngSubmit)="saveData()" class="w-100">
+
+    <div class="d-flex align-items-center justify-content-between gap-2">
+      <h5>Relevant Details :</h5>
+      <div class="form-group">
+        <button type="submit" class="btn-fill btn-f-2">Save</button>
+      </div>
+    </div>
+
+    <div class="row form-wrapper">
+      <div class="col-12">
+        <div class="form-group">
+          <div class="skills-container">
+            <label for="skills">Skills <span>(separate with commas)</span></label>
+
+            <div class="tags-input">
+    <span class="tag" *ngFor="let skill of relevantDetails.skills">
+      {{ skill }}
+      <span class="remove-tag" (click)="removeSkill(skill)">×</span>
+    </span>
+
+              <input type="text"
+                     id="skills"
+                     [(ngModel)]="inputValue"
+                     [ngModelOptions]="{standalone: true}"
+                     (keydown)="addSkill($event)"
+                     placeholder="Add a skill..." />
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-12 col-md-6">
+        <div class="form-group">
+          <label for="startDate">Start Date *</label>
+          <input type="date" class="form-control" id="startDate" placeholder="2020-01-01" [(ngModel)]="relevantDetails.startDate" [ngModelOptions]="{standalone: true}" required>
+        </div>
+      </div>
+      <div class="col-6 col-md-3">
+        <div class="form-group">
+          <label for="startTime">Start Time *</label>
+          <input type="time" class="form-control" id="startTime" placeholder="20.00PM" [(ngModel)]="relevantDetails.startTime" required [ngModelOptions]="{standalone: true}">
+        </div>
+      </div>
+      <div class="col-6 col-md-3">
+        <div class="form-group">
+          <label for="endTime">End Time *</label>
+          <input type="time" class="form-control" id="endTime" placeholder="22.00PM" [(ngModel)]="relevantDetails.endTime" required [ngModelOptions]="{standalone: true}">
+        </div>
+      </div>
+      <div class="col-12 col-md-9">
+        <div class="form-group">
+          <label for="banner">Upload Cover Image</label>
+          <input type="file" class="form-control" id="banner" (change)="uploadFile($event, 'trainingPlatform/courses/banners/' + generateRandomId())">
+          <span class="error-msg">We recommend to check sample banner before uploading</span>
+        </div>
+      </div>
+      <div class="col-6 col-md-3">
+        <div class="form-group">
+          <label for="sample">
+            <span class="d-md-none">Check sample Image</span>
+          </label>
+          <button type="submit" id="sample" class="btn-fill btn-f-1" (click)="downloadSampleBanner()">Sample</button>
+        </div>
+      </div>
+      <div class="col-6 col-md-3">
+        <div class="form-group">
+          <label for="currency">Currency *</label>
+          <select class="form-control" id="currency" [(ngModel)]="relevantDetails.currency" [ngModelOptions]="{standalone: true}" required>
+            <option value="$">USD</option>
+            <option value="Rs">LKR</option>
+            <option value="₹">INR</option>
+            <option value="€">EUR</option>
+          </select>
+        </div>
+      </div>
+      <div class="col-6 col-md-3">
+        <div class="form-group">
+          <label for="price">Price *</label>
+          <input type="text" class="form-control" id="price" placeholder="10.00" [(ngModel)]="relevantDetails.price" required [ngModelOptions]="{standalone: true}">
+        </div>
+      </div>
+      <div class="col-6 col-md-3 col-lg-6 col-xl-3">
+        <div class="form-group">
+          <label for="mediaType">Media Type *</label>
+          <select class="form-control" id="mediaType" [(ngModel)]="relevantDetails.mediaType" [ngModelOptions]="{standalone: true}" required>
+            <option value="zoom">Zoom</option>
+            <option value="meet">Google Meet</option>
+            <option value="team">Microsoft Teams</option>
+            <option value="online">Online</option>
+            <option value="physical">Physical</option>
+          </select>
+        </div>
+      </div>
+      <div class="col-12 col-md-3 col-lg-12 col-xl-3">
+        <div class="form-group">
+          <label for="location">Location url</label>
+          <input type="text" class="form-control" id="location" placeholder="https://maps.google.com" [(ngModel)]="relevantDetails.location" [ngModelOptions]="{standalone: true}">
+        </div>
+      </div>
+    </div>
+  </form>
+</div>
