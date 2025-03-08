@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import {WindowService} from './common/window.service';
+import {WindowService} from '../common/window.service';
 
 @Injectable({
   providedIn: 'root'

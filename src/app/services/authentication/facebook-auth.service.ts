@@ -3,8 +3,8 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { environment } from '../../../environments/environment';
 import { Router } from '@angular/router';
 import { CredentialService } from '../credential.service';
-import { AlertsService } from '../alerts.service';
-import { AuthService } from '../auth.service';
+import { AlertsService } from '../support/alerts.service';
+import { AuthService } from '../support/auth.service';
 import {WindowService} from "../common/window.service";
 
 declare var FB: any;
@@ -100,12 +100,18 @@ export class FacebookAuthService {
   }
 
   private registerFacebookUser(profile: any) {
+    const referer = this.authService.getReferer();
+    const platform = this.authService.getPlatform();
+    const promotion = this.authService.getPromotion();
     const newUser = {
       email: profile.email,
       firstname: profile.firstName,
       lastname: profile.lastName,
       role: 'candidate',
       userLevel: '1',
+      referrerId: referer,
+      platform: platform,
+      promotion: promotion
     };
 
     this.credentialService.addCredential(newUser).subscribe(

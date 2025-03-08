@@ -1,12 +1,12 @@
 import {AfterViewInit, Component, OnInit} from '@angular/core';
 import {HttpErrorResponse} from '@angular/common/http';
 import {FormControl, FormGroup, ReactiveFormsModule, Validators} from '@angular/forms';
-import {AuthService} from '../../../services/auth.service';
+import {AuthService} from '../../../services/support/auth.service';
 import {CredentialService} from '../../../services/credential.service';
-import {EncryptionService} from '../../../services/encryption.service';
+import {EncryptionService} from '../../../services/support/encryption.service';
 import {EmployeeService} from '../../../services/employee.service';
 import {Router} from '@angular/router';
-import {AlertsService} from '../../../services/alerts.service';
+import {AlertsService} from '../../../services/support/alerts.service';
 import {WindowService} from '../../../services/common/window.service';
 
 @Component({

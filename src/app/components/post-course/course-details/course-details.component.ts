@@ -1,7 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {RichTextEditorComponent} from '../../shared/elements/rich-text-editor/rich-text-editor.component';
-import {ResumeStorageService} from '../../../services/resume-storage.service';
-import {AlertsService} from '../../../services/alerts.service';
+import {ResumeStorageService} from '../../../services/support/resume-storage.service';
+import {AlertsService} from '../../../services/support/alerts.service';
 
 @Component({
   selector: 'app-course-details',

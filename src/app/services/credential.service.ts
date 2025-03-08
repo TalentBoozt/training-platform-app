@@ -44,7 +44,7 @@ export class CredentialService {
     const headers = new HttpHeaders({
       'Authorization': 'Basic ' + btoa('admin:password')
     });
-    return this.http.post<any>(`${this.baseUrl}/portal_credentials/add`, credential, {headers});
+    return this.http.post<any>(`${this.baseUrl}/portal_credentials/add/${credential.platform}`, credential, {headers});
   }
 
   updateCredential(id: any, credential: any): Observable<any> {

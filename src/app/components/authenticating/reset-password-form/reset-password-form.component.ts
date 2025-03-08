@@ -1,7 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
 import {CredentialService} from '../../../services/credential.service';
-import {EncryptionService} from '../../../services/encryption.service';
+import {EncryptionService} from '../../../services/support/encryption.service';
 import {NgIf} from '@angular/common';
 import {FormsModule} from '@angular/forms';
 
