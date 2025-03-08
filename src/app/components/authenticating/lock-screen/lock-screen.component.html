@@ -1,0 +1,27 @@
+<div class="shared-background">
+  <div class="overlay"></div>
+
+  <div class="container">
+    <div class="content-holder">
+      <div class="form-card-1">
+        <div class="profile-wrapper">
+          <img [src]="employee?.image?employee.image:'./assets/imgs/shared/default_emp_dp.svg'" alt="profile">
+        </div>
+        <h5>{{employee?.firstname ? employee?.firstname + ' ' + employee?.lastname : 'User Locked'}}</h5>
+
+        <form [formGroup]="unlockForm">
+          <div class="row form-wrapper">
+            <div class="col-12">
+              <label for="password">Password:</label>
+              <input type="password" placeholder="Enter Password" id="password" formControlName="password">
+            </div>
+
+            <div class="col-12">
+              <button class="btn-1 w-100" (click)="unlockUser()">unlock</button>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
