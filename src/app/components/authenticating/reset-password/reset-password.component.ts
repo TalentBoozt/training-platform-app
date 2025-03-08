@@ -1,6 +1,6 @@
 import {AfterViewInit, Component} from '@angular/core';
 import {CredentialService} from '../../../services/credential.service';
-import {ThemeService} from '../../../services/theme.service';
+import {ThemeService} from '../../../services/support/theme.service';
 import {NgIf, NgStyle} from '@angular/common';
 import {FormsModule} from '@angular/forms';
 import {RouterLink} from '@angular/router';

@@ -1,6 +1,6 @@
 import {Component, OnInit} from '@angular/core';
-import {AlertsService} from '../../../services/alerts.service';
-import {ResumeStorageService} from '../../../services/resume-storage.service';
+import {AlertsService} from '../../../services/support/alerts.service';
+import {ResumeStorageService} from '../../../services/support/resume-storage.service';
 import {FormsModule} from '@angular/forms';
 
 @Component({

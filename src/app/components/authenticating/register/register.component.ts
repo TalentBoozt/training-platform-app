@@ -2,10 +2,10 @@ import {AfterViewInit, Component, OnInit} from '@angular/core';
 import {FormControl, FormGroup, ReactiveFormsModule, Validators} from '@angular/forms';
 import {ActivatedRoute, Router, RouterLink} from '@angular/router';
 import {CredentialService} from '../../../services/credential.service';
-import {AlertsService} from '../../../services/alerts.service';
-import {EncryptionService} from '../../../services/encryption.service';
-import {ThemeService} from '../../../services/theme.service';
-import {AuthService} from '../../../services/auth.service';
+import {AlertsService} from '../../../services/support/alerts.service';
+import {EncryptionService} from '../../../services/support/encryption.service';
+import {ThemeService} from '../../../services/support/theme.service';
+import {AuthService} from '../../../services/support/auth.service';
 import {NgClass, NgStyle} from '@angular/common';
 import {WindowService} from '../../../services/common/window.service';
 
@@ -74,6 +74,9 @@ export class RegisterComponent implements OnInit, AfterViewInit{
     if (this.registerForm.valid) {
       const formData = this.registerForm.value;
       const password = formData.password;
+      const referer = this.cookieService.getReferer();
+      const platform = this.cookieService.getPlatform();
+      const promotion = this.cookieService.getPromotion();
 
       if (password && password.length >= 6) {
         const isPwned = await this.encryptionService.checkLeakedPassword(password);
@@ -91,6 +94,9 @@ export class RegisterComponent implements OnInit, AfterViewInit{
           password: encryptedPassword,
           role: formData.role,
           userLevel: formData.role === 'candidate' ? "1" : "2",
+          referrerId: referer,
+          platform: platform,
+          promotion: promotion
         }).subscribe((response: any) => {
           if (!response) {
             this.alertService.errorMessage('User already exists or an unexpected error has occurred', 'Unexpected Error');

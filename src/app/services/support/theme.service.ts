@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import {BehaviorSubject} from "rxjs";
-import {WindowService} from './common/window.service';
+import {WindowService} from '../common/window.service';
 
 @Injectable({
   providedIn: 'root'

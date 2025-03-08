@@ -1,6 +1,7 @@
-import { Component } from '@angular/core';
-import { RouterOutlet } from '@angular/router';
+import {Component, OnInit} from '@angular/core';
+import {ActivatedRoute, RouterOutlet} from '@angular/router';
 import {HeaderComponent} from './components/shared/header/header.component';
+import {AuthService} from './services/support/auth.service';
 
 @Component({
   selector: 'app-root',
@@ -9,6 +10,20 @@ import {HeaderComponent} from './components/shared/header/header.component';
   styleUrl: './app.component.scss',
   standalone: true
 })
-export class AppComponent {
+export class AppComponent implements OnInit {
   title = 'training-platform-app';
+
+  constructor(private route: ActivatedRoute, private cookieService: AuthService) {
+  }
+
+  ngOnInit(): void {
+    this.route.queryParams.subscribe(params => {
+      const platform = params['platform'] || 'TrainingPlatform';
+      const ref = params['ref'] || '';
+      const promo = params['promo'] || '';
+      this.cookieService.createPlatform(platform);
+      this.cookieService.createReferer(ref);
+      this.cookieService.createPromotion(promo);
+    });
+  }
 }

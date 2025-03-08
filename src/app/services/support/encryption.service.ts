@@ -1,6 +1,6 @@
 import {Injectable} from '@angular/core';
 import * as CryptoJS from 'crypto-js';
-import {environment} from "../../environments/environment";
+import {environment} from "../../../environments/environment";
 import { HttpClient, HttpHeaders } from "@angular/common/http";
 
 @Injectable({
@@ -21,6 +21,7 @@ export class EncryptionService {
       response =  await this.http.post<any>(`${this.baseUrl}/encryption/encrypt`, {data: password}, {headers}).toPromise();
       return response?.data as string;
     } catch (error:any) {
+      console.log(error)
       console.error('Error during encryption:', error?.data);
       throw new Error('Encryption failed');
     }

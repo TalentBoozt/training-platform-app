@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import {CookieService} from "ngx-cookie-service";
+import {WindowService} from '../common/window.service';
 
 
 @Injectable({
@@ -7,7 +8,7 @@ import {CookieService} from "ngx-cookie-service";
 })
 export class AuthService {
 
-  constructor(private cookieService: CookieService) { }
+  constructor(private cookieService: CookieService, private windowService: WindowService) { }
 
   public createUserID(token:any){
     this.cookieService.set('user-token-id',token, {expires: 60* 60* 24* 7, path: '/', sameSite: 'Strict', secure: true});
@@ -30,7 +31,9 @@ export class AuthService {
   }
 
   createSession(user: any) {
-    sessionStorage.setItem('access_token', user.access_token);
+    if (this.windowService.nativeSessionStorage){
+      sessionStorage.setItem('access_token', user.access_token);
+    }
   }
 
   public logout(){
@@ -40,7 +43,9 @@ export class AuthService {
     this.cookieService.delete('admin-token');
     this.cookieService.delete('level');
     this.cookieService.deleteAll();
-    sessionStorage.clear();
+    if (this.windowService.nativeSessionStorage){
+      sessionStorage.clear();
+    }
   }
 
   public isExists():boolean{
@@ -121,13 +126,27 @@ export class AuthService {
     return cookie.length !== 0;
   }
 
-  public newsletter() {
-    this.cookieService.set('newsletter', 'true', 60*60*24*30);
+  public createReferer(referer: string) {
+    this.cookieService.set('referer', referer, 60*60*24*30);
   }
 
-  public isNewsletter() {
-    let newsletter = this.cookieService.get('newsletter');
-    return newsletter.length !== 0;
+  public createPlatform(platform: string) {
+    this.cookieService.set('platform', platform, 60*60*24*30);
   }
 
+  public createPromotion(promotion: string) {
+    this.cookieService.set('promotion', promotion, 60*60*24*30);
+  }
+
+  public getReferer() {
+    return this.cookieService.get('referer');
+  }
+
+  public getPlatform() {
+    return this.cookieService.get('platform');
+  }
+
+  public getPromotion() {
+    return this.cookieService.get('promotion');
+  }
 }

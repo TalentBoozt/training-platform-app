@@ -1,8 +1,8 @@
 import {Component, OnInit} from '@angular/core';
 import {FormsModule} from "@angular/forms";
-import {ResumeStorageService} from '../../../services/resume-storage.service';
-import {AlertsService} from '../../../services/alerts.service';
-import {FileUploadService} from '../../../services/file-upload.service';
+import {ResumeStorageService} from '../../../services/support/resume-storage.service';
+import {AlertsService} from '../../../services/support/alerts.service';
+import {FileUploadService} from '../../../services/support/file-upload.service';
 import {NgForOf} from '@angular/common';
 
 @Component({

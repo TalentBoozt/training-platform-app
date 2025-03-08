@@ -7,10 +7,10 @@ import {GitHubAuthService} from '../../../services/authentication/git-hub-auth.s
 import {FacebookAuthService} from '../../../services/authentication/facebook-auth.service';
 import {LinkedInAuthService} from '../../../services/authentication/linked-in-auth.service';
 import {SocialAuthApiService} from '../../../services/authentication/social-auth-api.service';
-import {EncryptionService} from '../../../services/encryption.service';
-import {AuthService} from '../../../services/auth.service';
-import {ThemeService} from '../../../services/theme.service';
-import {AlertsService} from '../../../services/alerts.service';
+import {EncryptionService} from '../../../services/support/encryption.service';
+import {AuthService} from '../../../services/support/auth.service';
+import {ThemeService} from '../../../services/support/theme.service';
+import {AlertsService} from '../../../services/support/alerts.service';
 import {NgClass, NgStyle} from '@angular/common';
 import {WindowService} from '../../../services/common/window.service';
 

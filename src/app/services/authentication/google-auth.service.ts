@@ -3,8 +3,8 @@ import {AuthConfig, NullValidationHandler, OAuthService} from "angular-oauth2-oi
 import { environment } from "../../../environments/environment";
 import { CredentialService } from "../credential.service";
 import { Router } from "@angular/router";
-import { AlertsService } from "../alerts.service";
-import { AuthService } from "../auth.service";
+import { AlertsService } from "../support/alerts.service";
+import { AuthService } from "../support/auth.service";
 import { Subject } from "rxjs";
 import { HttpClient } from "@angular/common/http";
 import {WindowService} from "../common/window.service";
@@ -133,12 +133,18 @@ export class GoogleAuthService implements OnInit, OnDestroy {
   }
 
   private registerGoogleUser(profile: any) {
+    const referer = this.cookieService.getReferer();
+    const platform = this.cookieService.getPlatform();
+    const promotion = this.cookieService.getPromotion();
     const newUser = {
       email: profile.email,
       firstname: profile.firstName,
       lastname: profile.lastName,
       role: 'candidate',
       userLevel: '1',
+      referrerId: referer,
+      platform: platform,
+      promotion: promotion
     };
 
     this.credentialService.addCredential(newUser).subscribe(
