@@ -1,0 +1,80 @@
+<div class="shared-background">
+  <div class="overlay"></div>
+
+  <div class="content-holder">
+    <div class="main-content-wrapper">
+      <div class="img-card-1">
+        <img src="./assets/imgs/login/register.webp" alt="register image">
+      </div>
+      <div class="form-card-1">
+        <div class="logo" [ngStyle]="{'background-image': themeService.isDarkMode() ? 'url(./assets/imgs/logo/top-w.webp)' : 'url(./assets/imgs/logo/top-b.webp)'}">
+        </div>
+        <h5 class="title">Create an account</h5>
+
+        <form [formGroup]="registerForm">
+          <div class="row form-wrapper">
+            <div class="col-12">
+              <label for="name">Name:</label>
+              <input type="text" placeholder="John" id="name" formControlName="name">
+              <div class="error-msg">{{errorMsg}}</div>
+            </div>
+
+            <div class="col-12">
+              <label for="email">Email:</label>
+              <input type="email" placeholder="example@example.com" id="email" formControlName="email">
+              <div class="error-msg">{{errorMsg}}</div>
+            </div>
+
+            <div class="col-12">
+              <label for="password">Password:</label>
+              <div class="input-group w-100 d-flex">
+                <input type="password" placeholder="Password:" id="password" formControlName="password" aria-label="Password:" aria-describedby="button-addon" style="flex:1">
+                <button class="btn btn-outline-secondary" type="button" id="button-addon" (click)="togglePasswordVisibility()"><i [ngClass]="isp1open? 'fa fa-eye-slash':'fa fa-eye'" aria-hidden="true"></i></button>
+              </div>
+              <div class="error-msg">{{errorMsg}}</div>
+            </div>
+
+            <div class="col-12">
+              <p style="margin: 0">You are registered as a</p>
+              <div class="d-flex align-items-center justify-content-around">
+                <div class="form-radio d-flex align-items-center">
+                  <input class="form-radio-input" type="radio" formControlName="role" value="candidate" id="candidateRadio">
+                  <label class="form-radio-label" for="candidateRadio">
+                    Candidate
+                  </label>
+                </div>
+                <div class="form-radio d-flex align-items-center">
+                  <input class="form-radio-input" type="radio" formControlName="role" value="employer" id="employerRadio">
+                  <label class="form-radio-label" for="employerRadio">
+                    Employer
+                  </label>
+                </div>
+              </div>
+            </div>
+
+            <div class="col-12">
+              <div class="d-sm-flex align-items-center justify-content-between">
+                <div class="form-check">
+                  <input class="form-check-input me-2" type="checkbox" formControlName="termsCheck" id="termsCheck">
+                  <label class="form-check-label" for="termsCheck">
+                    I accept <a href="https://talentboozt.com/terms-and-conditions">Terms and Conditions</a>
+                  </label>
+                  <div class="error-msg">{{termsErrorMsg}}</div>
+                </div>
+              </div>
+            </div>
+
+            <div class="col-12">
+              <button class="btn-1 w-100" (click)="registerUser()">Sign Up</button>
+            </div>
+
+            <div class="col-12">
+              <p class="navigation-text text-center">Already have an account ? <a routerLink="/login">Sign In</a></p>
+            </div>
+          </div>
+        </form>
+
+      </div>
+    </div>
+  </div>
+</div>

@@ -10,6 +10,7 @@ import { getFirestore, provideFirestore } from '@angular/fire/firestore';
 import { initializeApp, provideFirebaseApp } from '@angular/fire/app';
 import { getStorage, provideStorage } from '@angular/fire/storage';
 import {provideHttpClient, withFetch} from '@angular/common/http';
+import {provideOAuthClient} from 'angular-oauth2-oidc';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -23,6 +24,7 @@ export const appConfig: ApplicationConfig = {
     }),
     provideAnimations(),
     provideHttpClient(withFetch()),
+    provideOAuthClient(),
     provideFirebaseApp(() => initializeApp(environment.firebase)),
     provideFirestore(() => getFirestore()),
     provideStorage(() => getStorage()),
