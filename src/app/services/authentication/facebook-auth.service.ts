@@ -6,6 +6,7 @@ import { CredentialService } from '../credential.service';
 import { AlertsService } from '../support/alerts.service';
 import { AuthService } from '../support/auth.service';
 import {WindowService} from "../common/window.service";
+import {TimerService} from '../common/timer.service';
 
 declare var FB: any;
 
@@ -22,7 +23,8 @@ export class FacebookAuthService {
     private credentialService: CredentialService,
     private alertService: AlertsService,
     private authService: AuthService,
-    private windowService: WindowService
+    private windowService: WindowService,
+    private timerService: TimerService
   ) {}
 
   initializeFacebookSdk() {
@@ -128,7 +130,7 @@ export class FacebookAuthService {
     this.authService.createUserID(user.employeeId.toString());
     this.authService.createLevel(user.userLevel.toString());
     this.authService.unlock();
-    setTimeout(() => {
+    this.timerService.setTimeout(() => {
       if (user.role === 'candidate') {
         this.router.navigate(['/candidate-profile']);
         this.alertService.successMessage('Login successful', 'Success');

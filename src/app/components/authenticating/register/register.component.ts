@@ -8,6 +8,11 @@ import {ThemeService} from '../../../services/support/theme.service';
 import {AuthService} from '../../../services/support/auth.service';
 import {NgClass, NgStyle} from '@angular/common';
 import {WindowService} from '../../../services/common/window.service';
+import {HttpErrorResponse} from '@angular/common/http';
+import {GoogleAuthService} from '../../../services/authentication/google-auth.service';
+import {GitHubAuthService} from '../../../services/authentication/git-hub-auth.service';
+import {FacebookAuthService} from '../../../services/authentication/facebook-auth.service';
+import {LinkedInAuthService} from '../../../services/authentication/linked-in-auth.service';
 
 @Component({
   selector: 'app-register',
@@ -26,7 +31,6 @@ export class RegisterComponent implements OnInit, AfterViewInit{
     name: new FormControl('', [Validators.required]),
     email: new FormControl('', [Validators.required, Validators.email]),
     password: new FormControl('', [Validators.required]),
-    role: new FormControl('candidate'),  // Default to 'candidate'
     termsCheck: new FormControl(false, [Validators.requiredTrue])
   });
 
@@ -39,18 +43,19 @@ export class RegisterComponent implements OnInit, AfterViewInit{
               private credentialService: CredentialService,
               private alertService: AlertsService,
               private encryptionService: EncryptionService,
+              private googleAuthService: GoogleAuthService,
+              private gitHubAuthService: GitHubAuthService,
+              private facebookAuthService: FacebookAuthService,
+              private linkedInAuthService: LinkedInAuthService,
               private windowService: WindowService,
               public themeService: ThemeService,
               private cookieService: AuthService) { }
 
   ngOnInit(): void {
-    this.route.queryParams.subscribe(params => {
-      if (params['from'] === 'companies') {
-        this.registerForm.patchValue({ role: 'employer' });
-      } else {
-        this.registerForm.patchValue({ role: 'candidate' });
-      }
-    });
+    this.googleAuthService.configureOAuth();
+    this.gitHubAuthService.handleRedirectCallback();
+    this.facebookAuthService.initializeFacebookSdk().then(r => {});
+    this.linkedInAuthService.initializeLinkedInSdk().then(r => {});
   }
 
   ngAfterViewInit() {
@@ -92,29 +97,38 @@ export class RegisterComponent implements OnInit, AfterViewInit{
           lastname: formData.name?.split(' ')[1] || '',
           email: formData.email,
           password: encryptedPassword,
-          role: formData.role,
-          userLevel: formData.role === 'candidate' ? "1" : "2",
+          role: "employer",
+          userLevel: "5",
           referrerId: referer,
           platform: platform,
           promotion: promotion
         }).subscribe((response: any) => {
           if (!response) {
-            this.alertService.errorMessage('User already exists or an unexpected error has occurred', 'Unexpected Error');
+            this.alertService.errorMessage('An unexpected error has occurred', 'Unexpected Error');
             return;
           }
-          if (formData.role === 'candidate') {
-            this.router.navigate(['/candidate-profile']);
-            this.cookieService.createUserID(response.employeeId);
-            this.cookieService.createLevel(response.userLevel);
-          } else if (formData.role === 'employer') {
-            this.router.navigate(['/dashboard']);
-            this.cookieService.createUserID(response.employeeId);
-            this.cookieService.createLevel(response.userLevel);
-            this.cookieService.createAdmin(response.email);
-            this.cookieService.createOrganizationID(response.companyId);
+          if (response.accessedPlatforms.includes(platform) && response.accessedPlatforms.includes('TrainingPlatform')) {
+            this.alertService.errorMessage('This email has already been registered', 'Email Already Exists');
+            return;
           }
-        }, error => {
-          this.alertService.errorMessage('User already exists or an unexpected error has occurred', 'Unexpected Error');
+          this.cookieService.createUserID(response.employeeId);
+          this.cookieService.createLevel(response.userLevel);
+          this.cookieService.createAdmin(response.email);
+          this.cookieService.createOrganizationID(response.companyId);
+        }, (error: HttpErrorResponse) => {
+          switch (error.status) {
+            case 409:
+              this.alertService.errorMessage('This email has already been registered', 'Email Already Exists');
+              break;
+            case 400:
+              this.alertService.errorMessage('Please fill in all the required fields', 'Missing Fields');
+              break;
+            case 500:
+              this.alertService.errorMessage('An unexpected error has occurred', 'Unexpected Error');
+              break;
+            default:
+              this.alertService.errorMessage('An unexpected error has occurred', 'Unexpected Error');
+          }
         });
       } else {
         this.alertService.errorMessage('Password must be at least 6 characters long', 'Weak Password');
@@ -123,6 +137,22 @@ export class RegisterComponent implements OnInit, AfterViewInit{
       this.errorMsg = 'Please fill in all the fields';
       this.alertService.errorMessage('Please fill in all required fields', 'Missing Fields');
     }
+  }
+
+  loginWithGoogle(): void {
+    this.googleAuthService.loginWithGoogle();
+  }
+
+  loginWithGithub() {
+    this.gitHubAuthService.loginWithGitHub();
+  }
+
+  loginWithLinkedin() {
+    this.linkedInAuthService.loginWithLinkedIn();
+  }
+
+  loginWithFacebook() {
+    this.facebookAuthService.loginWithFacebook();
   }
 
   togglePasswordVisibility(){

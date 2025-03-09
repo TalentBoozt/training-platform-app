@@ -1,6 +1,5 @@
 import { Component } from '@angular/core';
-import {FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators} from '@angular/forms';
-import {NgClass, NgForOf, NgIf, NgStyle, NgSwitch, NgSwitchCase} from '@angular/common';
+import {NgIf, NgSwitch, NgSwitchCase} from '@angular/common';
 import {BasicDetailsComponent} from './basic-details/basic-details.component';
 import {CourseDetailsComponent} from './course-details/course-details.component';
 import {RelavantDetailsComponent} from './relavant-details/relavant-details.component';

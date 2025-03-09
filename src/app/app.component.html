@@ -1,7 +1,10 @@
-<div class="theme-light common-styles" style="width: 100%">
-  <div class="theme-wrapper">
-    <app-header></app-header>
+<div [ngClass]="{'theme-light': !themeService.isDarkMode(), 'theme-dark': themeService.isDarkMode()}"
+     style="max-height: 100vh;">
+  <div class="common-styles" style="width: 100%">
+    <div class="theme-wrapper">
+      <app-header *ngIf="showNavbar"></app-header>
 
-    <router-outlet />
+      <router-outlet (activate)="toggleCommonComponent($event)"/>
+    </div>
   </div>
 </div>

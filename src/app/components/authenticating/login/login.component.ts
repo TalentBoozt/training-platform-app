@@ -13,6 +13,7 @@ import {ThemeService} from '../../../services/support/theme.service';
 import {AlertsService} from '../../../services/support/alerts.service';
 import {NgClass, NgStyle} from '@angular/common';
 import {WindowService} from '../../../services/common/window.service';
+import {TimerService} from '../../../services/common/timer.service';
 
 @Component({
   selector: 'app-login',
@@ -48,6 +49,7 @@ export class LoginComponent implements OnInit, AfterViewInit{
     private socialAuthService: SocialAuthApiService,
     private encryptionService: EncryptionService,
     private windowService: WindowService,
+    private timerService: TimerService,
     private cookieService: AuthService,
     public themeService: ThemeService,
     private alertService: AlertsService) { }
@@ -85,7 +87,7 @@ export class LoginComponent implements OnInit, AfterViewInit{
           this.alertService.warningMessage('Too many attempts! Try again in 5 minutes', 'Warning');
           this.loginForm.reset();
           this.disabled = true;
-          setTimeout(()=>{
+          this.timerService.setTimeout(()=>{
             this.attempts = 4;
             sessionStorage.removeItem('LgnAtT');
             this.disabled = false;
@@ -97,6 +99,10 @@ export class LoginComponent implements OnInit, AfterViewInit{
         this.credentialService.fetchCredentialByEmail(formData.email).subscribe(async (response: any) => {
           if (!response) {
             this.alertService.errorMessage('User doesn\'t exist or something went wrong', 'Error');
+            return;
+          }
+          if (response.userLevel !== '5') {
+            this.alertService.errorMessage('You are not authorized to login', 'Error');
             return;
           }
 
@@ -114,30 +120,14 @@ export class LoginComponent implements OnInit, AfterViewInit{
                 localStorage.removeItem('password');
               }
 
-              if (response.role === 'candidate') {
-                this.cookieService.createUserID(response.employeeId);
-                this.cookieService.createLevel(response.userLevel);
-                this.cookieService.unlock();
-                this.router.navigate(['/candidate-profile']);
-                this.alertService.successMessage('Login successful', 'Success');
-              } else if (response.role === 'employer') {
-                if (response.userLevel === "2") {
-                  this.cookieService.createUserID(response.employeeId);
-                  this.cookieService.createAdmin(response.email);
-                  this.cookieService.createOrganizationID(response.companyId);
-                  this.cookieService.createLevel(response.userLevel);
-                  this.cookieService.unlock();
-                  this.router.navigate(['/dashboard']);
-                }
-                else if (response.userLevel === "3") {
-                  this.cookieService.createUserID(response.employeeId);
-                  this.cookieService.createProAdmin(response.email);
-                  this.cookieService.createOrganizationID(response.companyId);
-                  this.cookieService.createLevel(response.userLevel);
-                  this.cookieService.unlock();
-                  this.router.navigate(['/pro']);
-                }
-              }
+              this.cookieService.createUserID(response.employeeId);
+              this.cookieService.createProAdmin(response.email);
+              this.cookieService.createOrganizationID(response.companyId);
+              this.cookieService.createLevel(response.userLevel);
+              this.cookieService.unlock();
+              this.alertService.successMessage('Login successful', 'Success');
+              this.router.navigate(['/']);
+
             } else {
               this.alertService.errorMessage('Wrong password', 'Error');
             }
@@ -150,7 +140,7 @@ export class LoginComponent implements OnInit, AfterViewInit{
         });
       }
     } else {
-      this.alertService.errorMessage('Form is not valid', 'Error');
+      this.alertService.errorMessage('Form is not valid. Please fill in all the required fields', 'Error');
     }
   }
 

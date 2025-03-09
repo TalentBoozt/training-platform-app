@@ -6,6 +6,7 @@ import {AlertsService} from "../support/alerts.service";
 import {AuthService} from "../support/auth.service";
 import { HttpClient, HttpHeaders } from "@angular/common/http";
 import {WindowService} from "../common/window.service";
+import {TimerService} from '../common/timer.service';
 
 @Injectable({
   providedIn: 'root'
@@ -19,6 +20,7 @@ export class GitHubAuthService {
               private credentialService: CredentialService,
               private cookieService: AuthService,
               private windowService: WindowService,
+              private timerService: TimerService,
               private alertService: AlertsService) {
   }
 
@@ -97,7 +99,7 @@ export class GitHubAuthService {
 
   private processUserProfile(profile: any) {
     if (this.windowService.nativeSessionStorage){
-      setTimeout(() => {
+      this.timerService.setTimeout(() => {
       }, 1000)
 
       if (sessionStorage.getItem('primaryEmail') === null) {
@@ -161,7 +163,7 @@ export class GitHubAuthService {
     this.cookieService.createUserID(user.employeeId.toString());
     this.cookieService.createLevel(user.userLevel.toString());
     this.cookieService.unlock();
-    setTimeout(() => {
+    this.timerService.setTimeout(() => {
       if (user.role === 'candidate') {
         this.router.navigate(['/candidate-profile']);
         this.alertService.successMessage('Login successful', 'Success');
