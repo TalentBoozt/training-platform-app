@@ -12,6 +12,7 @@ import {
 } from '@angular/core';
 import {NgForOf} from '@angular/common';
 import {WindowService} from '../../../../services/common/window.service';
+import {TimerService} from '../../../../services/common/timer.service';
 
 @Component({
   selector: 'app-rich-text-editor',
@@ -63,7 +64,8 @@ export class RichTextEditorComponent implements AfterViewInit {
   constructor(
     private cdr: ChangeDetectorRef,
     private ngZone: NgZone,
-    private windowService: WindowService
+    private windowService: WindowService,
+    private timerService: TimerService
   ) {}
 
   ngAfterViewInit() {
@@ -74,7 +76,7 @@ export class RichTextEditorComponent implements AfterViewInit {
         this.editor.nativeElement.innerHTML = this.setContent;
 
         // Queue up a save state operation after the current cycle completes
-        setTimeout(() => {
+        this.timerService.setTimeout(() => {
           // Save initial state for undo
           this.saveState();
         }, 0);
@@ -92,7 +94,7 @@ export class RichTextEditorComponent implements AfterViewInit {
       }
 
       // Set initial focus to improve UX (delay to avoid issues)
-      setTimeout(() => {
+      this.timerService.setTimeout(() => {
         if (this.editor) {
           this.editor.nativeElement.focus();
         }
@@ -446,7 +448,7 @@ export class RichTextEditorComponent implements AfterViewInit {
       document.body.appendChild(tooltip);
 
       // Remove after delay
-      setTimeout(() => {
+      this.timerService.setTimeout(() => {
         document.body.removeChild(tooltip);
       }, 1500);
     }

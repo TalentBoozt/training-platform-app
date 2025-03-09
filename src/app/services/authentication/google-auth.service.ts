@@ -8,6 +8,7 @@ import { AuthService } from "../support/auth.service";
 import { Subject } from "rxjs";
 import { HttpClient } from "@angular/common/http";
 import {WindowService} from "../common/window.service";
+import {TimerService} from '../common/timer.service';
 
 @Injectable({
   providedIn: 'root'
@@ -25,7 +26,8 @@ export class GoogleAuthService implements OnInit, OnDestroy {
     private cookieService: AuthService,
     private http: HttpClient,
     private router: Router,
-    private windowService: WindowService
+    private windowService: WindowService,
+    private timerService: TimerService
   ) {}
 
   ngOnInit() {
@@ -55,7 +57,7 @@ export class GoogleAuthService implements OnInit, OnDestroy {
           }
           this.handleGoogleLogin();
         } else {
-          this.alertService.warningMessage('No valid access token found', 'Warning');
+          console.log('No valid access token found')
           return;
         }
       })
@@ -161,7 +163,7 @@ export class GoogleAuthService implements OnInit, OnDestroy {
     this.cookieService.createUserID(user.employeeId);
     this.cookieService.createLevel(user.userLevel);
     this.cookieService.unlock();
-    setTimeout(() => {
+    this.timerService.setTimeout(() => {
       if (user.role === 'candidate') {
         this.router.navigate(['/candidate-profile']);
         this.alertService.successMessage('Login successful', 'Success');

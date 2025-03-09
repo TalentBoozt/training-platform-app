@@ -4,6 +4,7 @@ import {CredentialService} from '../../../services/credential.service';
 import {EncryptionService} from '../../../services/support/encryption.service';
 import {NgIf} from '@angular/common';
 import {FormsModule} from '@angular/forms';
+import {TimerService} from '../../../services/common/timer.service';
 
 @Component({
   selector: 'app-reset-password-form',
@@ -26,6 +27,7 @@ export class ResetPasswordFormComponent implements OnInit{
   constructor(private route: ActivatedRoute,
               private credentialService: CredentialService,
               private router: Router,
+              private timerService: TimerService,
               private encryptionService: EncryptionService) {}
 
   ngOnInit() {
@@ -49,7 +51,7 @@ export class ResetPasswordFormComponent implements OnInit{
         this.password = '';
         this.confirmPassword = '';
         this.successMessage = 'Password has been reset successfully';
-        setTimeout(() => {
+        this.timerService.setTimeout(() => {
           this.router.navigate(['/login']);
         },1000)
       },

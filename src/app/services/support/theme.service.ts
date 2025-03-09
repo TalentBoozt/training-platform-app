@@ -31,16 +31,11 @@ export class ThemeService {
   applyTheme() {
     if (this.windowService.nativeDocument) {
       document.body.classList.remove(
-        'theme-blue-light', 'theme-blue-dark',
-        'theme-green-light', 'theme-green-dark',
-        'theme-orange-light', 'theme-orange-dark',
-        'theme-red-light', 'theme-red-dark',
-        'theme-purple-light', 'theme-purple-dark',
-        'theme-mixed-light', 'theme-mixed-dark'
+        'theme-light', 'theme-dark'
       );
 
       // Add the new theme based on color and mode
-      const themeClass = `theme-${this.currentColorShading}-${this.isDarkTheme ? 'dark' : 'light'}`;
+      const themeClass = `theme-${this.isDarkTheme ? 'dark' : 'light'}`;
       document.body.classList.add(themeClass);
     }
   }

@@ -9,8 +9,16 @@ import {environment} from '../environments/environment';
 import { getFirestore, provideFirestore } from '@angular/fire/firestore';
 import { initializeApp, provideFirebaseApp } from '@angular/fire/app';
 import { getStorage, provideStorage } from '@angular/fire/storage';
-import {provideHttpClient, withFetch} from '@angular/common/http';
+import {
+  HTTP_INTERCEPTORS,
+  provideHttpClient,
+  withFetch,
+  withInterceptorsFromDi
+} from '@angular/common/http';
 import {provideOAuthClient} from 'angular-oauth2-oidc';
+import {SkipXsrfInterceptor} from './Config/SkipXsrfInterceptor';
+import {DemoModeInterceptor} from './Config/DemoModeInterceptor';
+import {LocationStrategy, PathLocationStrategy} from '@angular/common';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -23,10 +31,13 @@ export const appConfig: ApplicationConfig = {
       preventDuplicates: true,
     }),
     provideAnimations(),
-    provideHttpClient(withFetch()),
+    provideHttpClient(withFetch(), withInterceptorsFromDi()),
     provideOAuthClient(),
     provideFirebaseApp(() => initializeApp(environment.firebase)),
     provideFirestore(() => getFirestore()),
     provideStorage(() => getStorage()),
+    { provide: HTTP_INTERCEPTORS, useClass: SkipXsrfInterceptor, multi: true },
+    { provide: HTTP_INTERCEPTORS, useClass: DemoModeInterceptor, multi: true },
+    { provide: LocationStrategy, useClass: PathLocationStrategy },
   ]
 };

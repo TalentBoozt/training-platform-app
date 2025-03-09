@@ -6,6 +6,7 @@ import { AlertsService } from "../support/alerts.service";
 import {environment} from "../../../environments/environment";
 import { HttpClient, HttpHeaders } from "@angular/common/http";
 import {WindowService} from "../common/window.service";
+import {TimerService} from '../common/timer.service';
 
 @Injectable({
   providedIn: 'root',
@@ -22,6 +23,7 @@ export class LinkedInAuthService{
     private authService: AuthService,
     private credentialService: CredentialService,
     private windowService: WindowService,
+    private timerService: TimerService,
     private http: HttpClient
   ) {}
 
@@ -110,7 +112,7 @@ export class LinkedInAuthService{
     this.http.post<any>(`${this.baseUrl}/linkedin/exchange-code`, body, {headers}).subscribe(
       (response) => {
         const accessToken = response.access_token;
-        setTimeout(() => {
+        this.timerService.setTimeout(() => {
           this.http.get<any>(`${this.baseUrl}/linkedin/profile?accessToken=${accessToken}`, {headers}).subscribe(
             (response) => {
               this.handleAuthResponse(response);
@@ -195,7 +197,7 @@ export class LinkedInAuthService{
     this.authService.createUserID(user.employeeId.toString());
     this.authService.createLevel(user.userLevel.toString());
     this.authService.unlock();
-    setTimeout(() => {
+    this.timerService.setTimeout(() => {
       if (user.role === 'candidate') {
         this.router.navigate(['/candidate-profile']);
         this.alertService.successMessage('Login successful', 'Success');

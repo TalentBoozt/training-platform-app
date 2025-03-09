@@ -317,8 +317,32 @@ $screen-xxl: 1401px;
     color: var(--color-secondary-100);
   }
 }
+.btn-f-3{
+  color: var(--color-white);
+  background-color: var(--color-primary-100);
+
+  &:hover{
+    background-color: var(--color-white);
+    border: 2px solid var(--color-primary-100);
+    color: var(--color-primary-100);
+  }
+}
 
 // texts
+h1, h2, h3, h4, h5, h6 {
+  font-family: 'Merriweather', serif;
+  color: var(--color-text-100);
+}
+
+code, pre {
+  font-family: 'Source Code Pro', monospace;
+  color: var(--color-code-100);
+}
+
+p, ol, ul, li {
+  color: var(--color-text-400);
+}
+
 .title-1{
   font-size: var(--fs-50);
   font-weight: var(--fw-700);
@@ -556,4 +580,111 @@ $screen-xxl: 1401px;
 .error-msg{
   color: var(--color-danger-200);
   font-size: var(--fs-12);
+}
+.success-msg{
+  color: green;
+  font-size: var(--fs-12);
+}
+.warn-msg{
+  color: orange;
+  font-size: var(--fs-12);
+}
+
+// lock screens
+.shared-background{
+  width: 100%;
+  height: 100vh;
+  position: relative;
+  background-image: url("https://jobstack-shreethemes.vercel.app/static/media/bg3.b53090a36ed85cc017cd.jpg");
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+
+  .overlay{
+    width: 100%;
+    height: 100%;
+    background-image: linear-gradient(rgba(0,0,0,0), #0f172ab3);
+    backdrop-filter: opacity(.8);
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    z-index: 1;
+  }
+
+  .content-holder{
+    width: 100vh;
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    position: relative;
+    z-index: 2;
+
+    .form-card-1{
+      max-width: 400px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+
+      .profile-wrapper{
+        width: 80px;
+        height: 80px;
+        border-radius: 50%;
+        overflow: hidden;
+
+        img{
+          width: 100%;
+          height: 100%;
+        }
+      }
+
+      .logo{
+        width: 240px;
+        height: 70px;
+        background-size: cover;
+        background-position: center center;
+        background-repeat: no-repeat;
+      }
+
+      h5{
+        width: 100%;
+        text-align: center;
+      }
+
+      .title{
+        width: 100%;
+        text-align: left;
+      }
+
+      .link{
+        color: var(--color-text-300);
+        cursor: pointer;
+        text-decoration: none;
+
+        &:hover{
+          color: var(--color-text-200);
+        }
+      }
+
+      .navigation-text{
+        a{
+          color: var(--color-text-100);
+          cursor: pointer;
+          text-decoration: none;
+          font-weight: 500;
+
+          &:hover{
+            color: var(--color-text-200);
+          }
+        }
+      }
+    }
+
+    @media screen and (max-width: 768px) {
+      width: 100%;
+    }
+  }
 }

@@ -7,7 +7,7 @@
         <img src="./assets/imgs/login/login.webp" alt="login image">
       </div>
       <div class="form-card-1">
-        <div class="logo" [ngStyle]="{'background-image': themeService.isDarkMode() ? 'url(./assets/imgs/logo/top-w.webp)' : 'url(./assets/imgs/logo/top-b.webp)'}">
+        <div class="logo" [ngStyle]="{'background-image': themeService.isDarkMode() ? 'url(./assets/images/logo/top-w.webp)' : 'url(./assets/images/logo/top-b.webp)'}">
         </div>
         <h5 class="title">Sign in to your account</h5>
 
@@ -40,12 +40,12 @@
             </div>
 
             <div class="col-12">
-              <button class="btn-1 w-100" (click)="loginUser()" [disabled]="disabled">Sign In</button>
+              <button class="btn-fill btn-f-3 w-100" (click)="loginUser()" [disabled]="disabled">Sign In</button>
             </div>
 
             <div class="d-flex align-items-center justify-content-center">
               <hr>
-              <p class="mx-1 my-0" style="white-space: nowrap">or sign in/up with</p>
+              <p class="mx-1 my-0" style="white-space: nowrap">or sign in with</p>
               <hr>
             </div>
 
