@@ -105,6 +105,7 @@
           [value]="currentColor"
           (change)="applyColor($event)"
           (mouseover)="showTooltip($event, 'We recommend not change automatic colors because it will effects to different color themes')"
+          (mouseleave)="hideTooltip()"
           title="Text Color"
           class="toolbar-color" />
       </div>

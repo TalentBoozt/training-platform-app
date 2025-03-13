@@ -1,1 +1,75 @@
-<p>module-details works!</p>
+<div class="d-md-flex">
+  <div class="form-card-1 justify-content-start">
+    <h5>Initialize Installment Plans :</h5>
+
+    <form (ngSubmit)="addModule()">
+      <div class="row form-wrapper">
+        <div class="col-12">
+          <div class="form-group">
+            <label for="name">Module name *</label>
+            <input type="text" class="form-control" id="name" [(ngModel)]="newModule.name" [ngModelOptions]="{standalone: true}" required>
+          </div>
+        </div>
+        <div class="col-12">
+          <div class="form-group">
+            <label for="description">Module description *</label>
+            <input type="text" class="form-control" id="description" [(ngModel)]="newModule.description" [ngModelOptions]="{standalone: true}" required>
+          </div>
+        </div>
+        <div class="col-12 col-md-6">
+          <div class="form-group">
+            <label for="installment">Installment Plan *</label>
+            <select class="form-control" id="installment" [(ngModel)]="newModule.installmentId" [ngModelOptions]="{standalone: true}" required>
+              <option *ngFor="let i of installments" [value]="i.id">{{i.name}}</option>
+            </select>
+          </div>
+        </div>
+        <div class="col-12 col-md-6">
+          <div class="form-group">
+            <label for="mlink">Meeting Link</label>
+            <input type="text" class="form-control" id="mlink" placeholder="10.00" [(ngModel)]="newModule.meetingLink" [ngModelOptions]="{standalone: true}">
+          </div>
+        </div>
+        <div class="col-12 col-md-6">
+          <div class="form-group">
+            <label for="date">Start Date *</label>
+            <input type="date" class="form-control" id="date" [(ngModel)]="newModule.date" [ngModelOptions]="{standalone: true}" required>
+          </div>
+        </div>
+        <div class="col-6 col-md-3">
+          <div class="form-group">
+            <label for="start">Start Time *</label>
+            <input type="time" class="form-control" id="start" [(ngModel)]="newModule.start" [ngModelOptions]="{standalone: true}" required>
+          </div>
+        </div>
+        <div class="col-6 col-md-3">
+          <div class="form-group">
+            <label for="end">End Time *</label>
+            <input type="time" class="form-control" id="end" [(ngModel)]="newModule.end" [ngModelOptions]="{standalone: true}" required>
+          </div>
+        </div>
+        <div class="col-12 col-md-6 col-lg-3">
+          <div class="form-group d-flex align-items-end w-100 h-100">
+            <button type="submit" class="btn-fill btn-f-2" translate="no">Add</button>
+          </div>
+        </div>
+      </div>
+    </form>
+
+    <div class="skill-set w-100" *ngIf="modules.length > 0">
+      <hr>
+      <div class="row my-2" *ngFor="let module of modules; let i = index">
+        <div class="col-6">
+          <p>{{module.name}}</p>
+        </div>
+        <div class="col-3">
+          <p>{{module.date}}</p>
+        </div>
+        <div class="col-3">
+          <button class="btn-fill btn-f-4" (click)="removeModule(i)"><i class="material-icons" translate="no">delete</i></button>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>

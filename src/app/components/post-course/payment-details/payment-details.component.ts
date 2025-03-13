@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {ResumeStorageService} from '../../../services/support/resume-storage.service';
 import {FormsModule} from '@angular/forms';
 import {NgForOf, NgIf} from '@angular/common';
@@ -15,8 +15,7 @@ import {AlertsService} from '../../../services/support/alerts.service';
   styleUrl: './payment-details.component.scss',
   standalone: true
 })
-export class PaymentDetailsComponent {
-  installments: any[] = [];
+export class PaymentDetailsComponent implements OnInit{
   paymentMethod: string = 'card';
 
   bankInstallments: any[] = [];
@@ -48,7 +47,7 @@ export class PaymentDetailsComponent {
       this.bankInstallments = savedData.installment;
       this.cardInstallments = savedData.installment
     }
-    if (!savedData.basicDetails.paymentMethod) {
+    if (!savedData?.basicDetails?.paymentMethod) {
       this.alertService.errorMessage('Payment acceptance method not found! Add it first in step 1', 'Error');
     } else {
       this.paymentMethod = savedData.basicDetails.paymentMethod;
