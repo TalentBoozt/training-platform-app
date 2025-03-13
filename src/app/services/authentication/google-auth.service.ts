@@ -142,11 +142,12 @@ export class GoogleAuthService implements OnInit, OnDestroy {
       email: profile.email,
       firstname: profile.firstName,
       lastname: profile.lastName,
-      role: 'candidate',
-      userLevel: '1',
+      role: "employer",
+      userLevel: "5",
       referrerId: referer,
       platform: platform,
-      promotion: promotion
+      promotion: promotion,
+      active: false
     };
 
     this.credentialService.addCredential(newUser).subscribe(

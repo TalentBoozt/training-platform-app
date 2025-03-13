@@ -105,6 +105,10 @@ export class LoginComponent implements OnInit, AfterViewInit{
             this.alertService.errorMessage('You are not authorized to login', 'Error');
             return;
           }
+          if (response.disabled){
+            this.alertService.errorMessage('Your account is disabled', 'Error');
+            return;
+          }
 
           const encryptedPassword = await this.encryptionService.decryptPassword(response.password?.toString());
 
@@ -125,7 +129,11 @@ export class LoginComponent implements OnInit, AfterViewInit{
               this.cookieService.createOrganizationID(response.companyId);
               this.cookieService.createLevel(response.userLevel);
               this.cookieService.unlock();
-              this.alertService.successMessage('Login successful', 'Success');
+              if (response.active){
+                this.alertService.successMessage('Login successful', 'Success');
+              } else {
+                this.alertService.warningMessage('Your account is not active yet! Stay tuned', 'Warning');
+              }
               this.router.navigate(['/']);
 
             } else {
