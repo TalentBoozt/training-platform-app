@@ -1,0 +1,73 @@
+<div class="form-card-1">
+  <div class="d-flex align-items-center justify-content-between gap-2 w-100">
+    <h5>Preview & Publish :</h5>
+    <div class="form-group">
+      <button type="submit" class="btn-fill btn-f-2">Publish</button>
+    </div>
+  </div>
+
+  <div style="width: 100%" *ngFor="let c of selectedCourse">
+    <div class="overview-wrapper" *ngIf="!isNotFound">
+      <div class="container mb-4">
+        <div class="d-flex flex-column gap-4">
+          <div class="title-2">{{c?.name}}</div>
+          <div class="paragraph-1">{{c?.overview}}</div>
+          <div class="paragraph-1"><span class="bold">Lecturers: </span>{{c?.lecturer}}</div>
+        </div>
+      </div>
+
+      <div class="details-wrapper">
+        <div class="container">
+          <div class="d-md-flex align-items-center justify-content-between w-100">
+            <div class="d-flex align-items-center justify-content-between w-100 mb-3 mb-md-0">
+              <div class="d-flex flex-column align-items-center justify-content-center w-100">
+                <div class="details-tag">Reviews</div>
+                <div class="details-val">
+                  <i class="material-icons star">star</i>
+                  {{c?.rating}}
+                </div>
+              </div>
+              <div class="d-flex flex-column align-items-center justify-content-center w-100">
+                <div class="details-tag">Language</div>
+                <div class="details-val">{{c?.language}}</div>
+              </div>
+            </div>
+            <div class="d-flex align-items-center justify-content-between w-100 mb-3 mb-md-0">
+              <div class="d-flex flex-column align-items-center justify-content-center w-100">
+                <div class="details-tag">Course</div>
+                <div class="details-val">{{c?.modules.length || '0'}} Modules</div>
+              </div>
+              <div class="d-flex flex-column align-items-center justify-content-center w-100">
+                <div class="details-tag">Experience</div>
+                <div class="details-val">{{c?.level}}</div>
+              </div>
+            </div>
+            <div class="d-flex align-items-center justify-content-between w-100">
+              <div class="d-flex flex-column align-items-center justify-content-center w-100">
+                <div class="details-tag">Duration</div>
+                <div class="details-val">{{c?.duration}}</div>
+              </div>
+              <div class="w-100"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="container">
+        <button class="btn-fill btn-f-2">Enroll Now</button>
+      </div>
+    </div>
+
+    <div class="container py-5">
+      <div class="content-title">Skills you’ll gain</div>
+      <button class="btn-outline btn-o-2 me-2 mb-2" *ngFor="let s of c?.skills">{{s}}</button>
+
+      <div class="content-title">What you’ll learn</div>
+      <div style="color: var(--color-text-200)" [innerHTML]="sanitizeHTML(c?.description)"></div>
+    </div>
+  </div>
+
+  <div *ngIf="isNotFound" class="w-100 d-flex align-items-center justify-content-center" style="min-height: 80vh">
+    <p>Preview Not Available! Make sure to add course details and saved in every step!</p>
+  </div>
+</div>

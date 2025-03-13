@@ -18,7 +18,7 @@ export class BasicDetailsComponent implements OnInit {
     overview: '',
     lecturer: '',
     language: '',
-    level: '',
+    level: 'Beginner',
     duration: '',
     email: '',
     paymentMethod: 'bank' // 'card' or 'bank'

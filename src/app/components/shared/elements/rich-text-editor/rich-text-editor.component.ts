@@ -481,17 +481,15 @@ export class RichTextEditorComponent implements AfterViewInit {
       tooltip.style.top = `${event.clientY + 10}px`;
       // Add to document
       document.body.appendChild(tooltip);
-      // Remove after delay
-      this.timerService.setTimeout(() => {
-        document.body.removeChild(tooltip);
-      }, 2000);
     }
   }
 
-  // hideTooltip() {
-  //   const tooltip = document.querySelector('.rte-tooltip');
-  //   if (tooltip) {
-  //     document.body.removeChild(tooltip);
-  //   }
-  // }
+  hideTooltip() {
+    if (this.windowService.nativeDocument){
+      const tooltip = document.querySelector('.rte-tooltip');
+      if (tooltip) {
+        document.body.removeChild(tooltip);
+      }
+    }
+  }
 }

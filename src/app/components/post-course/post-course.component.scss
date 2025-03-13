@@ -171,6 +171,10 @@
       border-radius: 5px 0 0 5px;
       padding: 10px;
       background-color: var(--color-surface-mixed-100);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
 
       &:hover{
         background-color: var(--color-surface-300);

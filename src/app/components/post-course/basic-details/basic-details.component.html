@@ -35,8 +35,12 @@
       </div>
       <div class="col-12 col-md-6">
         <div class="form-group">
-          <label for="level">Experience *</label>
-          <input type="text" class="form-control" id="level" placeholder="Beginner" [(ngModel)]="basicDetails.level" [ngModelOptions]="{standalone: true}">
+          <label for="level">Target Level *</label>
+          <select class="form-control" id="level" [(ngModel)]="basicDetails.level" [ngModelOptions]="{standalone: true}" required>
+            <option value="Beginner">Beginner</option>
+            <option value="Intermediate">Intermediate</option>
+            <option value="Advanced">Advanced</option>
+          </select>
         </div>
       </div>
       <div class="col-12 col-md-6">

@@ -20,10 +20,11 @@
         <app-relavant-details *ngSwitchCase="2"></app-relavant-details>
         <app-payment-details *ngSwitchCase="3"></app-payment-details>
         <app-module-details *ngSwitchCase="4"></app-module-details>
+        <app-preview-post *ngSwitchCase="5"></app-preview-post>
       </div>
     </div>
 
-    <div style="margin: max(50px, 5vw) auto; width: 100%; max-width: 400px;">
+    <div *ngIf="currentStep != 5" style="margin: max(50px, 5vw) auto; width: 100%; max-width: 400px;">
       <div class="form-card-2">
         <div class="pro-title">
           <h5>Copy from existing Course:</h5>
@@ -45,11 +46,11 @@
           <div class="pro-tag" *ngIf="false">pro</div>
         </div>
         <div class="d-flex align-items-center justify-content-end w-100 h-100 drafts-wrapper">
-          <div class="d-flex align-items-center justify-content-between w-100 draft" *ngIf="false">
-            <div class="draft-name">Load Draft</div>
-            <i class="material-icons clear">delete</i>
+          <div class="d-flex align-items-center justify-content-between w-100 draft" *ngIf="draft">
+            <div class="draft-name"><i class="material-icons">auto_awesome</i> Auto Saved</div>
+            <i class="material-icons clear" (click)="clearDraft()">delete</i>
           </div>
-          <div class="draft-not-found" *ngIf="true">
+          <div class="draft-not-found" *ngIf="!draft">
             <i class="material-icons">drafts</i>
             <div class="d-flex align-items-center justify-content-center">
               <p>No Drafts Found</p>
