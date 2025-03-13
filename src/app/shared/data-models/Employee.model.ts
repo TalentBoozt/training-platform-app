@@ -21,4 +21,8 @@ export interface EmployeeModel {
   expectedSalaryRange?: any;
   currentExperience?: any;
   keywords?: any;
+  referrerId?: any,
+  platform?: any,
+  promotion?: any,
+  active?: boolean
 }

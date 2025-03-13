@@ -101,7 +101,8 @@ export class RegisterComponent implements OnInit, AfterViewInit{
           userLevel: "5",
           referrerId: referer,
           platform: platform,
-          promotion: promotion
+          promotion: promotion,
+          active: false
         }).subscribe((response: any) => {
           if (!response) {
             this.alertService.errorMessage('An unexpected error has occurred', 'Unexpected Error');
@@ -115,6 +116,8 @@ export class RegisterComponent implements OnInit, AfterViewInit{
           this.cookieService.createLevel(response.userLevel);
           this.cookieService.createAdmin(response.email);
           this.cookieService.createOrganizationID(response.companyId);
+          this.router.navigate(['/']);
+          this.alertService.successMessage('Registration successful! We will review your account and unlock full access as soon as possible!', 'Success');
         }, (error: HttpErrorResponse) => {
           switch (error.status) {
             case 409:
