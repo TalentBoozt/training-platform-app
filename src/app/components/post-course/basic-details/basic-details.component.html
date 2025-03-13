@@ -51,6 +51,23 @@
           <input type="text" class="form-control" id="email" placeholder="mDd0i@example.com" [(ngModel)]="basicDetails.email" required [ngModelOptions]="{standalone: true}">
         </div>
       </div>
+      <div class="col-12">
+        <div class="form-group">
+          <label>Payment Accept Method *</label>
+          <div class="form-check">
+            <input class="form-check-input" type="radio" name="paymentMethod" id="cardPayment" [(ngModel)]="basicDetails.paymentMethod" value="card" [ngModelOptions]="{standalone: true}">
+            <label class="form-check-label" for="cardPayment">
+              Card Payments
+            </label>
+          </div>
+          <div class="form-check">
+            <input class="form-check-input" type="radio" name="paymentMethod" id="bankTransfer" [(ngModel)]="basicDetails.paymentMethod" value="bank" [ngModelOptions]="{standalone: true}">
+            <label class="form-check-label" for="bankTransfer">
+              Bank Transfers
+            </label>
+          </div>
+        </div>
+      </div>
     </div>
   </form>
 </div>

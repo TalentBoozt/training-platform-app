@@ -8,6 +8,9 @@
 
   <div class="toolbar">
     <div class="toolbar-group">
+      <select [value]="currentFontFamily" (change)="applyFontFamily($event)" title="Font Family" class="toolbar-select">
+        <option *ngFor="let font of fontFamilies" [value]="font.value">{{font.label}}</option>
+      </select>
       <button
         type="button"
         (click)="applyStyle('bold')"
@@ -101,6 +104,7 @@
           type="color"
           [value]="currentColor"
           (change)="applyColor($event)"
+          (mouseover)="showTooltip($event, 'We recommend not change automatic colors because it will effects to different color themes')"
           title="Text Color"
           class="toolbar-color" />
       </div>

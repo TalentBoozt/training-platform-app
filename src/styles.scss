@@ -327,6 +327,24 @@ $screen-xxl: 1401px;
     color: var(--color-primary-100);
   }
 }
+.btn-f-4{
+  color: var(--color-white);
+  background-color: var(--color-danger-200);
+  padding: var(--padding-1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  i{
+    font-size: 16px;
+    margin: 0;
+    padding: 0;
+  }
+
+  &:hover{
+    background-color: var(--color-danger-100);
+  }
+}
 
 // texts
 h1, h2, h3, h4, h5, h6 {
@@ -550,6 +568,11 @@ p, ol, ul, li {
   }
   .form-check{
     gap: 5px;
+
+    .form-check-input{
+      width: fit-content;
+      margin-right: 5px;
+    }
   }
 
   .form-radio-input{
