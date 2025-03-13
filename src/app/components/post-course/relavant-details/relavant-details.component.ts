@@ -3,13 +3,15 @@ import {FormsModule} from "@angular/forms";
 import {ResumeStorageService} from '../../../services/support/resume-storage.service';
 import {AlertsService} from '../../../services/support/alerts.service';
 import {FileUploadService} from '../../../services/support/file-upload.service';
-import {NgForOf} from '@angular/common';
+import {NgClass, NgForOf, NgIf} from '@angular/common';
 
 @Component({
   selector: 'app-relavant-details',
   imports: [
     FormsModule,
-    NgForOf
+    NgForOf,
+    NgClass,
+    NgIf
   ],
   templateUrl: './relavant-details.component.html',
   styleUrl: './relavant-details.component.scss',

@@ -46,6 +46,7 @@ export class RichTextEditorComponent implements AfterViewInit {
 
   currentFontSize = '16px';
   currentColor = '#000000';
+  currentFontFamily = 'Arial, sans-serif';
 
   // Track if content was modified
   contentModified = false;
@@ -59,6 +60,20 @@ export class RichTextEditorComponent implements AfterViewInit {
     { value: '20px', label: '20' },
     { value: '24px', label: '24' },
     { value: '28px', label: '28' }
+  ];
+
+  // Available font families
+  fontFamilies = [
+    { value: 'Arial, sans-serif', label: 'Arial' },
+    { value: 'Helvetica, sans-serif', label: 'Helvetica' },
+    { value: 'Times New Roman, serif', label: 'Times New Roman' },
+    { value: 'Georgia, serif', label: 'Georgia' },
+    { value: 'Courier New, monospace', label: 'Courier New' },
+    { value: 'Verdana, sans-serif', label: 'Verdana' },
+    { value: 'Tahoma, sans-serif', label: 'Tahoma' },
+    { value: 'Trebuchet MS, sans-serif', label: 'Trebuchet MS' },
+    { value: 'Impact, sans-serif', label: 'Impact' },
+    { value: 'Comic Sans MS, cursive', label: 'Comic Sans MS' }
   ];
 
   constructor(
@@ -308,6 +323,13 @@ export class RichTextEditorComponent implements AfterViewInit {
     });
   }
 
+  // Apply font family
+  applyFontFamily(event: Event) {
+    const fontFamily = (event.target as HTMLSelectElement).value;
+    this.currentFontFamily = fontFamily;
+    this.executeCommand('fontName', fontFamily);
+  }
+
   // Apply text color
   applyColor(event: Event) {
     const color = (event.target as HTMLInputElement).value;
@@ -399,6 +421,21 @@ export class RichTextEditorComponent implements AfterViewInit {
         this.currentFontSize = closestSize;
       }
 
+      // Check for font family
+      if (computedStyle.fontFamily) {
+        const fontFamily = computedStyle.fontFamily;
+
+        // Find matching font family or use default
+        const matchedFont = this.fontFamilies.find(font =>
+          fontFamily.includes(font.label) ||
+          fontFamily.includes(font.value.split(',')[0])
+        );
+
+        if (matchedFont) {
+          this.currentFontFamily = matchedFont.value;
+        }
+      }
+
       // Check for color
       if (computedStyle.color) {
         const rgb = computedStyle.color;
@@ -438,19 +475,23 @@ export class RichTextEditorComponent implements AfterViewInit {
       const tooltip = document.createElement('div');
       tooltip.classList.add('rte-tooltip');
       tooltip.textContent = message;
-
       // Position tooltip near the mouse
       tooltip.style.position = 'absolute';
       tooltip.style.left = `${event.clientX + 10}px`;
       tooltip.style.top = `${event.clientY + 10}px`;
-
       // Add to document
       document.body.appendChild(tooltip);
-
       // Remove after delay
       this.timerService.setTimeout(() => {
         document.body.removeChild(tooltip);
-      }, 1500);
+      }, 2000);
     }
   }
+
+  // hideTooltip() {
+  //   const tooltip = document.querySelector('.rte-tooltip');
+  //   if (tooltip) {
+  //     document.body.removeChild(tooltip);
+  //   }
+  // }
 }

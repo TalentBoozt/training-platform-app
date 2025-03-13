@@ -20,7 +20,8 @@ export class BasicDetailsComponent implements OnInit {
     language: '',
     level: '',
     duration: '',
-    email: ''
+    email: '',
+    paymentMethod: 'bank' // 'card' or 'bank'
   };
 
   constructor(private resumeStorage: ResumeStorageService, private alertService: AlertsService) {}
@@ -38,7 +39,7 @@ export class BasicDetailsComponent implements OnInit {
       this.basicDetails.overview &&
       this.basicDetails.lecturer &&
       this.basicDetails.language &&
-      this.basicDetails.level) {
+      this.basicDetails.level && this.basicDetails.paymentMethod) {
       if (!this.isValidEmail(this.basicDetails.email)){
         this.alertService.errorMessage('Please enter a valid email address', 'Error');
         return;

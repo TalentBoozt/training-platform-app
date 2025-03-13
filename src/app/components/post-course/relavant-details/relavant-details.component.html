@@ -80,9 +80,9 @@
           <input type="text" class="form-control" id="price" placeholder="10.00" [(ngModel)]="relevantDetails.price" required [ngModelOptions]="{standalone: true}">
         </div>
       </div>
-      <div class="col-6 col-md-3 col-lg-6 col-xl-3">
+      <div class="col-6 col-md-3 col-lg-6" [ngClass]="relevantDetails.mediaType === 'physical' ? 'col-xl-3' : ''">
         <div class="form-group">
-          <label for="mediaType">Media Type *</label>
+          <label for="mediaType">Deliver Type *</label>
           <select class="form-control" id="mediaType" [(ngModel)]="relevantDetails.mediaType" [ngModelOptions]="{standalone: true}" required>
             <option value="zoom">Zoom</option>
             <option value="meet">Google Meet</option>
@@ -92,10 +92,10 @@
           </select>
         </div>
       </div>
-      <div class="col-12 col-md-3 col-lg-12 col-xl-3">
+      <div class="col-12 col-md-3 col-lg-12 col-xl-3" *ngIf="relevantDetails.mediaType === 'physical'">
         <div class="form-group">
           <label for="location">Location url</label>
-          <input type="text" class="form-control" id="location" placeholder="https://maps.google.com" [(ngModel)]="relevantDetails.location" [ngModelOptions]="{standalone: true}">
+          <input type="text" class="form-control" id="location" placeholder="https://maps.google.com" [(ngModel)]="relevantDetails.location" [ngModelOptions]="{standalone: true}" [disabled]="relevantDetails.mediaType != 'physical'">
         </div>
       </div>
     </div>

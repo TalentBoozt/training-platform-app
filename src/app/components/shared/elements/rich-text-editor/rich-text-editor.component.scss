@@ -269,7 +269,8 @@ $screen-xxl: 1401px;
 }
 
 // Tooltip
-.rte-tooltip {
+::ng-deep .rte-tooltip {
+  max-width: 180px;
   position: absolute;
   background-color: rgba(0, 0, 0, 0.8);
   color: white;
