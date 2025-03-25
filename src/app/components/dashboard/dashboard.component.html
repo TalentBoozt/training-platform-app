@@ -4,9 +4,9 @@
       <div class="card-1">
         <div class="title">
           <div class="img-wrapper">
-            <img src="/assets/images/dashboard/icons/chronometer-time.svg" alt="img">
+            <img src="/assets/images/dashboard/icons/chronometer-time.svg" alt="img"loading="lazy">
           </div>
-          Hours Worked
+          Training Hours
         </div>
         <div class="value">
           4H 15M
@@ -17,7 +17,7 @@
       <div class="card-1">
         <div class="title">
           <div class="img-wrapper">
-            <img src="/assets/images/dashboard/icons/books.svg" alt="img">
+            <img src="/assets/images/dashboard/icons/books.svg" alt="img" loading="lazy">
           </div>
           Courses in Progress
         </div>
@@ -30,7 +30,7 @@
       <div class="card-1">
         <div class="title">
           <div class="img-wrapper">
-            <img src="/assets/images/dashboard/icons/summary-check.svg" alt="img">
+            <img src="/assets/images/dashboard/icons/summary-check.svg" alt="img" loading="lazy">
           </div>
           Courses Completed
         </div>
@@ -43,12 +43,12 @@
       <div class="card-1">
         <div class="title">
           <div class="img-wrapper">
-            <img src="/assets/images/dashboard/icons/percentage.svg" alt="img">
+            <img src="/assets/images/dashboard/icons/participants.svg" alt="img" loading="lazy">
           </div>
-          Progress Percentage
+          Total Participants
         </div>
         <div class="value">
-          65%
+          400
         </div>
       </div>
     </div>
@@ -78,12 +78,81 @@
 
         <div class="result-not-found" *ngIf="filteredCourses.length === 0">
           <div class="img-wrapper">
-            <img src="/assets/images/decorations/polar-bear.svg" alt="not found">
+            <img src="/assets/images/decorations/polar-bear.svg" alt="not found" loading="lazy">
           </div>
           <p>No Results Available</p>
         </div>
       </div>
     </div>
-    <div class="col-12 col-md-4 col-lg-3"></div>
+    <div class="col-12 col-md-4 col-lg-3">
+      <div class="upcoming-trainings">
+        <div class="d-flex align-items-center justify-content-between w-100">
+          <h4>Upcoming Trainings</h4>
+          <div class="dropdown">
+            <a role="button" data-bs-toggle="dropdown" aria-expanded="false">
+              <i class="material-icons">more_horiz</i>
+            </a>
+
+            <ul class="dropdown-menu">
+              <li><a class="dropdown-item" href="#">Preview</a></li>
+              <li><hr class="dropdown-divider"></li>
+              <li><a class="dropdown-item" href="#">Participants</a></li>
+              <li><a class="dropdown-item" href="#">Edit Course</a></li>
+              <li><a class="dropdown-item" href="#">Edit Modules</a></li>
+              <li><hr class="dropdown-divider"></li>
+              <li><a class="dropdown-item text-danger" href="#">Delete</a></li>
+            </ul>
+          </div>
+        </div>
+        <div class="upcoming-trainings-wrapper">
+          <div class="d-flex align-items-center justify-content-start gap-2 w-100 course" *ngFor="let course of filteredUpcomingCourses">
+            <div class="icon-wrapper">
+              <img src="/assets/images/dashboard/icons/course.svg" alt="course" loading="lazy">
+            </div>
+            <div class="d-flex flex-column align-items-start w-100">
+              <div class="title">{{course.name}}</div>
+              <div class="date">{{course.startDate}}</div>
+            </div>
+            <div class="arrow-icon">
+              <i class="material-icons">arrow_forward_ios</i>
+            </div>
+          </div>
+
+          <div class="result-not-found" *ngIf="filteredUpcomingCourses.length === 0">
+            <div class="img-wrapper">
+              <img src="/assets/images/decorations/polar-bear.svg" alt="not found" loading="lazy">
+            </div>
+            <p>No Upcoming Trainings Available</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="upcoming-trainings mt-4">
+        <div class="d-flex align-items-center justify-content-between w-100">
+          <h4>Quick Links</h4>
+        </div>
+        <div class="upcoming-trainings-wrapper">
+          <div class="d-flex align-items-center justify-content-start gap-2 w-100 course" *ngFor="let link of quickLinks" [routerLink]="link.link">
+            <div class="icon-wrapper">
+              <i class="material-icons">{{link.icon}}</i>
+            </div>
+            <div class="d-flex flex-column align-items-start w-100">
+              <div class="title">{{link.title}}</div>
+<!--              <div class="date">{{course.startDate}}</div>-->
+            </div>
+            <div class="arrow-icon">
+              <i class="material-icons">arrow_forward_ios</i>
+            </div>
+          </div>
+
+          <div class="result-not-found" *ngIf="filteredUpcomingCourses.length === 0">
+            <div class="img-wrapper">
+              <img src="/assets/images/decorations/polar-bear.svg" alt="not found" loading="lazy">
+            </div>
+            <p>Quick Links Not Available</p>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 </div>

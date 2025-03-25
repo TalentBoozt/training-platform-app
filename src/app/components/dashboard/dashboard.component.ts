@@ -1,13 +1,15 @@
 import {Component, ElementRef, OnInit, ViewChild} from '@angular/core';
 import {NgForOf, NgIf} from '@angular/common';
 import {CourseCardComponent} from '../shared/cards/course-card/course-card.component';
+import {RouterLink} from '@angular/router';
 
 @Component({
   selector: 'app-dashboard',
   imports: [
     NgForOf,
     CourseCardComponent,
-    NgIf
+    NgIf,
+    RouterLink
   ],
   templateUrl: './dashboard.component.html',
   styleUrl: './dashboard.component.scss',
@@ -24,8 +26,6 @@ export class DashboardComponent implements OnInit{
   ];
 
   selectedCategory: string = 'All';
-  selectedSkill: string = '';
-  selectedSort: string = '';
 
   courseCards = [
     {
@@ -107,10 +107,25 @@ export class DashboardComponent implements OnInit{
       startDate: "2023-01-01",
       fromTime: "10:00 AM",
       toTime: "12:00 PM",
-      courseStatus: "ongoing",
+      courseStatus: "upcoming",
+    }
+  ];
+  quickLinks: any[] = [
+    {
+      id: 1,
+      title: 'Post a Course',
+      icon: 'add',
+      link: '/post-course'
+    },
+    {
+      id: 2,
+      title: 'My Courses',
+      icon: 'book',
+      link: '/my-courses'
     }
   ];
   filteredCourses: any[] = [];
+  filteredUpcomingCourses: any[] = [];
 
   ngOnInit() {
     this.updateFilteredCourses();
@@ -119,7 +134,6 @@ export class DashboardComponent implements OnInit{
   // Select Category & Reset Skill Filter
   selectCategory(category: string) {
     this.selectedCategory = category;
-    this.selectedSkill = ''; // Reset skill filter
     this.updateFilteredCourses();
   }
 
@@ -129,5 +143,7 @@ export class DashboardComponent implements OnInit{
     this.filteredCourses = this.selectedCategory === 'All'
       ? [...this.courseCards]
       : this.courseCards.filter(course => course.courseStatus === this.selectedCategory);
+
+    this.filteredUpcomingCourses = this.courseCards.filter(course => course.courseStatus === 'upcoming');
   }
 }
