@@ -135,9 +135,9 @@ export class GoogleAuthService implements OnInit, OnDestroy {
   }
 
   private registerGoogleUser(profile: any) {
-    const referer = this.cookieService.getReferer();
+    const referer = this.cookieService.getReferer() || null;
     const platform = this.cookieService.getPlatform();
-    const promotion = this.cookieService.getPromotion();
+    const promotion = this.cookieService.getPromotion() || null;
     const newUser = {
       email: profile.email,
       firstname: profile.firstName,
@@ -163,6 +163,7 @@ export class GoogleAuthService implements OnInit, OnDestroy {
   private processLogin(user: any) {
     this.cookieService.createUserID(user.employeeId);
     this.cookieService.createLevel(user.userLevel);
+    this.cookieService.createAuthToken(user.token);
     this.cookieService.unlock();
     this.timerService.setTimeout(() => {
       if (user.role === 'candidate') {
@@ -186,6 +187,7 @@ export class GoogleAuthService implements OnInit, OnDestroy {
     this.cookieService.createLevel(user.userLevel);
     this.cookieService.unlock();
     this.router.navigate([route]);
+    this.alertService.successMessage('Login successful', 'Success');
   }
 
   logout() {

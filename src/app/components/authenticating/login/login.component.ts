@@ -96,7 +96,7 @@ export class LoginComponent implements OnInit, AfterViewInit{
         }
 
         const formData = this.loginForm.value;
-        this.credentialService.fetchCredentialByEmail(formData.email).subscribe(async (response: any) => {
+        this.credentialService.login(formData.email, formData.password).subscribe(async (response: any) => {
           if (!response) {
             this.alertService.errorMessage('User doesn\'t exist or something went wrong', 'Error');
             return;
@@ -105,46 +105,35 @@ export class LoginComponent implements OnInit, AfterViewInit{
             this.alertService.errorMessage('You are not authorized to login', 'Error');
             return;
           }
-          if (response.disabled){
-            this.alertService.errorMessage('Your account is disabled', 'Error');
-            return;
-          }
-
-          const encryptedPassword = await this.encryptionService.decryptPassword(response.password?.toString());
 
           if (sessionStorage.getItem('LgnAtT') != '0'){
-            if (formData.password == encryptedPassword) {
-              this.cookieService.createSession(response);
+            this.cookieService.createSession(response);
 
-              if (this.loginForm.get('remember')?.value) {
-                localStorage.setItem('email', <string>this.loginForm.get('email')?.value);
-                localStorage.setItem('password', <string>this.loginForm.get('password')?.value);
-              } else {
-                localStorage.removeItem('email');
-                localStorage.removeItem('password');
-              }
-
-              this.cookieService.createUserID(response.employeeId);
-              this.cookieService.createProAdmin(response.email);
-              this.cookieService.createOrganizationID(response.companyId);
-              this.cookieService.createLevel(response.userLevel);
-              this.cookieService.unlock();
-              if (response.active){
-                this.alertService.successMessage('Login successful', 'Success');
-              } else {
-                this.alertService.warningMessage('Your account is not active yet! Stay tuned', 'Warning');
-              }
-              this.router.navigate(['/']);
-
+            if (this.loginForm.get('remember')?.value) {
+              localStorage.setItem('email', <string>this.loginForm.get('email')?.value);
+              localStorage.setItem('password', <string>this.loginForm.get('password')?.value);
             } else {
-              this.alertService.errorMessage('Wrong password', 'Error');
+              localStorage.removeItem('email');
+              localStorage.removeItem('password');
             }
+
+            this.cookieService.createUserID(response.employeeId);
+            this.cookieService.createProAdmin(response.email);
+            this.cookieService.createOrganizationID(response.organizations?.join(', '));
+            this.cookieService.createLevel(response.userLevel);
+            this.cookieService.createAuthToken(response.token);
+            this.cookieService.unlock();
+            if (response.active){
+              this.alertService.successMessage('Login successful', 'Success');
+            } else {
+              this.alertService.warningMessage('Your account is not active yet! Stay tuned', 'Warning');
+            }
+            this.router.navigate(['/']);
           } else {
             this.alertService.errorMessage('Too many attempts! Try again in 5 minutes', 'Warning');
           }
-
         }, error => {
-          this.alertService.errorMessage('Something went wrong', 'Error');
+          this.alertService.errorMessage(error.error.message, "Code: "+error.status);
         });
       }
     } else {

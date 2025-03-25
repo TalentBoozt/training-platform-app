@@ -135,9 +135,9 @@ export class GitHubAuthService {
   }
 
   private registerGitHubUser(profile: any) {
-    const referer = this.cookieService.getReferer();
+    const referer = this.cookieService.getReferer() || null;
     const platform = this.cookieService.getPlatform();
-    const promotion = this.cookieService.getPromotion();
+    const promotion = this.cookieService.getPromotion() || null;
     const newUser = {
       email: profile.email,
       firstname: profile.firstName,
@@ -163,6 +163,7 @@ export class GitHubAuthService {
   private processLogin(user: any) {
     this.cookieService.createUserID(user.employeeId.toString());
     this.cookieService.createLevel(user.userLevel.toString());
+    this.cookieService.createAuthToken(user.token);
     this.cookieService.unlock();
     this.timerService.setTimeout(() => {
       if (user.role === 'candidate') {
@@ -182,9 +183,10 @@ export class GitHubAuthService {
   private setEmployerSession(user: any, route: string) {
     this.cookieService.createUserID(user.employeeId);
     this.cookieService.createAdmin(user.email);
-    this.cookieService.createOrganizationID(user.companyId);
+    this.cookieService.createOrganizationID(user.organizations?.join(', '));
     this.cookieService.createLevel(user.userLevel);
     this.cookieService.unlock();
     this.router.navigate([route]);
+    this.alertService.successMessage('Login successful', 'Success');
   }
 }
