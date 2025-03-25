@@ -1,0 +1,73 @@
+.card{
+  width: 100%;
+  background-color: var(--color-surface-300);
+  margin-bottom: 12px;
+
+  .card-title{
+    color: var(--color-text-100);
+    font-size: var(--fs-20);
+    font-weight: var(--fw-500);
+    margin-bottom: 0;
+    display: -webkit-box;
+    cursor: pointer;
+  }
+
+  .sm-tag, .rating-tag{
+    font-size: var(--fs-14);
+    font-weight: var(--fw-400);
+    color: var(--color-text-400);
+  }
+
+  .ssm-tag{
+    font-size: var(--fs-12);
+    font-weight: var(--fw-400);
+    color: var(--color-text-400);
+  }
+
+  .rating-tag{
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 4px;
+    color: var(--color-highlight-100);
+
+    .material-icons{
+      font-size: var(--fs-18);
+    }
+  }
+
+  .platform{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+
+    .icon-wrapper{
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 20px;
+      height: 20px;
+
+      img{
+        width: 100%;
+      }
+    }
+
+    .platform-name{
+      font-size: var(--fs-16);
+      font-weight: var(--fw-500);
+      color: var(--color-text-200);
+    }
+  }
+
+  .price-tag{
+    font-size: var(--fs-16);
+    font-weight: var(--fw-500);
+    color: var(--color-text-100);
+  }
+}
+
+.text-danger{
+  color: var(--color-danger-100);
+}

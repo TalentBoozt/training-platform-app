@@ -1,0 +1,54 @@
+<div class="card">
+  <img src="{{course.image || '/assets/images/course-card/placeholder.webp'}}" class="card-img-top" alt="course banner" (click)="navigateToDetails()">
+  <div class="card-body">
+    <div class="d-flex flex-column gap-2">
+      <div class="card-title" (click)="navigateToDetails()">{{course.name}}</div>
+      <div class="d-flex flex-column align-items-start gap-2 w-100">
+        <div class="d-flex flex-column align-items-start gap-2 w-100">
+          <div class="platform">
+            <div class="icon-wrapper" *ngIf="course.platform === 'online'">
+              <img src="/assets/images/course-card/online.svg" alt="online">
+            </div>
+            <div class="icon-wrapper" *ngIf="course.platform === 'physical'">
+              <img src="/assets/images/course-card/physical.svg" alt="physical">
+            </div>
+            <div class="icon-wrapper" *ngIf="course.platform === 'zoom'">
+              <img src="/assets/images/course-card/zoom.svg" alt="zoom">
+            </div>
+            <div class="icon-wrapper" *ngIf="course.platform === 'team'">
+              <img src="/assets/images/course-card/ms-teams.svg" alt="teams">
+            </div>
+            <div class="icon-wrapper" *ngIf="course.platform === 'meet'">
+              <img src="/assets/images/course-card/meet.svg" alt="meet">
+            </div>
+            <div class="platform-name">{{course.platform}}</div>
+          </div>
+          <div class="sm-tag">{{course.startDate}}</div>
+        </div>
+        <div class="d-flex align-items-center justify-content-start w-100">
+          <div class="sm-tag">{{course.fromTime +'-'+ course.toTime}}</div>
+        </div>
+        <div class="d-flex align-items-center justify-content-end w-100">
+          <div class="sm-tag"><strong>25 Participants</strong></div>
+        </div>
+        <div class="d-flex align-items-center justify-content-end w-100">
+          <div class="dropdown">
+            <a role="button" data-bs-toggle="dropdown" aria-expanded="false">
+              <i class="material-icons">more_horiz</i>
+            </a>
+
+            <ul class="dropdown-menu">
+              <li><a class="dropdown-item" href="#">Preview</a></li>
+              <li><hr class="dropdown-divider"></li>
+              <li><a class="dropdown-item" href="#">Participants</a></li>
+              <li><a class="dropdown-item" href="#">Edit Course</a></li>
+              <li><a class="dropdown-item" href="#">Edit Modules</a></li>
+              <li><hr class="dropdown-divider"></li>
+              <li><a class="dropdown-item text-danger" href="#">Delete</a></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

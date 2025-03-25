@@ -171,8 +171,10 @@ $screen-lg: 993px;
     height: 60px;
     cursor: pointer;
 
-    @media screen and (max-width: 360px) {
-      min-width: 140px;
+    @include respond-to(sm) {
+      background-image: url(../../../../../public/assets/images/logo/logo-w.webp);
+      min-width: 30px;
+      max-width: 50px;
     }
   }
 
