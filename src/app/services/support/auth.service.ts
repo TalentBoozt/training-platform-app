@@ -153,15 +153,6 @@ export class AuthService {
   }
 
   public createAuthToken(token: string) {
-    this.cookieService.set('auth-token-id', token, {
-      expires: 60 * 60 * 24 * 7,  // Token expires in 7 days
-      path: '/',
-      sameSite: 'Strict',
-      secure: true
-    });
-  }
-
-  storeAuthToken(token: string): void {
     this.cookieService.set('jwtToken', token, { path: '/', secure: true, sameSite: 'Strict' });
   }
 

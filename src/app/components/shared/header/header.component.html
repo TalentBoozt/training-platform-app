@@ -1,11 +1,138 @@
-<nav class="d-md-flex nav-bar">
-  <div class="d-flex align-items-center justify-content-between gap-2">
+<div class="nav-bar sticky-top">
+  <div class="container d-flex align-items-center justify-content-between">
     <div class="logo-wrapper"></div>
-<!--    <div class="btn-outline btn-o-1">Explore Now</div>-->
+    <div class="menu">
+      <li *ngIf="employeeType" class="nav-item d-block d-lg-none ms-2 dropdown">
+        <div class="profile-wrapper" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+          <img [src]="employee?.image?employee.image:'./assets/imgs/shared/default_emp_dp.svg'"
+               alt="profile" width="40" height="40">
+        </div>
+
+        <ul class="dropdown-menu dropdown-menu-end">
+          <div *ngIf="employeeType === 'employer'">
+            <li *ngIf="employeeLevel === '2'"><a class="dropdown-item" routerLink="/dashboard"><i
+              class="material-icons">autorenew</i> Switch to Dashboard</a></li>
+            <li *ngIf="employeeLevel === '3'"><a class="dropdown-item" routerLink="/pro"><i
+              class="material-icons">autorenew</i> Switch to Dashboard</a></li>
+            <li>
+              <hr class="dropdown-divider">
+            </li>
+          </div>
+          <li><a class="dropdown-item" routerLink="/candidate-profile"><i class="material-icons">perm_identity</i>
+            Profile</a></li>
+          <li><a class="dropdown-item" routerLink="/candidate-profile-setting"><i class="material-icons">settings</i>
+            Setting</a></li>
+          <li>
+            <hr class="dropdown-divider">
+          </li>
+          <li><a class="dropdown-item" routerLink="/my-jobs"><i class="material-icons">assignment</i> My
+            Jobs</a></li>
+          <li><a class="dropdown-item" routerLink="/cart"><i class="material-icons">add_shopping_cart</i> My
+            Products</a></li>
+          <li>
+            <hr class="dropdown-divider">
+          </li>
+          <li><a class="dropdown-item" routerLink="/locked"><i class="material-icons">lock</i> Lock
+            Screen</a></li>
+          <li><span class="dropdown-item" (click)="logout()"><i
+            class="material-icons">logout</i> Logout</span>
+          </li>
+        </ul>
+      </li>
+      <li *ngIf="!employeeType" class="d-block d-lg-none nav-item" (click)="collapseNavbar()">
+        <div class="d-flex align-items-center justify-content-end gap-2">
+          <div class="btn-outline btn-o-1" routerLink="/login" [class.active]="isActive('/login')">Login</div>
+          <div class="btn-fill btn-f-1" routerLink="/register" [class.active]="isActive('/register')">Sign Up</div>
+        </div>
+      </li>
+      <li class="nav-item d-block d-lg-none ms-2">
+        <button class="theme-btn" (click)="toggleTheme()" title="Theme">
+          <i class="material-icons">{{themeService.isDarkMode()?'light_mode':'dark_mode'}}</i>
+        </button>
+      </li>
+      <nav class="navbar navbar-expand-lg bg-body-tertiary">
+        <div class="container-fluid" style="justify-content: flex-end!important;">
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+                  aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+          <div class="collapse navbar-collapse" id="navbarNav" #navbarNav
+               style="justify-content: flex-end!important;">
+            <ul class="navbar-nav">
+              <li class="nav-item" (click)="collapseNavbar()">
+                <a class="nav-link" routerLink="/dashboard" [class.active]="isActive('/dashboard')">Dashboard</a>
+              </li>
+              <li class="nav-item" (click)="collapseNavbar()">
+                <a class="nav-link" routerLink="/courses" [class.active]="isActive('/courses')">My Courses</a>
+              </li>
+              <li class="nav-item" (click)="collapseNavbar()">
+                <a class="nav-link" routerLink="/post-course" [class.active]="isActive('/post-course')">Post a Course</a>
+              </li>
+              <li class="nav-item">
+                <div class="d-flex align-items-center justify-content-end w-100 h-100 s-bar">
+                  <input type="text" placeholder="Search..." (keyup)="handleSearch($event.target)"/>
+                  <i class="material-icons">search</i>
+                </div>
+              </li>
+              <li class="d-none d-lg-block nav-item">
+                <button class="theme-btn" (click)="toggleTheme()" title="Theme">
+                  <i class="material-icons">{{themeService.isDarkMode()?'light_mode':'dark_mode'}}</i>
+                </button>
+              </li>
+              <li *ngIf="!employeeType" class="d-none d-lg-block nav-item" (click)="collapseNavbar()">
+                <div class="d-flex align-items-center justify-content-end gap-2">
+                  <div class="btn-outline btn-o-1" routerLink="/login" [class.active]="isActive('/login')">Login</div>
+                  <div class="btn-fill btn-f-1" routerLink="/register" [class.active]="isActive('/register')">Sign Up</div>
+                </div>
+              </li>
+              <li *ngIf="employeeType" class="nav-item d-none d-lg-block ms-2 dropdown">
+                <div class="profile-wrapper" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                  <img [src]="employee?.image?employee.image:'./assets/imgs/shared/default_emp_dp.svg'"
+                       alt="profile" width="40" height="40">
+                </div>
+
+                <ul class="dropdown-menu dropdown-menu-end">
+                  <div *ngIf="employeeType === 'employer'">
+                    <li *ngIf="employeeLevel === '2'"><a class="dropdown-item" routerLink="/dashboard"><i
+                      class="material-icons">autorenew</i> Switch to Dashboard</a></li>
+                    <li *ngIf="employeeLevel === '3'"><a class="dropdown-item" routerLink="/pro"><i
+                      class="material-icons">autorenew</i> Switch to Dashboard</a></li>
+                    <li>
+                      <hr class="dropdown-divider">
+                    </li>
+                  </div>
+                  <li><a class="dropdown-item" routerLink="/candidate-profile"><i class="material-icons">perm_identity</i>
+                    Profile</a></li>
+                  <li><a class="dropdown-item" routerLink="/candidate-profile-setting"><i class="material-icons">settings</i>
+                    Setting</a></li>
+                  <li>
+                    <hr class="dropdown-divider">
+                  </li>
+                  <li><a class="dropdown-item" routerLink="/my-jobs"><i class="material-icons">assignment</i> My
+                    Jobs</a></li>
+                  <li><a class="dropdown-item" routerLink="/cart"><i class="material-icons">add_shopping_cart</i> My
+                    Products</a></li>
+                  <li>
+                    <hr class="dropdown-divider">
+                  </li>
+                  <li><a class="dropdown-item" routerLink="/locked"><i class="material-icons">lock</i> Lock
+                    Screen</a></li>
+                  <li><span class="dropdown-item" (click)="logout()"><i
+                    class="material-icons">logout</i> Logout</span>
+                  </li>
+                </ul>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </nav>
+    </div>
   </div>
 
-  <div class="d-flex align-items-center justify-content-end gap-2">
-    <div class="btn-outline btn-o-1" routerLink="/login">Login</div>
-    <div class="btn-fill btn-f-1" routerLink="/register">Sign Up</div>
+  <div class="search-results-wrapper" *ngIf="openSearchResults">
+    <div class="search-result" *ngFor="let r of filterSearchResults()">
+      <a [routerLink]="r.routerLink">{{r.name}}</a>
+    </div>
+    <div class="not-found" *ngIf="filterSearchResults().length <= 0">No results found. :(</div>
   </div>
-</nav>
+</div>
