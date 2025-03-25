@@ -102,9 +102,9 @@ export class FacebookAuthService {
   }
 
   private registerFacebookUser(profile: any) {
-    const referer = this.authService.getReferer();
+    const referer = this.authService.getReferer() || null;
     const platform = this.authService.getPlatform();
-    const promotion = this.authService.getPromotion();
+    const promotion = this.authService.getPromotion() || null;
     const newUser = {
       email: profile.email,
       firstname: profile.firstName,
@@ -117,7 +117,7 @@ export class FacebookAuthService {
       active: false
     };
 
-    this.credentialService.addCredential(newUser).subscribe(
+    this.credentialService.register(newUser).subscribe(
       (response: any) => {
         this.processLogin(response);
       },
@@ -130,6 +130,7 @@ export class FacebookAuthService {
   private processLogin(user: any) {
     this.authService.createUserID(user.employeeId.toString());
     this.authService.createLevel(user.userLevel.toString());
+    this.authService.createAuthToken(user.token);
     this.authService.unlock();
     this.timerService.setTimeout(() => {
       if (user.role === 'candidate') {
@@ -142,7 +143,16 @@ export class FacebookAuthService {
   }
 
   private handleEmployerLogin(user: any) {
-    const route = user.userLevel === '2' ? '/dashboard' : '/home';
+    const route = user.userLevel === '2' ? '/dashboard' : user.userLevel === '3' ? '/pro' : '/';
+    this.setEmployerSession(user, route);
+  }
+
+  private setEmployerSession(user: any, route: string) {
+    this.authService.createUserID(user.employeeId);
+    this.authService.createAdmin(user.email);
+    this.authService.createOrganizationID(user.organizations?.join(', '));
+    this.authService.createLevel(user.userLevel);
+    this.authService.unlock();
     this.router.navigate([route]);
     this.alertService.successMessage('Employer login successful', 'Success');
   }

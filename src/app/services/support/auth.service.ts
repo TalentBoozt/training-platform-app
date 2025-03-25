@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import {CookieService} from "ngx-cookie-service";
 import {WindowService} from '../common/window.service';
+import {Observable} from 'rxjs';
 
 
 @Injectable({
@@ -42,6 +43,7 @@ export class AuthService {
     this.cookieService.delete('organization');
     this.cookieService.delete('admin-token');
     this.cookieService.delete('level');
+    this.cookieService.delete('jwtToken', '/');
     this.cookieService.deleteAll();
     if (this.windowService.nativeSessionStorage){
       sessionStorage.clear();
@@ -148,5 +150,26 @@ export class AuthService {
 
   public getPromotion() {
     return this.cookieService.get('promotion');
+  }
+
+  public createAuthToken(token: string) {
+    this.cookieService.set('auth-token-id', token, {
+      expires: 60 * 60 * 24 * 7,  // Token expires in 7 days
+      path: '/',
+      sameSite: 'Strict',
+      secure: true
+    });
+  }
+
+  storeAuthToken(token: string): void {
+    this.cookieService.set('jwtToken', token, { path: '/', secure: true, sameSite: 'Strict' });
+  }
+
+  getAuthToken(): string | null {
+    return this.cookieService.get('jwtToken');
+  }
+
+  isAuthToken(): boolean {
+    return !!this.getAuthToken();
   }
 }

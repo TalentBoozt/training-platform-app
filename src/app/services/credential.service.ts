@@ -9,6 +9,7 @@ import {Observable} from "rxjs";
 export class CredentialService {
 
   baseUrl = environment.apiUrl;
+  baseUrlSimple = environment.apiUrlSimple;
 
   constructor(private http: HttpClient) { }
 
@@ -73,5 +74,13 @@ export class CredentialService {
       'Authorization': 'Basic ' + btoa('admin:password')
     });
     return this.http.put<any>(`${this.baseUrl}/password-reset/reset`, { token: token, newPassword: password }, {headers});
+  }
+
+  login(email: any, password: any): Observable<any> {
+    return this.http.post(`${this.baseUrlSimple}/api/auth/login`, { email, password });
+  }
+
+  register(credential: any): Observable<any> {
+    return this.http.post<any>(`${this.baseUrlSimple}/api/auth/login/${credential.platform}`, credential);
   }
 }

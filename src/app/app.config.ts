@@ -19,6 +19,7 @@ import {provideOAuthClient} from 'angular-oauth2-oidc';
 import {SkipXsrfInterceptor} from './Config/SkipXsrfInterceptor';
 import {DemoModeInterceptor} from './Config/DemoModeInterceptor';
 import {LocationStrategy, PathLocationStrategy} from '@angular/common';
+import {AuthInterceptor} from './Config/AuthInterceptor';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -38,6 +39,7 @@ export const appConfig: ApplicationConfig = {
     provideStorage(() => getStorage()),
     { provide: HTTP_INTERCEPTORS, useClass: SkipXsrfInterceptor, multi: true },
     { provide: HTTP_INTERCEPTORS, useClass: DemoModeInterceptor, multi: true },
+    { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true },
     { provide: LocationStrategy, useClass: PathLocationStrategy },
   ]
 };

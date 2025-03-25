@@ -79,9 +79,9 @@ export class RegisterComponent implements OnInit, AfterViewInit{
     if (this.registerForm.valid) {
       const formData = this.registerForm.value;
       const password = formData.password;
-      const referer = this.cookieService.getReferer();
+      const referer = this.cookieService.getReferer() || null;
       const platform = this.cookieService.getPlatform();
-      const promotion = this.cookieService.getPromotion();
+      const promotion = this.cookieService.getPromotion() || null;
 
       if (password && password.length >= 6) {
         const isPwned = await this.encryptionService.checkLeakedPassword(password);
@@ -90,13 +90,11 @@ export class RegisterComponent implements OnInit, AfterViewInit{
           return;
         }
 
-        const encryptedPassword = await this.encryptionService.encryptPassword(password);
-
-        this.credentialService.addCredential({
+        this.credentialService.register({
           firstname: formData.name?.split(' ')[0],
           lastname: formData.name?.split(' ')[1] || '',
           email: formData.email,
-          password: encryptedPassword,
+          password: password,
           role: "employer",
           userLevel: "5",
           referrerId: referer,
@@ -108,14 +106,15 @@ export class RegisterComponent implements OnInit, AfterViewInit{
             this.alertService.errorMessage('An unexpected error has occurred', 'Unexpected Error');
             return;
           }
-          if (response.accessedPlatforms.includes(platform) && response.accessedPlatforms.includes('TrainingPlatform')) {
+          if (response.accessedPlatforms?.includes(platform) && response.accessedPlatforms?.includes('TrainingPlatform')) {
             this.alertService.errorMessage('This email has already been registered', 'Email Already Exists');
             return;
           }
           this.cookieService.createUserID(response.employeeId);
           this.cookieService.createLevel(response.userLevel);
           this.cookieService.createAdmin(response.email);
-          this.cookieService.createOrganizationID(response.companyId);
+          this.cookieService.createOrganizationID(response.organizations?.join(', '));
+          this.cookieService.createAuthToken(response.token);
           this.router.navigate(['/']);
           this.alertService.successMessage('Registration successful! We will review your account and unlock full access as soon as possible!', 'Success');
         }, (error: HttpErrorResponse) => {
@@ -130,7 +129,7 @@ export class RegisterComponent implements OnInit, AfterViewInit{
               this.alertService.errorMessage('An unexpected error has occurred', 'Unexpected Error');
               break;
             default:
-              this.alertService.errorMessage('An unexpected error has occurred', 'Unexpected Error');
+              this.alertService.errorMessage(error.error.message, "Code: "+error.status);
           }
         });
       } else {
