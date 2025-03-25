@@ -1,0 +1,89 @@
+<div class="container">
+  <div class="row py-4">
+    <div class="col-6 col-lg-3">
+      <div class="card-1">
+        <div class="title">
+          <div class="img-wrapper">
+            <img src="/assets/images/dashboard/icons/chronometer-time.svg" alt="img">
+          </div>
+          Hours Worked
+        </div>
+        <div class="value">
+          4H 15M
+        </div>
+      </div>
+    </div>
+    <div class="col-6 col-lg-3">
+      <div class="card-1">
+        <div class="title">
+          <div class="img-wrapper">
+            <img src="/assets/images/dashboard/icons/books.svg" alt="img">
+          </div>
+          Courses in Progress
+        </div>
+        <div class="value">
+          2
+        </div>
+      </div>
+    </div>
+    <div class="col-6 col-lg-3">
+      <div class="card-1">
+        <div class="title">
+          <div class="img-wrapper">
+            <img src="/assets/images/dashboard/icons/summary-check.svg" alt="img">
+          </div>
+          Courses Completed
+        </div>
+        <div class="value">
+          4
+        </div>
+      </div>
+    </div>
+    <div class="col-6 col-lg-3">
+      <div class="card-1">
+        <div class="title">
+          <div class="img-wrapper">
+            <img src="/assets/images/dashboard/icons/percentage.svg" alt="img">
+          </div>
+          Progress Percentage
+        </div>
+        <div class="value">
+          65%
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-12 col-md-8 col-lg-9">
+      <ul class="nav nav-tabs">
+        <li class="nav-item" *ngFor="let course of courses">
+          <a class="nav-link"
+             [class.active]="selectedCategory === course.category"
+             (click)="selectCategory(course.category)"
+             href="javascript:void(0)">
+            {{ course.name }}
+          </a>
+        </li>
+      </ul>
+
+      <div class="container">
+
+        <!-- Course Cards -->
+        <div class="row py-3 w-100">
+          <div class="col-12 col-md-6 col-lg-4" *ngFor="let course of filteredCourses">
+            <app-course-card [course]="course"></app-course-card>
+          </div>
+        </div>
+
+        <div class="result-not-found" *ngIf="filteredCourses.length === 0">
+          <div class="img-wrapper">
+            <img src="/assets/images/decorations/polar-bear.svg" alt="not found">
+          </div>
+          <p>No Results Available</p>
+        </div>
+      </div>
+    </div>
+    <div class="col-12 col-md-4 col-lg-3"></div>
+  </div>
+</div>
