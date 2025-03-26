@@ -760,3 +760,51 @@ p, ol, ul, li {
   -moz-box-shadow: 0 0 2px 0 var(--color-box-shadow-100);
   box-shadow: 0 0 2px 0 var(--color-box-shadow-100);
 }
+
+// bootstrap table
+.table{
+  background-color: var(--color-surface-200);
+
+  thead{
+    th{
+      background-color: var(--color-surface-200);
+      color: var(--color-text-100);
+      font-weight: 600;
+    }
+    .hyperlink{
+      cursor: pointer;
+      text-decoration: underline;
+      transition: all 0.3s ease-in-out;
+
+      &:hover{
+        color: var(--color-secondary-100);
+      }
+    }
+  }
+
+  tbody{
+    td{
+      background-color: var(--color-surface-200);
+      color: var(--color-text-200);
+
+      .bold-text{
+        font-weight: 550;
+      }
+
+      a{
+        text-decoration: none;
+        color: var(--color-secondary-100);
+      }
+
+      .hyperlink{
+        cursor: pointer;
+        transition: all 0.3s ease-in-out;
+        color: var(--color-secondary-100);
+
+        &:hover{
+          color: var(--color-primary-100);
+        }
+      }
+    }
+  }
+}

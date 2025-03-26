@@ -43,21 +43,24 @@ export class DashboardComponent implements OnInit{
           name: 'First Installment',
           currency: 'LKR',
           price: 5000.00,
-          paymentLink: 'https://www.paypal.com/donate'
+          paymentLink: 'https://www.paypal.com/donate',
+          paid: true
         },
         {
           id: 2,
           name: 'Second Installment',
           currency: 'LKR',
           price: 5000.00,
-          paymentLink: 'https://www.paypal.com/donate'
+          paymentLink: 'https://www.paypal.com/donate',
+          paid: false
         },
         {
           id: 3,
           name: 'Third Installment',
           currency: 'LKR',
           price: 4000.00,
-          paymentLink: 'https://www.paypal.com/donate'
+          paymentLink: 'https://www.paypal.com/donate',
+          paid: false
         }
       ],
       duration: "3 hours",
@@ -69,7 +72,6 @@ export class DashboardComponent implements OnInit{
           date: '2025-03-30',
           start: '08.00PM',
           end: '10.00PM',
-          paid: true,
           meetingLink: '',
           status: 'upcoming'
         },
@@ -80,7 +82,6 @@ export class DashboardComponent implements OnInit{
           date: '2025-04-06',
           start: '08.00PM',
           end: '10.00PM',
-          paid: false,
           meetingLink: '',
           status: 'upcoming'
         },
@@ -91,7 +92,6 @@ export class DashboardComponent implements OnInit{
           date: '2025-04-13',
           start: '08.00PM',
           end: '10.00PM',
-          paid: false,
           meetingLink: '',
           status: 'upcoming'
         }

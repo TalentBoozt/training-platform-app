@@ -1,0 +1,61 @@
+<div class="container">
+  <div class="title mt-3">Participants</div>
+
+  <div class="form-card-1">
+    <div class="row form-wrapper w-100">
+      <div class="col-6 col-md-4">
+        <div class="form-group">
+          <label for="course">Course</label>
+          <select class="form-control" id="course">
+            <option *ngIf="courses.length == 0" disabled value="n/a">Not Available</option>
+            <option *ngFor="let c of courses" [value]="c.id">{{c.name}}</option>
+          </select>
+        </div>
+      </div>
+      <div class="col-6 col-md-4">
+        <div class="form-group">
+          <label for="installment">Installment</label>
+          <select class="form-control" id="installment">
+            <option *ngIf="installments.length == 0" disabled value="n/a">Not Available</option>
+            <option *ngFor="let i of installments" [value]="i.id">{{i.name}}</option>
+          </select>
+        </div>
+      </div>
+      <div class="col-12 col-md-4">
+        <div class="form-group">
+          <label for="search">Search</label>
+          <input type="text" class="form-control" id="search" placeholder="Search by name"/>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="table-card-1">
+    <table class="table table-hover">
+      <thead>
+        <tr>
+          <th scope="col">Name</th>
+          <th scope="col">Payment Status</th>
+          <th scope="col">Email</th>
+          <th scope="col">Account Status</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let p of participants">
+          <td>{{p.name}}</td>
+          <td>
+            <select class="form-control p-status" [(ngModel)]="p.pStatus" [ngModelOptions]="{standalone: true}" [ngStyle]="{'background-color': p.pStatus == 'paid' ? 'green' : p.pStatus == 'unpaid' ? 'red' : 'orange'}">
+              <option *ngFor="let ps of paidStatus" value="{{ps.value}}">{{ps.name}}</option>
+            </select>
+          </td>
+          <td>{{p.email}}</td>
+          <td>
+            <select class="form-control p-status" [(ngModel)]="p.aStatus" [ngModelOptions]="{standalone: true}" [ngStyle]="{'background-color': p.aStatus == 'Enrolled' ? 'green' : p.aStatus == 'Dropped' ? 'red' : 'orange'}">
+              <option *ngFor="let ps of accountStatus" value="{{ps.value}}">{{ps.name}}</option>
+            </select>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
