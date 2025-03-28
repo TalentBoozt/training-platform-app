@@ -13,67 +13,24 @@ export class CredentialService {
 
   constructor(private http: HttpClient) { }
 
-  fetchCredentials(): Observable<any> {
-    const headers = new HttpHeaders({
-      'Authorization': 'Basic ' + btoa('admin:password')
-    });
-    return this.http.get<any>(`${this.baseUrl}/portal_credentials/getAll`, {headers});
-  }
-
-  fetchCredentialById(id: any): Observable<any> {
-    const headers = new HttpHeaders({
-      'Authorization': 'Basic ' + btoa('admin:password')
-    });
-    return this.http.get<any>(`${this.baseUrl}/portal_credentials/get/${id}`, {headers});
-  }
-
   fetchCredentialByEmployeeId(employeeId: any): Observable<any> {
-    const headers = new HttpHeaders({
-      'Authorization': 'Basic ' + btoa('admin:password')
-    });
-    return this.http.get<any>(`${this.baseUrl}/portal_credentials/getByEmployeeId/${employeeId}`, {headers});
+    return this.http.get<any>(`${this.baseUrl}/portal_credentials/getByEmployeeId/${employeeId}`);
   }
 
   fetchCredentialByEmail(email: any): Observable<any> {
-    const headers = new HttpHeaders({
-      'Authorization': 'Basic ' + btoa('admin:password')
-    });
-    return this.http.get<any>(`${this.baseUrl}/portal_credentials/getByEmail/${email}`, {headers});
+    return this.http.get<any>(`${this.baseUrl}/portal_credentials/getByEmail/${email}`);
   }
 
   addCredential(credential: any): Observable<any> {
-    const headers = new HttpHeaders({
-      'Authorization': 'Basic ' + btoa('admin:password')
-    });
-    return this.http.post<any>(`${this.baseUrl}/portal_credentials/add/${credential.platform}`, credential, {headers});
-  }
-
-  updateCredential(id: any, credential: any): Observable<any> {
-    const headers = new HttpHeaders({
-      'Authorization': 'Basic ' + btoa('admin:password')
-    });
-    return this.http.put<any>(`${this.baseUrl}/portal_credentials/update/${id}`, credential, {headers});
-  }
-
-  deleteCredential(id: any): Observable<any> {
-    const headers = new HttpHeaders({
-      'Authorization': 'Basic ' + btoa('admin:password')
-    });
-    return this.http.delete<any>(`${this.baseUrl}/portal_credentials/delete/${id}`, {headers});
+    return this.http.post<any>(`${this.baseUrl}/portal_credentials/add/${credential.platform}`, credential);
   }
 
   resetPasswordRequest(email: any): Observable<any> {
-    const headers = new HttpHeaders({
-      'Authorization': 'Basic ' + btoa('admin:password')
-    });
-    return this.http.post<any>(`${this.baseUrl}/password-reset/request`, { email: email }, {headers});
+    return this.http.post<any>(`${this.baseUrl}/password-reset/request`, { email: email });
   }
 
   resetPassword(token: any, password: any): Observable<any> {
-    const headers = new HttpHeaders({
-      'Authorization': 'Basic ' + btoa('admin:password')
-    });
-    return this.http.put<any>(`${this.baseUrl}/password-reset/reset`, { token: token, newPassword: password }, {headers});
+    return this.http.put<any>(`${this.baseUrl}/password-reset/reset`, { token: token, newPassword: password });
   }
 
   login(email: any, password: any): Observable<any> {

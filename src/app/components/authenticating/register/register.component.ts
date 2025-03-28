@@ -113,7 +113,9 @@ export class RegisterComponent implements OnInit, AfterViewInit{
           this.cookieService.createUserID(response.employeeId);
           this.cookieService.createLevel(response.userLevel);
           this.cookieService.createAdmin(response.email);
-          this.cookieService.createOrganizationID(response.organizations?.join(', '));
+          response.organizations?.forEach((organization: any) => {
+            this.cookieService.createOrganizationID(organization.TrainingPlatform || '');
+          })
           this.cookieService.createAuthToken(response.token);
           this.cookieService.createRefreshToken(response.refreshToken);
           this.router.navigate(['/']);

@@ -184,7 +184,9 @@ export class GitHubAuthService {
   private setEmployerSession(user: any, route: string) {
     this.cookieService.createUserID(user.employeeId);
     this.cookieService.createAdmin(user.email);
-    this.cookieService.createOrganizationID(user.organizations?.join(', '));
+    user.organizations?.forEach((organization: any) => {
+      this.cookieService.createOrganizationID(organization.TrainingPlatform || '');
+    })
     this.cookieService.createLevel(user.userLevel);
     this.cookieService.unlock();
     this.router.navigate([route]);

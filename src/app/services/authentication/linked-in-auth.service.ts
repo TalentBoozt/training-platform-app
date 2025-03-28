@@ -221,7 +221,9 @@ export class LinkedInAuthService{
   private setEmployerSession(user: any, route: string) {
     this.authService.createUserID(user.employeeId);
     this.authService.createAdmin(user.email);
-    this.authService.createOrganizationID(user.organizations?.join(', '));
+    user.organizations?.forEach((organization: any) => {
+      this.authService.createOrganizationID(organization.TrainingPlatform || '');
+    })
     this.authService.createLevel(user.userLevel);
     this.authService.unlock();
     this.router.navigate([route]);
