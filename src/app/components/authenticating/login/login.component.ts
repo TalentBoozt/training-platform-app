@@ -119,11 +119,14 @@ export class LoginComponent implements OnInit, AfterViewInit{
 
             this.cookieService.createUserID(response.employeeId);
             this.cookieService.createProAdmin(response.email);
-            this.cookieService.createOrganizationID(response.organizations?.join(', '));
             this.cookieService.createLevel(response.userLevel);
             this.cookieService.createAuthToken(response.token);
             this.cookieService.createRefreshToken(response.refreshToken);
             this.cookieService.unlock();
+            response.organizations?.forEach((organization: any) => {
+              this.cookieService.createOrganizationID(organization.TrainingPlatform || '');
+            })
+
             if (response.active){
               this.alertService.successMessage('Login successful', 'Success');
             } else {
