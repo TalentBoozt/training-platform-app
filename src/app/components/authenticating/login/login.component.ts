@@ -122,6 +122,7 @@ export class LoginComponent implements OnInit, AfterViewInit{
             this.cookieService.createOrganizationID(response.organizations?.join(', '));
             this.cookieService.createLevel(response.userLevel);
             this.cookieService.createAuthToken(response.token);
+            this.cookieService.createRefreshToken(response.refreshToken);
             this.cookieService.unlock();
             if (response.active){
               this.alertService.successMessage('Login successful', 'Success');

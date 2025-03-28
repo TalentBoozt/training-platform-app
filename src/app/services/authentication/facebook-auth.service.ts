@@ -131,6 +131,7 @@ export class FacebookAuthService {
     this.authService.createUserID(user.employeeId.toString());
     this.authService.createLevel(user.userLevel.toString());
     this.authService.createAuthToken(user.token);
+    this.authService.createRefreshToken(user.refreshToken);
     this.authService.unlock();
     this.timerService.setTimeout(() => {
       if (user.role === 'candidate') {

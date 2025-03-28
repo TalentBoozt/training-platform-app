@@ -164,6 +164,7 @@ export class GoogleAuthService implements OnInit, OnDestroy {
     this.cookieService.createUserID(user.employeeId);
     this.cookieService.createLevel(user.userLevel);
     this.cookieService.createAuthToken(user.token);
+    this.cookieService.createRefreshToken(user.refreshToken);
     this.cookieService.unlock();
     this.timerService.setTimeout(() => {
       if (user.role === 'candidate') {

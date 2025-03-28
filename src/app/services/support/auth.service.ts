@@ -163,4 +163,12 @@ export class AuthService {
   isAuthToken(): boolean {
     return !!this.getAuthToken();
   }
+
+  public createRefreshToken(refreshToken: string) {
+    this.cookieService.set('refreshToken', refreshToken, { path: '/', secure: true, sameSite: 'Strict' });
+  }
+
+  public getRefreshToken(): string | null {
+    return this.cookieService.get('refreshToken');
+  }
 }
