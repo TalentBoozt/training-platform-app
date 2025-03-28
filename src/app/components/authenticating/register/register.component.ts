@@ -115,6 +115,7 @@ export class RegisterComponent implements OnInit, AfterViewInit{
           this.cookieService.createAdmin(response.email);
           this.cookieService.createOrganizationID(response.organizations?.join(', '));
           this.cookieService.createAuthToken(response.token);
+          this.cookieService.createRefreshToken(response.refreshToken);
           this.router.navigate(['/']);
           this.alertService.successMessage('Registration successful! We will review your account and unlock full access as soon as possible!', 'Success');
         }, (error: HttpErrorResponse) => {

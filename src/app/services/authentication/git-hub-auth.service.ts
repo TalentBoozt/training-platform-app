@@ -164,6 +164,7 @@ export class GitHubAuthService {
     this.cookieService.createUserID(user.employeeId.toString());
     this.cookieService.createLevel(user.userLevel.toString());
     this.cookieService.createAuthToken(user.token);
+    this.cookieService.createRefreshToken(user.refreshToken);
     this.cookieService.unlock();
     this.timerService.setTimeout(() => {
       if (user.role === 'candidate') {
