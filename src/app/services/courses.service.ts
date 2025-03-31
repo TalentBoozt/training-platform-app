@@ -34,4 +34,16 @@ export class CoursesService {
     }
     return this.categories$;
   }
+
+  public getFullParticipants(courseId: string): Observable<any> {
+    return this.http.get<any>(`${this.baseUrl}/batch/getParticipants/${courseId}`);
+  }
+
+  public getParticipants(courseId: string): Observable<any> {
+    return this.http.get<any>(`${this.baseUrl}/course/get/${courseId}/users`);
+  }
+
+  public getOverviewByCompany(organization: string): Observable<any> {
+    return this.http.get<any>(`${this.baseUrl}/course/overview/${organization}`);
+  }
 }

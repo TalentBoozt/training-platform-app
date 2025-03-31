@@ -9,7 +9,7 @@
           Training Hours
         </div>
         <div class="value">
-          4H 15M
+          {{overview.hours | number:'2.0-2'}} H
         </div>
       </div>
     </div>
@@ -22,7 +22,7 @@
           Courses in Progress
         </div>
         <div class="value">
-          2
+          {{overview.inProgress}}
         </div>
       </div>
     </div>
@@ -35,7 +35,7 @@
           Courses Completed
         </div>
         <div class="value">
-          4
+          {{overview.completed}}
         </div>
       </div>
     </div>
@@ -48,7 +48,7 @@
           Total Participants
         </div>
         <div class="value">
-          400
+          {{overview.participants}}
         </div>
       </div>
     </div>
