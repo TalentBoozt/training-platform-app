@@ -21,6 +21,7 @@ export class BasicDetailsComponent implements OnInit {
     level: 'Beginner',
     duration: '',
     email: '',
+    certificate: true,
     paymentMethod: 'bank' // 'card' or 'bank'
   };
 

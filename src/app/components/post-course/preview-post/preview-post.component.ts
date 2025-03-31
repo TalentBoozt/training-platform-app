@@ -71,7 +71,7 @@ export class PreviewPostComponent implements OnInit{
         name: savedData.basicDetails.name,
         description: savedData.courseContent,
         overview: savedData.basicDetails.overview,
-        category: "",
+        category: savedData.relevantDetails.category,
         organizer: savedData.basicDetails.email,
         level: savedData.basicDetails.level,
         currency: savedData.relevantDetails.currency,
@@ -84,12 +84,13 @@ export class PreviewPostComponent implements OnInit{
         lecturer: savedData.basicDetails.lecturer,
         image: savedData.relevantDetails.coverImage,
         skills: savedData.relevantDetails.skills,
-        certificate: "",
+        certificate: savedData.basicDetails.certificate,
         platform: savedData.relevantDetails.mediaType,
         location: savedData.relevantDetails.location,
         startDate: savedData.relevantDetails.startDate,
         fromTime: savedData.relevantDetails.startTime,
-        toTime: savedData.relevantDetails.endTime
+        toTime: savedData.relevantDetails.endTime,
+        courseStatus: savedData.relevantDetails.courseStatus
       }
 
       this.courseService.addCourse(course).subscribe(() => {

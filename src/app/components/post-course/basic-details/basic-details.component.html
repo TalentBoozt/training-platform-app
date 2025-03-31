@@ -56,8 +56,16 @@
         </div>
       </div>
       <div class="col-12">
+        <div class="d-sm-flex align-items-center justify-content-between">
+          <div class="form-check">
+            <input class="form-check-input me-2" type="checkbox" id="certCheck" [(ngModel)]="basicDetails.certificate" [ngModelOptions]="{standalone: true}">
+            <label class="form-check-label" for="certCheck">Certificate Available</label>
+          </div>
+        </div>
+      </div>
+      <div class="col-12">
         <div class="form-group">
-          <label>Payment Accept Method *</label>
+          <label>Payment Accept Method (For free courses choose any) *</label>
           <div class="form-check">
             <input class="form-check-input" type="radio" name="paymentMethod" id="cardPayment" [(ngModel)]="basicDetails.paymentMethod" value="card" [ngModelOptions]="{standalone: true}">
             <label class="form-check-label" for="cardPayment">

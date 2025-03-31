@@ -16,18 +16,19 @@
             <input type="text" class="form-control" id="description" [(ngModel)]="newModule.description" [ngModelOptions]="{standalone: true}" required>
           </div>
         </div>
-        <div class="col-12 col-md-6">
+        <div class="col-12 col-md-4">
           <div class="form-group">
             <label for="installment">Installment Plan *</label>
-            <select class="form-control" id="installment" [(ngModel)]="newModule.installmentId" [ngModelOptions]="{standalone: true}" required>
+            <select class="form-control" id="installment" [(ngModel)]="newModule.installmentId" [ngModelOptions]="{standalone: true}" required [disabled]="isFreeCheck">
               <option *ngFor="let i of installments" [value]="i.id">{{i.name}}</option>
+              <option *ngIf="isFreeCheck" [value]="newModule.installmentId">Free</option>
             </select>
           </div>
         </div>
-        <div class="col-12 col-md-6">
+        <div class="col-12 col-md-8">
           <div class="form-group">
-            <label for="mlink">Meeting Link</label>
-            <input type="text" class="form-control" id="mlink" placeholder="10.00" [(ngModel)]="newModule.meetingLink" [ngModelOptions]="{standalone: true}">
+            <label for="mlink">Meeting Link(allowed to update later)</label>
+            <input type="text" class="form-control" id="mlink" placeholder="https://zoom.us/join/" [(ngModel)]="newModule.meetingLink" [ngModelOptions]="{standalone: true}">
           </div>
         </div>
         <div class="col-12 col-md-6">
