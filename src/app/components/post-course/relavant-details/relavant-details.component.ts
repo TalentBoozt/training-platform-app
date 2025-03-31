@@ -1,46 +1,112 @@
-import {Component, OnInit} from '@angular/core';
-import {FormsModule} from "@angular/forms";
+import {ChangeDetectionStrategy, Component, OnChanges, OnDestroy, OnInit} from '@angular/core';
+import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 import {ResumeStorageService} from '../../../services/support/resume-storage.service';
 import {AlertsService} from '../../../services/support/alerts.service';
 import {FileUploadService} from '../../../services/support/file-upload.service';
 import {NgClass, NgForOf, NgIf} from '@angular/common';
+import {CoursesService} from '../../../services/courses.service';
+import {tap} from 'rxjs';
 
 @Component({
   selector: 'app-relavant-details',
-  imports: [
-    FormsModule,
-    NgForOf,
-    NgClass,
-    NgIf
-  ],
+    imports: [
+        FormsModule,
+        NgForOf,
+        NgClass,
+        NgIf,
+        ReactiveFormsModule
+    ],
   templateUrl: './relavant-details.component.html',
   styleUrl: './relavant-details.component.scss',
-  standalone: true
+  standalone: true,
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class RelavantDetailsComponent implements OnInit{
+export class RelavantDetailsComponent implements OnInit, OnChanges, OnDestroy {
   relevantDetails = {
     skills: [] as string[],
     startDate: '',
     startTime: '',
     endTime: '',
     coverImage: '',
+    freeCheck: false,
     currency: '$',
     price: '',
     mediaType: 'zoom',
-    location: ''
+    location: '',
+    category: '',
+    courseStatus: 'upcoming'
   };
+
+  availableCategories: string[] = ['Technology', 'Marketing', 'Design', 'Health', 'Business'];
+  filteredCategories: string[] = [];
 
   loading = false;
   inputValue: string = ''; // for skills
 
   constructor(private resumeStorage: ResumeStorageService,
               private alertService: AlertsService,
+              private courseService: CoursesService,
               private fileUploadService: FileUploadService) {}
 
   ngOnInit(): void {
     const savedData = this.resumeStorage.getData();
     if (savedData?.relevantDetails) {
       this.relevantDetails = savedData.relevantDetails;
+      this.selectedPrice = this.relevantDetails.price;
+      this.selectedCurrency = this.relevantDetails.currency;
+    }
+
+    this.loadCategories().subscribe();
+  }
+
+  ngOnChanges() {
+    if (this.relevantDetails.freeCheck) {
+      this.selectedCurrency = '$';
+      this.selectedPrice = '0';
+    } else {
+      this.selectedCurrency = this.relevantDetails.currency;
+      this.selectedPrice = this.relevantDetails.price;
+    }
+  }
+
+  ngOnDestroy() {
+    if (this.relevantDetails.freeCheck){
+      const savedData = this.resumeStorage.getData();
+      if (savedData?.basicDetails) {
+        savedData.basicDetails.paymentMethod = 'free';
+      }
+    }
+  }
+
+  loadCategories() {
+    return this.courseService.getAllCategories().pipe(
+      tap(categories => {
+        if (categories && categories.length > 0) {
+          this.availableCategories = categories
+        }
+      })
+    )
+  }
+
+  filterCategories() {
+    if (this.relevantDetails.category) {
+      this.filteredCategories = this.availableCategories.filter(category =>
+        category.toLowerCase().includes(this.relevantDetails.category.toLowerCase())
+      );
+    } else {
+      this.filteredCategories = [];
+    }
+  }
+
+  selectCategory(category: string) {
+    this.relevantDetails.category = category;
+    this.filteredCategories = [];
+  }
+
+  addCategory() {
+    if (this.relevantDetails.category && !this.availableCategories.includes(this.relevantDetails.category)) {
+      this.availableCategories.push(this.relevantDetails.category);
+      this.filteredCategories = [];
     }
   }
 
@@ -113,5 +179,32 @@ export class RelavantDetailsComponent implements OnInit{
     link.target = '_blank';
     link.download = 'sample_banner.png';
     link.click();
+  }
+
+  get selectedCurrency(): string {
+    return this.relevantDetails.freeCheck ? '$' : this.relevantDetails.currency;
+  }
+
+  set selectedCurrency(value: string) {
+    if (!this.relevantDetails.freeCheck) {
+      this.relevantDetails.currency = value;
+    }
+  }
+
+  get selectedPrice(): string {
+    return this.relevantDetails.freeCheck ? '0' : this.relevantDetails.price;
+  }
+
+  set selectedPrice(value: string) {
+    if (!this.relevantDetails.freeCheck) {
+      this.relevantDetails.price = value;
+    }
+  }
+
+  onFreeCheckChange() {
+    if (this.relevantDetails.freeCheck) {
+      this.relevantDetails.currency = '$';
+      this.relevantDetails.price = '0';
+    }
   }
 }

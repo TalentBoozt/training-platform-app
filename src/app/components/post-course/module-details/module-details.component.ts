@@ -33,6 +33,8 @@ export class ModuleDetailsComponent implements OnInit{
 
   installments: any[] = []
 
+  isFreeCheck = false
+
   constructor(private resumeStorage: ResumeStorageService, private alertService: AlertsService) {}
 
   ngOnInit(): void {
@@ -40,11 +42,16 @@ export class ModuleDetailsComponent implements OnInit{
     if (savedData.modules) {
       this.modules = savedData.modules;
     }
-    if (savedData.installment && savedData.installment.length > 0){
-      this.installments = savedData.installment;
+    if (savedData?.relevantDetails?.freeCheck) {
+      this.isFreeCheck = true;
+      this.newModule.installmentId = 'free';
     } else {
-      this.alertService.errorMessage('You have not initialized any installment plan. You should initialize at least one installment plan in 4th step!', 'Error');
-      return;
+      if (savedData.installment && savedData.installment.length > 0){
+        this.installments = savedData.installment;
+      } else {
+        this.alertService.errorMessage('You have not initialized any installment plan. You should initialize at least one installment plan in 4th step!', 'Error');
+        return;
+      }
     }
   }
 
@@ -55,6 +62,10 @@ export class ModuleDetailsComponent implements OnInit{
       this.newModule.date &&
       this.newModule.start &&
       this.newModule.end){
+      if (this.newModule.meetingLink &&!this.isValidUrl(this.newModule.meetingLink)){
+        this.alertService.errorMessage('Please enter a valid url', 'Error');
+        return;
+      }
       this.newModule.id = this.generateRandomId();
       this.modules.push({ ...this.newModule });
       this.saveData();
@@ -78,7 +89,7 @@ export class ModuleDetailsComponent implements OnInit{
       id: '',
       name: '',
       description: '',
-      installmentId: '',
+      installmentId: this.isFreeCheck ? 'free' : '',
       meetingLink: '',
       date: '',
       start: '',
@@ -90,5 +101,14 @@ export class ModuleDetailsComponent implements OnInit{
 
   generateRandomId(): string {
     return Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
+  }
+
+  isValidUrl(url: string): boolean {
+    try {
+      const parsedUrl = new URL(url);
+      return parsedUrl.protocol === 'https:';
+    } catch (error) {
+      return false;
+    }
   }
 }

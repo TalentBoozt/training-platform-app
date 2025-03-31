@@ -1,10 +1,10 @@
 <div class="form-card-1">
-  <form (ngSubmit)="saveData()" class="w-100">
+  <form class="w-100">
 
     <div class="d-flex align-items-center justify-content-between gap-2">
       <h5>Relevant Details :</h5>
       <div class="form-group">
-        <button type="submit" class="btn-fill btn-f-2">Save</button>
+        <button type="submit" class="btn-fill btn-f-2" (click)="saveData()">Save</button>
       </div>
     </div>
 
@@ -63,10 +63,19 @@
           <button type="submit" id="sample" class="btn-fill btn-f-1" (click)="downloadSampleBanner()">Sample</button>
         </div>
       </div>
+      <div class="col-12">
+        <div class="d-sm-flex align-items-center justify-content-between">
+          <div class="form-check">
+            <input class="form-check-input me-2" type="checkbox" id="freeCheck" [(ngModel)]="relevantDetails.freeCheck" [ngModelOptions]="{standalone: true}" (change)="onFreeCheckChange()">
+            <label class="form-check-label" for="freeCheck">Initialize as Free</label>
+          </div>
+        </div>
+      </div>
+
       <div class="col-6 col-md-3">
         <div class="form-group">
           <label for="currency">Currency *</label>
-          <select class="form-control" id="currency" [(ngModel)]="relevantDetails.currency" [ngModelOptions]="{standalone: true}" required>
+          <select class="form-control" id="currency" [(ngModel)]="selectedCurrency" [ngModelOptions]="{standalone: true}" required [disabled]="relevantDetails.freeCheck">
             <option value="$">USD</option>
             <option value="Rs">LKR</option>
             <option value="₹">INR</option>
@@ -74,10 +83,11 @@
           </select>
         </div>
       </div>
+
       <div class="col-6 col-md-3">
         <div class="form-group">
           <label for="price">Price *</label>
-          <input type="text" class="form-control" id="price" placeholder="10.00" [(ngModel)]="relevantDetails.price" required [ngModelOptions]="{standalone: true}">
+          <input type="text" class="form-control" id="price" placeholder="10.00" [(ngModel)]="selectedPrice" [ngModelOptions]="{standalone: true}" required [disabled]="relevantDetails.freeCheck">
         </div>
       </div>
       <div class="col-6 col-md-3 col-lg-6" [ngClass]="relevantDetails.mediaType === 'physical' ? 'col-xl-3' : ''">
@@ -96,6 +106,49 @@
         <div class="form-group">
           <label for="location">Location url</label>
           <input type="text" class="form-control" id="location" placeholder="https://maps.google.com" [(ngModel)]="relevantDetails.location" [ngModelOptions]="{standalone: true}" [disabled]="relevantDetails.mediaType != 'physical'">
+        </div>
+      </div>
+
+      <div class="col-12 col-md-6">
+        <div class="form-group">
+          <label for="category">Category</label>
+          <div class="input-group dropup-center dropup">
+            <input
+              type="text"
+              class="form-control"
+              id="category"
+              [(ngModel)]="relevantDetails.category"
+              [ngModelOptions]="{standalone: true}"
+              (input)="filterCategories()"
+              placeholder="Select or Add Category"
+              autocomplete="off" />
+
+            <div *ngIf="filteredCategories.length > 0 && relevantDetails.category" class="dropdown-menu show" style="max-height: 100px; overflow-y: auto;">
+              <button *ngFor="let category of filteredCategories"
+                      class="dropdown-item"
+                      (click)="selectCategory(category)">
+                {{ category }}
+              </button>
+
+              <button *ngIf="!filteredCategories.includes(relevantDetails.category) && relevantDetails.category"
+                      class="dropdown-item"
+                      style="color: var(--color-text-400)"
+                      (click)="addCategory()">
+                Add "{{ relevantDetails.category }}"
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-12 col-md-6">
+        <div class="form-group">
+          <label for="status">Course Status *</label>
+          <select class="form-control" id="status" [(ngModel)]="relevantDetails.courseStatus" [ngModelOptions]="{standalone: true}" required>
+            <option value="upcoming">Upcoming</option>
+            <option value="ongoing">Ongoing</option>
+            <option value="completed">Completed</option>
+            <option value="cancelled">Cancelled</option>
+          </select>
         </div>
       </div>
     </div>

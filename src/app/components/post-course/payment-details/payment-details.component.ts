@@ -39,6 +39,8 @@ export class PaymentDetailsComponent implements OnInit{
     price: ''
   }
 
+  isFreeCheck: boolean = false;
+
   constructor(private resumeStorage: ResumeStorageService, private alertService: AlertsService) {}
 
   ngOnInit(): void {
@@ -47,10 +49,16 @@ export class PaymentDetailsComponent implements OnInit{
       this.bankInstallments = savedData.installment;
       this.cardInstallments = savedData.installment
     }
-    if (!savedData?.basicDetails?.paymentMethod) {
-      this.alertService.errorMessage('Payment acceptance method not found! Add it first in step 1', 'Error');
+
+    if (savedData?.relevantDetails?.freeCheck) {
+      this.isFreeCheck = true;
     } else {
-      this.paymentMethod = savedData.basicDetails.paymentMethod;
+      if (!savedData?.basicDetails?.paymentMethod || savedData?.basicDetails?.paymentMethod == 'free') {
+        this.alertService.errorMessage('Payment acceptance method not found or cleared in 3rd step! Add it first in step 1', 'Error');
+        return;
+      } else {
+        this.paymentMethod = savedData.basicDetails.paymentMethod;
+      }
     }
   }
 
@@ -60,6 +68,10 @@ export class PaymentDetailsComponent implements OnInit{
         this.newCardInstallment.name &&
         this.newCardInstallment.price &&
         this.newCardInstallment.currency){
+        if (!this.isValidUrl(this.newCardInstallment.paymentLink)){
+          this.alertService.errorMessage('Invalid payment link!', 'Error');
+          return;
+        }
         this.newCardInstallment.id = this.generateRandomId();
         this.cardInstallments.push({ ...this.newCardInstallment });
         this.saveData();
@@ -136,5 +148,14 @@ export class PaymentDetailsComponent implements OnInit{
 
   generateRandomId(): string {
     return Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
+  }
+
+  isValidUrl(url: string): boolean {
+    try {
+      const parsedUrl = new URL(url);
+      return parsedUrl.protocol === 'https:';
+    } catch (error) {
+      return false;
+    }
   }
 }
