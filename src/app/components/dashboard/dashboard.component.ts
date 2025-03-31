@@ -1,5 +1,5 @@
 import {Component, ElementRef, OnInit, ViewChild} from '@angular/core';
-import {NgForOf, NgIf} from '@angular/common';
+import {DecimalPipe, NgForOf, NgIf} from '@angular/common';
 import {CourseCardComponent} from '../shared/cards/course-card/course-card.component';
 import {RouterLink} from '@angular/router';
 import {CoursesService} from '../../services/courses.service';
@@ -11,7 +11,8 @@ import {AuthService} from '../../services/support/auth.service';
     NgForOf,
     CourseCardComponent,
     NgIf,
-    RouterLink
+    RouterLink,
+    DecimalPipe
   ],
   templateUrl: './dashboard.component.html',
   styleUrl: './dashboard.component.scss',
@@ -49,6 +50,13 @@ export class DashboardComponent implements OnInit{
 
   companyId: string = '';
 
+  overview: any = {
+    hours: 0,
+    inProgress: 0,
+    completed: 0,
+    participants: 0
+  }
+
   constructor(private courseService: CoursesService,
               private cookieService: AuthService) {
   }
@@ -56,6 +64,7 @@ export class DashboardComponent implements OnInit{
   ngOnInit() {
     this.companyId = this.cookieService.organization();
     this.getCourses(this.companyId);
+    this.getOverview(this.companyId);
   }
 
   // Get Courses
@@ -63,6 +72,17 @@ export class DashboardComponent implements OnInit{
     this.courseService.getCoursesByOrganization(id).subscribe(courses => {
       this.courseCards = courses;
       this.updateFilteredCourses();
+    });
+  }
+
+  getOverview(id: string) {
+    this.courseService.getOverviewByCompany(id).subscribe(overview => {
+      this.overview = {
+        hours: overview.totalTrainingHours / 60,
+        inProgress: overview.totalInProgressTrainings,
+        completed: overview.totalCompletedTrainings,
+        participants: overview.totalParticipants
+      }
     });
   }
 
