@@ -46,4 +46,12 @@ export class CoursesService {
   public getOverviewByCompany(organization: string): Observable<any> {
     return this.http.get<any>(`${this.baseUrl}/course/overview/${organization}`);
   }
+
+  public editCourse(id: any, course: any): Observable<any> {
+    return this.http.put<any>(`${this.baseUrl}/course/update/${id}`, course);
+  }
+
+  public deleteCourse(id: any): Observable<any> {
+    return this.http.delete<any>(`${this.baseUrl}/course/delete/${id}`);
+  }
 }

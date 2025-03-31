@@ -6,6 +6,7 @@ import {ResumeStorageService} from '../../../services/support/resume-storage.ser
 import {CoursesService} from '../../../services/courses.service';
 import {AlertsService} from '../../../services/support/alerts.service';
 import {AuthService} from '../../../services/support/auth.service';
+import {WindowService} from '../../../services/common/window.service';
 
 @Component({
   selector: 'app-preview-post',
@@ -21,6 +22,7 @@ export class PreviewPostComponent implements OnInit{
   selectedCourse: any[] = [];
   isNotFound: boolean = false;
   companyId: string = '';
+  isUpdateId: any;
 
   constructor(
     private router: Router,
@@ -29,12 +31,16 @@ export class PreviewPostComponent implements OnInit{
     private resumeStorage: ResumeStorageService,
     private courseService: CoursesService,
     private alertService: AlertsService,
+    private windowService: WindowService,
     private sanitizer: DomSanitizer) {
   }
 
   ngOnInit(): void {
     this.getCourseDetails();
     this.companyId = this.cookieService.organization();
+    if (this.windowService.nativeSessionStorage) {
+      if (sessionStorage.getItem('editCourse')) this.isUpdateId = sessionStorage.getItem('editCourse');
+    }
   }
 
   getCourseDetails() {
@@ -66,7 +72,7 @@ export class PreviewPostComponent implements OnInit{
   addCourse() {
     const savedData = this.resumeStorage.getData();
     if (savedData && Object.keys(savedData).length > 0){
-      const course = {
+      let course = {
         companyId: this.companyId || 'unknown',
         name: savedData.basicDetails.name,
         description: savedData.courseContent,
@@ -90,15 +96,26 @@ export class PreviewPostComponent implements OnInit{
         startDate: savedData.relevantDetails.startDate,
         fromTime: savedData.relevantDetails.startTime,
         toTime: savedData.relevantDetails.endTime,
-        courseStatus: savedData.relevantDetails.courseStatus
+        courseStatus: savedData.relevantDetails.courseStatus,
+        paymentMethod: savedData.basicDetails.paymentMethod
       }
 
-      this.courseService.addCourse(course).subscribe(() => {
-        this.router.navigate(['/courses']);
-        this.alertService.successMessage('Course added successfully', 'Success');
-      }, error => {
-        this.alertService.errorMessage(error.error.message, 'Error');
-      });
+      if (this.isUpdateId) {
+        this.courseService.editCourse(this.isUpdateId, course).subscribe(() => {
+          this.router.navigate(['/courses']);
+          sessionStorage.removeItem('editCourse');
+          this.alertService.successMessage('Course updated successfully', 'Success');
+        }, error => {
+          this.alertService.errorMessage(error.error.message, 'Error');
+        })
+      } else {
+        this.courseService.addCourse(course).subscribe(() => {
+          this.router.navigate(['/courses']);
+          this.alertService.successMessage('Course added successfully', 'Success');
+        }, error => {
+          this.alertService.errorMessage(error.error.message, 'Error');
+        });
+      }
     }
     else {
       this.alertService.errorMessage('Not enough data found to add course', 'Error');
