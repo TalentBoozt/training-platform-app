@@ -1,8 +1,8 @@
 <div class="card">
-  <img src="{{course.image || '/assets/images/course-card/placeholder.webp'}}" class="card-img-top" alt="course banner" (click)="navigateToDetails()">
+  <img src="{{course.image || '/assets/images/course-card/placeholder.webp'}}" class="card-img-top" alt="course banner" (click)="navigateToDetails(course.id)">
   <div class="card-body">
     <div class="d-flex flex-column gap-2">
-      <div class="card-title" (click)="navigateToDetails()">{{course.name}}</div>
+      <div class="card-title" (click)="navigateToDetails(course.id)">{{course.name}}</div>
       <div class="d-flex flex-column align-items-start gap-2 w-100">
         <div class="d-flex flex-column align-items-start gap-2 w-100">
           <div class="platform">
@@ -41,10 +41,10 @@
               <li><a class="dropdown-item" href="#">Preview</a></li>
               <li><hr class="dropdown-divider"></li>
               <li><a class="dropdown-item" (click)="navigateToParticipant(course.id)">Participants</a></li>
-              <li><a class="dropdown-item" href="#">Edit Course</a></li>
+              <li><a class="dropdown-item" (click)="editCourse(course)">Edit Course</a></li>
               <li><a class="dropdown-item" href="#">Edit Modules</a></li>
               <li><hr class="dropdown-divider"></li>
-              <li><a class="dropdown-item text-danger" href="#">Delete</a></li>
+              <li><a class="dropdown-item text-danger" (click)="deleteCourse(course.id)">Delete</a></li>
             </ul>
           </div>
         </div>

@@ -72,7 +72,11 @@
         <!-- Course Cards -->
         <div class="row py-3 w-100">
           <div class="col-12 col-md-6 col-lg-4" *ngFor="let course of filteredCourses">
-            <app-course-card [course]="course"></app-course-card>
+            <app-course-card
+              [course]="course"
+              (delete)="deleteCourse($event)"
+              (edit)="editCourse($event)"
+            ></app-course-card>
           </div>
         </div>
 
@@ -145,7 +149,7 @@
             </div>
           </div>
 
-          <div class="result-not-found" *ngIf="filteredUpcomingCourses.length === 0">
+          <div class="result-not-found" *ngIf="quickLinks.length === 0">
             <div class="img-wrapper">
               <img src="/assets/images/decorations/polar-bear.svg" alt="not found" loading="lazy">
             </div>
