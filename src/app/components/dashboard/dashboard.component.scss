@@ -1,5 +1,6 @@
 .card-1{
   width: 100%;
+  max-height: fit-content;
   margin-bottom: max(20px, 3vw);
   padding: 20px;
   border-radius: 8px;
@@ -9,6 +10,7 @@
   align-items: center;
   justify-content: center;
   gap: 16px;
+  position: relative;
 
   .title{
     width: 100%;
@@ -86,6 +88,7 @@
       border-bottom: 2px solid var(--color-secondary-100);
       padding: var(--padding-3);
       cursor: pointer;
+      position: relative;
 
       .icon-wrapper{
         width: 40px;

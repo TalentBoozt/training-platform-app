@@ -1,0 +1,26 @@
+<div class="container">
+  <div class="row py-3 w-100">
+    <div class="col-12 col-md-4 col-lg-3" *ngFor="let course of courses">
+      <app-course-card
+        [course]="course"
+        (delete)="deleteCourse($event)"
+        (edit)="editCourse($event)"
+      ></app-course-card>
+    </div>
+  </div>
+
+  <div class="w-100" *ngIf="loading">
+    <div class="row py-3 w-100">
+      <div class="col-12 col-md-4 col-lg-3 mb-2" *ngFor="let i of [1, 2, 3, 4]">
+        <app-card1x2-loader></app-card1x2-loader>
+      </div>
+    </div>
+  </div>
+
+  <div class="result-not-found" *ngIf="courses.length === 0 && !loading">
+    <div class="img-wrapper">
+      <img src="/assets/images/decorations/polar-bear.svg" alt="not found" loading="lazy">
+    </div>
+    <p>No Results Available</p>
+  </div>
+</div>

@@ -1,4 +1,4 @@
-import {Component, ElementRef, OnInit, ViewChild} from '@angular/core';
+import {Component, ElementRef, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {DecimalPipe, NgForOf, NgIf} from '@angular/common';
 import {CourseCardComponent} from '../shared/cards/course-card/course-card.component';
 import {Router, RouterLink} from '@angular/router';
@@ -7,6 +7,10 @@ import {AuthService} from '../../services/support/auth.service';
 import {AlertsService} from '../../services/support/alerts.service';
 import {WindowService} from '../../services/common/window.service';
 import {ResumeStorageService} from '../../services/support/resume-storage.service';
+import {Subscription} from 'rxjs';
+import {CourseManagementService} from '../../services/support/course-management.service';
+import {Card1x2LoaderComponent} from '../shared/cards/loaders/card1x2-loader/card1x2-loader.component';
+import {CardFullLoaderComponent} from '../shared/cards/loaders/card-full-loader/card-full-loader.component';
 
 @Component({
   selector: 'app-dashboard',
@@ -15,14 +19,18 @@ import {ResumeStorageService} from '../../services/support/resume-storage.servic
     CourseCardComponent,
     NgIf,
     RouterLink,
-    DecimalPipe
+    DecimalPipe,
+    Card1x2LoaderComponent,
+    CardFullLoaderComponent
   ],
   templateUrl: './dashboard.component.html',
   styleUrl: './dashboard.component.scss',
   standalone: true
 })
-export class DashboardComponent implements OnInit{
+export class DashboardComponent implements OnInit, OnDestroy {
   @ViewChild('skillsContainer', { static: false }) skillsContainer!: ElementRef;
+
+  private courseSub!: Subscription;
 
   courses = [
     { name: 'All', category: 'All' },
@@ -60,7 +68,12 @@ export class DashboardComponent implements OnInit{
     participants: 0
   }
 
+  loading: boolean = true;
+  o_loading: boolean = true;
+  u_loading: boolean = true;
+
   constructor(private courseService: CoursesService,
+              private courseManagementService: CourseManagementService,
               private resumeStorage: ResumeStorageService,
               private alertService: AlertsService,
               private router: Router,
@@ -70,8 +83,19 @@ export class DashboardComponent implements OnInit{
 
   ngOnInit() {
     this.companyId = this.cookieService.organization();
+    this.courseSub = this.courseManagementService
+      .getCourseUpdateListener()
+      .subscribe(() => {
+        this.getCourses(this.companyId);
+      });
     this.getCourses(this.companyId);
     this.getOverview(this.companyId);
+  }
+
+  ngOnDestroy() {
+    if (this.courseSub) {
+      this.courseSub.unsubscribe();
+    }
   }
 
   // Get Courses
@@ -79,6 +103,7 @@ export class DashboardComponent implements OnInit{
     this.courseService.getCoursesByOrganization(id).subscribe(courses => {
       this.courseCards = courses;
       this.updateFilteredCourses();
+      this.loading = false;
     });
   }
 
@@ -90,6 +115,7 @@ export class DashboardComponent implements OnInit{
         completed: overview.totalCompletedTrainings,
         participants: overview.totalParticipants
       }
+      this.o_loading = false;
     });
   }
 
@@ -107,64 +133,21 @@ export class DashboardComponent implements OnInit{
       : this.courseCards.filter(course => course.courseStatus === this.selectedCategory);
 
     this.filteredUpcomingCourses = this.courseCards.filter(course => course.courseStatus === 'upcoming');
+    this.u_loading = false;
   }
 
   deleteCourse(event: any) {
-    if (event) {
-      if (confirm('Are you sure you want to delete this course?')) {
-        this.courseService.deleteCourse(event).subscribe(() => {
-          this.getCourses(this.companyId);
-          this.alertService.successMessage('Course deleted successfully!', 'Success');
-        }, error => {
-          this.alertService.errorMessage('Failed to delete course. Please try again.', 'Error');
-        });
+    this.courseManagementService.deleteCourse(event).subscribe(
+      () => {
+        this.getCourses(this.companyId);
+      },
+      (error) => {
+        // Handle error if needed
       }
-    } else {
-      this.alertService.errorMessage('Failed to delete course. Please try again.', 'Error');
-    }
+    );
   }
 
   editCourse(event: any) {
-    if (this.windowService.nativeSessionStorage) {
-      sessionStorage.setItem('editCourse', event.id);
-      this.resumeStorage.clearData();
-
-      const basicDetails = {
-        name: event.name,
-        overview: event.overview,
-        lecturer: event.lecturer,
-        language: event.language,
-        level: event.level,
-        duration: event.duration,
-        email: event.organizer,
-        certificate: event.certificate,
-        paymentMethod: event.paymentMethod // 'card' or 'bank'
-      };
-      const courseContent = event.description;
-      const relevantDetails = {
-        skills: event.skills,
-        startDate: event.startDate,
-        startTime: event.fromTime,
-        endTime: event.toTime,
-        coverImage: event.image,
-        freeCheck: event.price === '0',
-        currency: event.currency,
-        price: event.price,
-        mediaType: event.platform,
-        location: event.location,
-        category: event.category,
-        courseStatus: event.courseStatus
-      };
-      const installment = event.installment;
-      const modules = event.modules;
-
-      this.resumeStorage.saveData('basicDetails', basicDetails);
-      this.resumeStorage.saveData('courseContent', courseContent);
-      this.resumeStorage.saveData('relevantDetails', relevantDetails);
-      this.resumeStorage.saveData('installment', installment);
-      this.resumeStorage.saveData('modules', modules);
-
-      this.router.navigate(['/post-course']);
-    }
+    this.courseManagementService.editCourse(event);
   }
 }
