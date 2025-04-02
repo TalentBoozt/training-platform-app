@@ -5,6 +5,7 @@ import {CoursesService} from '../../services/courses.service';
 import {ActivatedRoute} from '@angular/router';
 import {AuthService} from '../../services/support/auth.service';
 import {tap} from 'rxjs';
+import {AlertsService} from '../../services/support/alerts.service';
 
 @Component({
   selector: 'app-participants',
@@ -28,9 +29,9 @@ export class ParticipantsComponent implements OnInit {
     { name: 'Pending', value: 'pending' },
   ];
   accountStatus: any[] = [
-    { name: 'Enrolled', value: 'Enrolled' },
-    { name: 'Dropped', value: 'Dropped' },
-    { name: 'Completed', value: 'Completed' },
+    { name: 'Enrolled', value: 'enrolled' },
+    { name: 'Dropped', value: 'dropped' },
+    { name: 'Completed', value: 'completed' },
   ];
 
   courseId: any;
@@ -39,7 +40,10 @@ export class ParticipantsComponent implements OnInit {
 
   organizationId: any;
 
-  constructor(private courseService: CoursesService, private route: ActivatedRoute, private cookieService: AuthService) {}
+  constructor(private courseService: CoursesService,
+              private route: ActivatedRoute,
+              private alertService: AlertsService,
+              private cookieService: AuthService) {}
 
   ngOnInit(): void {
     this.organizationId = this.cookieService.organization();
@@ -70,10 +74,11 @@ export class ParticipantsComponent implements OnInit {
         return enroll.courses?.map((course: any) => {
           return course.installment?.map((installment: any) => {
             return {
+              id: user.id,
               name: user.firstname + ' ' + user.lastname,
               email: user.email,
-              pStatus: installment.paid === 'paid' ? 'paid' : installment.paid === null ? 'unpaid' : 'pending',
-              aStatus: course.status === 'enrolled' ? 'Enrolled' : course.status === 'dropped' ? 'Dropped' : 'Pending',
+              pStatus: installment.paid === 'paid' ? 'paid' : installment.paid === null || installment.paid === 'unpaid' ? 'unpaid' : 'pending',
+              aStatus: course.status === 'enrolled' ? 'enrolled' : course.status === null || course.status === 'dropped' ? 'dropped' : 'completed',
               courseId: course.courseId,
               installmentId: installment.id,
             };
@@ -115,6 +120,26 @@ export class ParticipantsComponent implements OnInit {
           p.email.toLowerCase().includes(this.searchTerm.toLowerCase())
           : true)
       );
+    });
+  }
+
+  updatePaymentStatus(eid: any, courseId: any, installmentId: any, pStatus: any) {
+    if (!eid || !courseId || !installmentId || !pStatus) return;
+    this.courseService.updateInstallmentPaymentStatus(eid, courseId, installmentId, pStatus).subscribe((res) => {
+      this.alertService.successMessage('Payment status updated successfully', 'Success');
+      this.getParticipants(this.courseId)
+    }, (err) => {
+      this.alertService.errorMessage('Failed to update payment status', 'Error');
+    });
+  }
+
+  updateAccountStatus(eid: any, courseId: any, aStatus: any) {
+    if (!eid || !courseId || !aStatus) return;
+    this.courseService.updateEnrollmentStatus(eid, courseId, aStatus.toLowerCase()).subscribe((res) => {
+      this.alertService.successMessage('Account status updated successfully', 'Success');
+      this.getParticipants(this.courseId)
+    }, (err) => {
+      this.alertService.errorMessage('Failed to update account status', 'Error');
     });
   }
 }

@@ -54,4 +54,12 @@ export class CoursesService {
   public deleteCourse(id: any): Observable<any> {
     return this.http.delete<any>(`${this.baseUrl}/course/delete/${id}`);
   }
+
+  public updateInstallmentPaymentStatus(eid: any, cid: any, iid: any, status: any): Observable<any> {
+    return this.http.put<any>(`${this.baseUrl}/emp-courses/update-installment-payment/${eid}/${cid}/${iid}/${status}`, {});
+  }
+
+  public updateEnrollmentStatus(eid: any, cid: any, status: any): Observable<any> {
+    return this.http.put<any>(`${this.baseUrl}/emp-courses/update-enrollment-status/${eid}/${cid}/${status}`, {});
+  }
 }

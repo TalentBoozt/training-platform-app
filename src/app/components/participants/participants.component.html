@@ -44,14 +44,14 @@
       <tr *ngFor="let p of filteredParticipants">
         <td>{{p?.name}}</td>
         <td>
-          <select class="form-control p-status" [(ngModel)]="p.pStatus" [ngModelOptions]="{standalone: true}" [ngStyle]="{'background-color': p.pStatus == 'paid' ? 'green' : p.pStatus == 'unpaid' ? 'red' : 'orange'}">
+          <select class="form-control p-status" [(ngModel)]="p.pStatus" [ngModelOptions]="{standalone: true}" [ngStyle]="{'background-color': p.pStatus == 'paid' ? 'green' : p.pStatus == 'unpaid' ? 'red' : 'orange'}" (change)="updatePaymentStatus(p.id, p.courseId, p.installmentId, p.pStatus)">
             <option *ngFor="let ps of paidStatus" [value]="ps.value">{{ps.name}}</option>
           </select>
         </td>
         <td>{{p.email}}</td>
         <td>
-          <select class="form-control p-status" [(ngModel)]="p.aStatus" [ngModelOptions]="{standalone: true}" [ngStyle]="{'background-color': p.aStatus == 'Enrolled' ? 'green' : p.aStatus == 'Dropped' ? 'red' : 'orange'}">
-            <option *ngFor="let ps of accountStatus" [value]="ps.value">{{ps.name}}</option>
+          <select class="form-control p-status" [(ngModel)]="p.aStatus" [ngModelOptions]="{standalone: true}" [ngStyle]="{'background-color': p.aStatus == 'enrolled' ? 'green' : p.aStatus == 'dropped' ? 'red' : 'orange'}" (change)="updateAccountStatus(p.id, p.courseId, p.aStatus)">
+            <option *ngFor="let pa of accountStatus" [value]="pa.value">{{pa.name}}</option>
           </select>
         </td>
       </tr>
