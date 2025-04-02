@@ -4,13 +4,14 @@
       <div class="card-1">
         <div class="title">
           <div class="img-wrapper">
-            <img src="/assets/images/dashboard/icons/chronometer-time.svg" alt="img"loading="lazy">
+            <img src="/assets/images/dashboard/icons/chronometer-time.svg" alt="img" loading="lazy">
           </div>
           Training Hours
         </div>
         <div class="value">
           {{overview.hours | number:'2.0-2'}} H
         </div>
+        <app-card-full-loader *ngIf="o_loading"></app-card-full-loader>
       </div>
     </div>
     <div class="col-6 col-lg-3">
@@ -24,6 +25,7 @@
         <div class="value">
           {{overview.inProgress}}
         </div>
+        <app-card-full-loader *ngIf="o_loading"></app-card-full-loader>
       </div>
     </div>
     <div class="col-6 col-lg-3">
@@ -37,6 +39,7 @@
         <div class="value">
           {{overview.completed}}
         </div>
+        <app-card-full-loader *ngIf="o_loading"></app-card-full-loader>
       </div>
     </div>
     <div class="col-6 col-lg-3">
@@ -50,6 +53,7 @@
         <div class="value">
           {{overview.participants}}
         </div>
+        <app-card-full-loader *ngIf="o_loading"></app-card-full-loader>
       </div>
     </div>
   </div>
@@ -70,7 +74,7 @@
       <div class="container">
 
         <!-- Course Cards -->
-        <div class="row py-3 w-100">
+        <div class="row py-3 w-100" *ngIf="!loading">
           <div class="col-12 col-md-6 col-lg-4" *ngFor="let course of filteredCourses">
             <app-course-card
               [course]="course"
@@ -80,7 +84,15 @@
           </div>
         </div>
 
-        <div class="result-not-found" *ngIf="filteredCourses.length === 0">
+        <div class="w-100" *ngIf="loading">
+          <div class="row py-3 w-100">
+            <div class="col-12 col-md-6 col-lg-4 mb-2" *ngFor="let i of [1, 2, 3]">
+              <app-card1x2-loader></app-card1x2-loader>
+            </div>
+          </div>
+        </div>
+
+        <div class="result-not-found" *ngIf="filteredCourses.length === 0 && !loading">
           <div class="img-wrapper">
             <img src="/assets/images/decorations/polar-bear.svg" alt="not found" loading="lazy">
           </div>
@@ -120,9 +132,11 @@
             <div class="arrow-icon">
               <i class="material-icons">arrow_forward_ios</i>
             </div>
+
+            <app-card-full-loader *ngIf="u_loading"></app-card-full-loader>
           </div>
 
-          <div class="result-not-found" *ngIf="filteredUpcomingCourses.length === 0">
+          <div class="result-not-found" *ngIf="filteredUpcomingCourses.length === 0 && !u_loading">
             <div class="img-wrapper">
               <img src="/assets/images/decorations/polar-bear.svg" alt="not found" loading="lazy">
             </div>
