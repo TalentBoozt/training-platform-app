@@ -327,9 +327,8 @@ $screen-xxl: 1401px;
     color: var(--color-primary-100);
   }
 }
-.btn-f-4{
+.btn-f-4, .btn-f-5{
   color: var(--color-white);
-  background-color: var(--color-danger-200);
   padding: var(--padding-1);
   display: flex;
   align-items: center;
@@ -340,9 +339,19 @@ $screen-xxl: 1401px;
     margin: 0;
     padding: 0;
   }
+}
+.btn-f-4{
+  background-color: var(--color-danger-200);
 
   &:hover{
     background-color: var(--color-danger-100);
+  }
+}
+.btn-f-5{
+  background-color: var(--color-secondary-100);
+
+  &:hover{
+    background-color: var(--color-primary-100);
   }
 }
 
