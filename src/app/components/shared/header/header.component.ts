@@ -32,8 +32,7 @@ export class HeaderComponent implements OnInit, AfterViewInit {
 
   employee: any;
   employeeId: any;
-  employeeLevel: any;
-  employeeType: any;
+  isTokenFound: boolean = false;
 
   constructor(public themeService: ThemeService,
               private router: Router,
@@ -48,7 +47,7 @@ export class HeaderComponent implements OnInit, AfterViewInit {
 
   ngOnInit() {
     this.employeeId = this.cookieService.userID();
-    this.employeeLevel = this.cookieService.level();
+    this.isTokenFound = this.cookieService.isRefreshToken();
     this.themeService.applyTheme();
     if (this.windowService.nativeWindow && this.windowService.nativeDocument) {
       this.router.events.subscribe(event => {
@@ -84,11 +83,6 @@ export class HeaderComponent implements OnInit, AfterViewInit {
     this.employeeService.getEmployee(id).subscribe(
       (data) => {
         this.employee = data;
-        this.credentialsService.fetchCredentialByEmployeeId(this.employeeId).subscribe(
-          (data) => {
-            this.employeeType = data?.role
-          }
-        )
       },
       (error: HttpErrorResponse) => {
         console.log(error)

@@ -38,12 +38,6 @@ export class AuthService {
   }
 
   public logout(){
-    this.cookieService.delete('user-token-id');
-    this.cookieService.delete('pro-admin-token');
-    this.cookieService.delete('organization');
-    this.cookieService.delete('admin-token');
-    this.cookieService.delete('level');
-    this.cookieService.delete('jwtToken', '/');
     this.cookieService.deleteAll();
     if (this.windowService.nativeSessionStorage){
       sessionStorage.clear();
@@ -170,5 +164,9 @@ export class AuthService {
 
   public getRefreshToken(): string | null {
     return this.cookieService.get('refreshToken');
+  }
+
+  isRefreshToken(): boolean {
+    return !!this.getRefreshToken();
   }
 }

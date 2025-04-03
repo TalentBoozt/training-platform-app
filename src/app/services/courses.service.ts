@@ -66,4 +66,12 @@ export class CoursesService {
   public getCourseById(id: any): Observable<any> {
     return this.http.get<any>(`${this.baseUrl}/course/get/${id}`);
   }
+
+  public updateModule(courseId: any, module: any){
+    return this.http.put<any>(`${this.baseUrl}/course/update-module/${courseId}`, module)
+  }
+
+  public deleteModule(courseId: any, moduleId: any){
+    return this.http.delete<any>(`${this.baseUrl}/course/delete-module/${courseId}/${moduleId}`)
+  }
 }
