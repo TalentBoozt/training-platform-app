@@ -38,7 +38,7 @@
             </a>
 
             <ul class="dropdown-menu">
-              <li><a class="dropdown-item" href="#">Preview</a></li>
+              <li><a class="dropdown-item" routerLink="/preview/{{course.id}}">Preview</a></li>
               <li><hr class="dropdown-divider"></li>
               <li><a class="dropdown-item" (click)="navigateToParticipant(course.id)">Participants</a></li>
               <li><a class="dropdown-item" (click)="editCourse(course)">Edit Course</a></li>

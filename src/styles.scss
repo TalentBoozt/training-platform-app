@@ -808,3 +808,28 @@ p, ol, ul, li {
     }
   }
 }
+
+.offcanvas{
+  background-color: var(--color-surface-300);
+  .offcanvas-body{
+    .content-title{
+      color: var(--color-text-100);
+      font-size: var(--fs-18);
+      font-weight: var(--fw-500);
+    }
+
+    .content-Value{
+      color: var(--color-text-300);
+      font-size: var(--fs-16);
+    }
+    .content-Value.upcoming{
+      color: #CEB700;
+    }
+    .content-Value.inprogress{
+      color: darkgreen;
+    }
+    .content-Value.concluded{
+      color: #9E0000;
+    }
+  }
+}

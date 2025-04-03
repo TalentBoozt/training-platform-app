@@ -2,7 +2,7 @@
   <div class="container d-flex align-items-center justify-content-between">
     <div class="logo-wrapper" routerLink="/"></div>
     <div class="menu">
-      <li *ngIf="employeeType" class="nav-item d-block d-lg-none ms-2 dropdown">
+      <li *ngIf="employeeId" class="nav-item d-block d-lg-none ms-2 dropdown">
         <div class="profile-wrapper" type="button" data-bs-toggle="dropdown" aria-expanded="false">
           <img [src]="employee?.image?employee.image:'./assets/images/shared/default_emp_dp.svg'"
                alt="profile" width="40" height="40">
@@ -39,7 +39,7 @@
           </li>
         </ul>
       </li>
-      <li *ngIf="!employeeType" class="d-block d-lg-none nav-item" (click)="collapseNavbar()">
+      <li *ngIf="!employeeId" class="d-block d-lg-none nav-item" (click)="collapseNavbar()">
         <div class="d-flex align-items-center justify-content-end gap-2">
           <div class="btn-outline btn-o-1" routerLink="/login" [class.active]="isActive('/login')">Login</div>
           <div class="btn-fill btn-f-1" routerLink="/register" [class.active]="isActive('/register')">Sign Up</div>
@@ -79,13 +79,13 @@
                   <i class="material-icons">{{themeService.isDarkMode()?'light_mode':'dark_mode'}}</i>
                 </button>
               </li>
-              <li *ngIf="!employeeType" class="d-none d-lg-block nav-item" (click)="collapseNavbar()">
+              <li *ngIf="!employeeId" class="d-none d-lg-block nav-item" (click)="collapseNavbar()">
                 <div class="d-flex align-items-center justify-content-end gap-2">
                   <div class="btn-outline btn-o-1" routerLink="/login" [class.active]="isActive('/login')">Login</div>
                   <div class="btn-fill btn-f-1" routerLink="/register" [class.active]="isActive('/register')">Sign Up</div>
                 </div>
               </li>
-              <li *ngIf="employeeType" class="nav-item d-none d-lg-block ms-2 dropdown">
+              <li *ngIf="employeeId" class="nav-item d-none d-lg-block ms-2 dropdown">
                 <div class="profile-wrapper" type="button" data-bs-toggle="dropdown" aria-expanded="false">
                   <img [src]="employee?.image?employee.image:'./assets/images/shared/default_emp_dp.svg'"
                        alt="profile" width="40" height="40">

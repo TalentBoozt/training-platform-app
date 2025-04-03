@@ -6,7 +6,8 @@ import {CoursesService} from '../../../../services/courses.service';
 @Component({
   selector: 'app-course-card',
   imports: [
-    NgIf
+    NgIf,
+    RouterLink
   ],
   templateUrl: './course-card.component.html',
   styleUrl: './course-card.component.scss',

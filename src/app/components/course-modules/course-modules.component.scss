@@ -1,0 +1,59 @@
+// Breakpoints
+$screen-sm: 577px;
+$screen-md: 769px;
+$screen-lg: 993px;
+$screen-xl: 1201px;
+$screen-xxl: 1401px;
+
+// Media Query Mixin
+@mixin respond-to($breakpoint) {
+  @if $breakpoint == sm {
+    @media (max-width: #{$screen-sm}) { @content; }
+  } @else if $breakpoint == md {
+    @media (max-width: #{$screen-md}) { @content; }
+  } @else if $breakpoint == lg {
+    @media (max-width: #{$screen-lg}) { @content; }
+  } @else if $breakpoint == xl {
+    @media (max-width: #{$screen-xl}) { @content; }
+  } @else if $breakpoint == xxl {
+    @media (max-width: #{$screen-xxl}) { @content; }
+  }
+}
+
+.overview-wrapper{
+  width: 100%;
+  min-height: 200px;
+  padding: var(--padding-7) 0;
+}
+
+.course-content{
+  width: 100%;
+
+  .content-title{
+    font-size: var(--fs-20);
+    color: var(--color-text-100);
+    font-weight: var(--fw-500);
+    margin-bottom: var(--margin-4);
+    margin-top: var(--margin-2);
+
+    @include respond-to(md) {
+      font-size: var(--fs-18);
+    }
+
+    @include respond-to(sm) {
+      font-size: var(--fs-16);
+    }
+  }
+
+  .module-wrapper{
+    background-color: var(--color-surface-200);
+    border-radius: 5px;
+  }
+}
+
+.no-access{
+  width: 100%;
+  text-align: center;
+  color: var(--color-text-100);
+  font-weight: var(--fw-500);
+}

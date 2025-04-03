@@ -1,0 +1,86 @@
+// Breakpoints
+$screen-sm: 577px;
+$screen-md: 769px;
+$screen-lg: 993px;
+$screen-xl: 1201px;
+$screen-xxl: 1401px;
+
+// Media Query Mixin
+@mixin respond-to($breakpoint) {
+  @if $breakpoint == sm {
+    @media (max-width: #{$screen-sm}) { @content; }
+  } @else if $breakpoint == md {
+    @media (max-width: #{$screen-md}) { @content; }
+  } @else if $breakpoint == lg {
+    @media (max-width: #{$screen-lg}) { @content; }
+  } @else if $breakpoint == xl {
+    @media (max-width: #{$screen-xl}) { @content; }
+  } @else if $breakpoint == xxl {
+    @media (max-width: #{$screen-xxl}) { @content; }
+  }
+}
+
+.card-wrapper{
+  width: 100%;
+  border: 2px solid var(--color-text-100);
+  border-radius: 5px;
+  padding: var(--padding-3) var(--padding-4);
+
+  .title{
+    color: var(--color-text-100);
+    font-weight: var(--fw-500);
+    font-size: var(--fs-18);
+    cursor: pointer;
+  }
+
+  .lock-icon{
+    i{
+      color: var(--color-highlight-100);
+      font-size: var(--fs-22);
+    }
+  }
+
+  .description{
+    color: var(--color-text-400);
+    font-weight: var(--fw-400);
+    font-size: var(--fs-14);
+  }
+
+  .fee{
+    color: var(--color-text-200);
+    font-weight: var(--fw-400);
+    font-size: var(--fs-14);
+  }
+
+  .btn-f-2{
+    padding: var(--padding-1) var(--padding-3);
+  }
+
+  @include respond-to(md) {
+    .title{
+      font-size: var(--fs-18);
+    }
+    .lock-icon{
+      i{
+        font-size: var(--fs-20);
+      }
+    }
+    .description{
+      font-size: var(--fs-14);
+    }
+  }
+
+  @include respond-to(sm) {
+    .title{
+      font-size: var(--fs-16);
+    }
+    .lock-icon{
+      i{
+        font-size: var(--fs-18);
+      }
+    }
+    .description{
+      font-size: var(--fs-12);
+    }
+  }
+}
