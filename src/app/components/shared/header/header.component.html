@@ -9,17 +9,9 @@
         </div>
 
         <ul class="dropdown-menu dropdown-menu-end">
-          <li><a class="dropdown-item" routerLink="/candidate-profile"><i class="material-icons">perm_identity</i>
-            Profile</a></li>
-          <li><a class="dropdown-item" routerLink="/candidate-profile-setting"><i class="material-icons">settings</i>
-            Setting</a></li>
-          <li>
-            <hr class="dropdown-divider">
-          </li>
-          <li><a class="dropdown-item" routerLink="/my-jobs"><i class="material-icons">assignment</i> My
-            Jobs</a></li>
-          <li><a class="dropdown-item" routerLink="/cart"><i class="material-icons">add_shopping_cart</i> My
-            Products</a></li>
+          <li><a class="dropdown-item" href="https://talentboozt.com/candidate-profile?id={{employeeId}}" target="_blank">
+            <i class="material-icons">perm_identity</i>
+            Access Main Profile</a></li>
           <li>
             <hr class="dropdown-divider">
           </li>
@@ -83,17 +75,9 @@
                 </div>
 
                 <ul class="dropdown-menu dropdown-menu-end">
-                  <li><a class="dropdown-item" routerLink="/candidate-profile"><i class="material-icons">perm_identity</i>
-                    Profile</a></li>
-                  <li><a class="dropdown-item" routerLink="/candidate-profile-setting"><i class="material-icons">settings</i>
-                    Setting</a></li>
-                  <li>
-                    <hr class="dropdown-divider">
-                  </li>
-                  <li><a class="dropdown-item" routerLink="/my-jobs"><i class="material-icons">assignment</i> My
-                    Jobs</a></li>
-                  <li><a class="dropdown-item" routerLink="/cart"><i class="material-icons">add_shopping_cart</i> My
-                    Products</a></li>
+                  <li><a class="dropdown-item" href="https://talentboozt.com/candidate-profile?id={{employeeId}}" target="_blank">
+                    <i class="material-icons">perm_identity</i>
+                    Access Main Profile</a></li>
                   <li>
                     <hr class="dropdown-divider">
                   </li>
@@ -113,7 +97,7 @@
 
   <div class="search-results-wrapper" *ngIf="openSearchResults">
     <div class="search-result" *ngFor="let r of filterSearchResults()">
-      <a [routerLink]="r.routerLink">{{r.name}}</a>
+      <a (click)="navigateToSearchResult(r.id)" >{{r.name}}</a>
     </div>
     <div class="not-found" *ngIf="filterSearchResults().length <= 0">No results found. :(</div>
   </div>

@@ -9,6 +9,8 @@ import {EmployeeService} from '../../../services/employee.service';
 import {CredentialService} from '../../../services/credential.service';
 import {LinkedInAuthService} from '../../../services/authentication/linked-in-auth.service';
 import {WindowService} from '../../../services/common/window.service';
+import {CoursesService} from '../../../services/courses.service';
+import {tap} from 'rxjs';
 
 @Component({
   selector: 'app-header',
@@ -32,12 +34,14 @@ export class HeaderComponent implements OnInit, AfterViewInit {
 
   employee: any;
   employeeId: any;
+  companyId: any;
   isTokenFound: boolean = false;
 
   constructor(public themeService: ThemeService,
               private router: Router,
               private renderer: Renderer2,
               private employeeService: EmployeeService,
+              private coursesService: CoursesService,
               private credentialsService: CredentialService,
               private linkedInAuthService: LinkedInAuthService,
               private windowService: WindowService,
@@ -47,6 +51,7 @@ export class HeaderComponent implements OnInit, AfterViewInit {
 
   ngOnInit() {
     this.employeeId = this.cookieService.userID();
+    this.companyId = this.cookieService.organization();
     this.isTokenFound = this.cookieService.isRefreshToken();
     this.themeService.applyTheme();
     if (this.windowService.nativeWindow && this.windowService.nativeDocument) {
@@ -68,6 +73,7 @@ export class HeaderComponent implements OnInit, AfterViewInit {
     if (this.employeeId){
       this.getEmployee(this.employeeId);
     }
+    this.getCourses(this.companyId).subscribe();
   }
 
   ngAfterViewInit() {
@@ -88,6 +94,14 @@ export class HeaderComponent implements OnInit, AfterViewInit {
         console.log(error)
       }
     );
+  }
+
+  getCourses(companyId: any) {
+    return this.coursesService.getCoursesByOrganization(companyId).pipe(
+      tap(data => {
+        this.commonSearchResults = data
+      })
+    )
   }
 
   updateActiveClass() {
@@ -124,14 +138,15 @@ export class HeaderComponent implements OnInit, AfterViewInit {
   }
 
   handleSearch(data: any) {
-    this.openSearchResults = !this.openSearchResults;
     this.targetInput = data as HTMLInputElement;
     const value = this.targetInput.value
     if (value) {
+      this.openSearchResults = true
       this.filteredSearchResults = this.commonSearchResults.filter((data: any) =>
         data.name.toLowerCase().includes(value.toLowerCase())
       );
     } else {
+      this.openSearchResults = false
       this.filteredSearchResults = this.commonSearchResults;
     }
   }
@@ -150,5 +165,9 @@ export class HeaderComponent implements OnInit, AfterViewInit {
 
   toggleTheme() {
     this.themeService.toggleTheme();
+  }
+
+  navigateToSearchResult(id:any) {
+    this.router.navigate(['/preview', id])
   }
 }

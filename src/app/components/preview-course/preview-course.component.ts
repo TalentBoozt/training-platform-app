@@ -33,8 +33,12 @@ export class PreviewCourseComponent implements OnInit{
               private alertService: AlertsService ) {}
 
   ngOnInit() {
-    this.courseId = this.route.snapshot.paramMap.get('courseId');
-    this.getCourseDetails(this.courseId);
+    this.route.paramMap.subscribe(params => {
+      this.courseId = params.get('courseId');
+      if (this.courseId) {
+        this.getCourseDetails(this.courseId);
+      }
+    });
   }
 
   getCourseDetails(courseId: any) {
