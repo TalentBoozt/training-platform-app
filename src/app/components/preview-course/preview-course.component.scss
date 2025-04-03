@@ -1,0 +1,71 @@
+// Breakpoints
+$screen-sm: 577px;
+$screen-md: 769px;
+$screen-lg: 993px;
+$screen-xl: 1201px;
+$screen-xxl: 1401px;
+
+// Media Query Mixin
+@mixin respond-to($breakpoint) {
+  @if $breakpoint == sm {
+    @media (max-width: #{$screen-sm}) { @content; }
+  } @else if $breakpoint == md {
+    @media (max-width: #{$screen-md}) { @content; }
+  } @else if $breakpoint == lg {
+    @media (max-width: #{$screen-lg}) { @content; }
+  } @else if $breakpoint == xl {
+    @media (max-width: #{$screen-xl}) { @content; }
+  } @else if $breakpoint == xxl {
+    @media (max-width: #{$screen-xxl}) { @content; }
+  }
+}
+
+.overview-wrapper{
+  width: 100%;
+  min-height: 300px;
+  padding: var(--padding-7) 0;
+  background-color: var(--color-surface-mixed-100);
+
+  .details-wrapper{
+    width: 100%;
+    background-color: #3B3B3B;
+    padding: var(--padding-5) 0;
+    margin-bottom: var(--margin-4);
+
+    .details-tag{
+      color: #c8c8c8;
+      font-size: 14px;
+    }
+
+    .details-val{
+      color: #FFFFFF;
+      font-size: 18px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      .star{
+        color: var(--color-highlight-100);
+        font-size: 20px;
+        margin: 0;
+        padding: 0;
+      }
+    }
+  }
+}
+
+.content-title{
+  font-size: var(--fs-20);
+  color: var(--color-text-100);
+  font-weight: var(--fw-500);
+  margin-bottom: var(--margin-4);
+  margin-top: var(--margin-2);
+
+  @include respond-to(md) {
+    font-size: var(--fs-18);
+  }
+
+  @include respond-to(sm) {
+    font-size: var(--fs-16);
+  }
+}

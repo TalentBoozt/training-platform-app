@@ -62,4 +62,8 @@ export class CoursesService {
   public updateEnrollmentStatus(eid: any, cid: any, status: any): Observable<any> {
     return this.http.put<any>(`${this.baseUrl}/emp-courses/update-enrollment-status/${eid}/${cid}/${status}`, {});
   }
+
+  public getCourseById(id: any): Observable<any> {
+    return this.http.get<any>(`${this.baseUrl}/course/get/${id}`);
+  }
 }

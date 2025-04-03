@@ -1,0 +1,24 @@
+@keyframes slide-loading {
+  0% {
+    background-position: 0 0;
+  }
+  100% {
+    background-position: 100% 0;
+  }
+}
+.course-card{
+  width: 100%;
+  height: 90vh;
+  border-radius: 8px;
+  background-color: var(--color-surface-200);
+  padding: 16px;
+
+  .large-card, .small-card{
+    width: 100%;
+    height: 90%;
+    border-radius: 5px;
+    background-image: linear-gradient(to right, rgba(0,0,0,0), var(--color-text-700));
+    background-size: 200% 100%;
+    animation: 1s slide-loading infinite ease-in-out;
+  }
+}
