@@ -15,7 +15,7 @@
       <a *ngIf="(installment.paid == 'unpaid' || !installment.paid) && installment.paymentLink" href="{{makePayment(module.installmentId)}}">
         <button class="btn-fill btn-f-2">Pay</button>
       </a>
-      <button *ngIf="(installment.paid == 'unpaid' || !installment.paid) && !installment.paymentLink" class="btn-fill btn-f-2" (click)="openBankPayment(installment)">
+      <button id="TP_MC_Pay" type="button" *ngIf="(installment.paid == 'unpaid' || !installment.paid) && !installment.paymentLink" class="btn-fill btn-f-2" (click)="openBankPayment(installment)">
         Pay
       </button>
 
