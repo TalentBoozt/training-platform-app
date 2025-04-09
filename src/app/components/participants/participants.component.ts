@@ -69,14 +69,17 @@ export class ParticipantsComponent implements OnInit {
     if (!courseId) return;
     this.courseService.getFullParticipants(courseId).subscribe((response: any) => {
       let participants = response.enrolls.flatMap((enroll: any) => {
-        const user = response.user[0]; // Assuming only one user per response
+        let user = response.user?.filter((user: any) => user.id === enroll.employeeId);
+        let userId = user[0]?.id
+        let userName = user[0]?.firstname + ' ' + user[0]?.lastname
+        let userEmail = user[0]?.email
 
         return enroll.courses?.map((course: any) => {
           return course.installment?.map((installment: any) => {
             return {
-              id: user.id,
-              name: user.firstname + ' ' + user.lastname,
-              email: user.email,
+              id: userId,
+              name: userName,
+              email: userEmail,
               pStatus: installment.paid === 'paid' ? 'paid' : installment.paid === null || installment.paid === 'unpaid' ? 'unpaid' : 'pending',
               aStatus: course.status === 'enrolled' ? 'enrolled' : course.status === null || course.status === 'dropped' ? 'dropped' : 'completed',
               courseId: course.courseId,

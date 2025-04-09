@@ -92,12 +92,12 @@
       </div>
       <div class="col-6 col-md-3 col-lg-6" [ngClass]="relevantDetails.mediaType === 'physical' ? 'col-xl-3' : ''">
         <div class="form-group">
-          <label for="mediaType">Deliver Type *</label>
+          <label for="mediaType">Delivery Type *</label>
           <select class="form-control" id="mediaType" [(ngModel)]="relevantDetails.mediaType" [ngModelOptions]="{standalone: true}" required>
             <option value="zoom">Zoom</option>
             <option value="meet">Google Meet</option>
             <option value="team">Microsoft Teams</option>
-            <option value="online">Online</option>
+            <option value="online">Other Online Plat.</option>
             <option value="physical">Physical</option>
           </select>
         </div>

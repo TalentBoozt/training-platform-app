@@ -7,6 +7,7 @@ import {PaymentDetailsComponent} from './payment-details/payment-details.compone
 import {ModuleDetailsComponent} from './module-details/module-details.component';
 import {PreviewPostComponent} from './preview-post/preview-post.component';
 import {ResumeStorageService} from '../../services/support/resume-storage.service';
+import {RouterLink} from '@angular/router';
 
 @Component({
   selector: 'app-post-course',
@@ -19,7 +20,8 @@ import {ResumeStorageService} from '../../services/support/resume-storage.servic
     RelavantDetailsComponent,
     PaymentDetailsComponent,
     ModuleDetailsComponent,
-    PreviewPostComponent
+    PreviewPostComponent,
+    RouterLink
   ],
   templateUrl: './post-course.component.html',
   styleUrl: './post-course.component.scss',
