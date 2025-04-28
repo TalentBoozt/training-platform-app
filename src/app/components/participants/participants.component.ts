@@ -47,9 +47,13 @@ export class ParticipantsComponent implements OnInit {
 
   ngOnInit(): void {
     this.organizationId = this.cookieService.organization();
-    this.courseId = this.getCourseId() || '';
-    if (!this.courseId) this.getAllCourses().subscribe((courses)=> this.getParticipants(courses[0].id));
-    this.getParticipants(this.courseId);
+    // this.courseId = this.getCourseId() || '';
+    this.route.queryParamMap.subscribe(params => {
+      this.courseId = params.get('id');
+
+      if (!this.courseId) this.getAllCourses().subscribe((courses)=> this.getParticipants(courses[0].id));
+      else this.getParticipants(this.courseId);
+    });
   }
 
   getAllCourses() {
@@ -61,13 +65,16 @@ export class ParticipantsComponent implements OnInit {
     )
   }
 
-  getCourseId(): string | null {
-    return this.route.snapshot.queryParamMap.get('id');
-  }
+  // if won't destroy the id with refresh of remove parameters
+  // getCourseId(): string | null {
+  //   return this.route.snapshot.queryParamMap.get('id');
+  // }
 
   getParticipants(courseId: any): void {
+    console.log(courseId)
     if (!courseId) return;
     this.courseService.getFullParticipants(courseId).subscribe((response: any) => {
+      console.log(response)
       let participants = response.enrolls.flatMap((enroll: any) => {
         let user = response.user?.filter((user: any) => user.id === enroll.employeeId);
         let userId = user[0]?.id
@@ -94,14 +101,16 @@ export class ParticipantsComponent implements OnInit {
 
       // Populate courses and installments (you can use your own logic to populate these arrays)
       this.courses = response.enrolls.flatMap((enroll: any) =>
-        enroll.courses?.map((course: any) => ({
+        enroll.courses?.filter((course: any) => (courseId ? course.courseId === courseId : true)).
+        map((course: any) => ({
           id: course?.courseId,
           name: course?.courseName,
         }))
       );
 
       this.installments = response.enrolls.flatMap((enroll: any) =>
-        enroll.courses.flatMap((course: any) =>
+        enroll.courses?.filter((course: any) => (courseId ? course.courseId === courseId : true))
+        .flatMap((course: any) =>
           course.installment?.map((installment: any) => ({
             id: installment?.id,
             name: installment?.name,
