@@ -15,8 +15,10 @@ export class AuthGuard implements CanActivate {
     state: RouterStateSnapshot): Observable<boolean> | Promise<boolean> | boolean {
 
     const userId = this.cookieService.userID();
+    const companyId = this.cookieService.organization();
+    const refreshToken = this.cookieService.isRefreshToken();
 
-    if (userId) {
+    if (userId && companyId && refreshToken) {
       return true;
     } else {
       this.router.navigate(['/login']);

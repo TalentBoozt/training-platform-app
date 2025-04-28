@@ -16,7 +16,7 @@
         <div class="form-group">
           <label for="installment">Installment</label>
           <select class="form-control" [(ngModel)]="installmentId" id="installment">
-            <option *ngIf="installments.length === 0" disabled value="n/a">Not Available</option>
+            <option *ngIf="installments.length === 0 || !installments" disabled value="n/a">Not Available</option>
             <option *ngFor="let i of installments" [value]="i?.id">{{i?.name}}</option>
           </select>
         </div>
@@ -30,14 +30,22 @@
     </div>
   </div>
 
+  <div class="warning-msg">
+    <div class="d-flex align-items-center justify-content-center gap-2 w-100">
+      <i class="material-icons">warning</i>
+      <p class="m-0">Please choose Course and Installment for filtering and get better results!</p>
+    </div>
+  </div>
+
   <div class="table-card-1">
     <table class="table table-hover">
       <thead>
       <tr>
         <th scope="col">Name</th>
         <th scope="col">Payment Status</th>
+        <th scope="col" class="d-none d-md-table-cell">Installment</th>
         <th scope="col">Email</th>
-        <th scope="col">Account Status</th>
+        <th scope="col">Course Status</th>
       </tr>
       </thead>
       <tbody>
@@ -48,6 +56,7 @@
             <option *ngFor="let ps of paidStatus" [value]="ps.value">{{ps.name}}</option>
           </select>
         </td>
+        <td class="d-none d-md-table-cell">{{p.installmentId}}</td>
         <td>{{p.email}}</td>
         <td>
           <select class="form-control p-status" [(ngModel)]="p.aStatus" [ngModelOptions]="{standalone: true}" [ngStyle]="{'background-color': p.aStatus == 'enrolled' ? 'green' : p.aStatus == 'dropped' ? 'red' : 'orange'}" (change)="updateAccountStatus(p.id, p.courseId, p.aStatus)">

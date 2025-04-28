@@ -52,10 +52,10 @@ export class RegisterComponent implements OnInit, AfterViewInit{
               private cookieService: AuthService) { }
 
   ngOnInit(): void {
-    this.googleAuthService.configureOAuth();
-    this.gitHubAuthService.handleRedirectCallback();
-    this.facebookAuthService.initializeFacebookSdk().then(r => {});
-    this.linkedInAuthService.initializeLinkedInSdk().then(r => {});
+    // this.googleAuthService.configureOAuth();
+    // this.gitHubAuthService.handleRedirectCallback();
+    // this.facebookAuthService.initializeFacebookSdk().then(r => {});
+    // this.linkedInAuthService.initializeLinkedInSdk().then(r => {});
   }
 
   ngAfterViewInit() {

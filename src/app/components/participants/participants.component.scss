@@ -15,6 +15,7 @@
   padding: var(--padding-2) var(--padding-4);
   border-radius: 8px;
   background-color: var(--color-surface-200);
+  overflow-x: auto;
 }
 
 .p-status{
@@ -22,4 +23,16 @@
   font-weight: var(--fw-500);
   color: var(--color-white);
   width: fit-content;
+}
+
+.warning-msg{
+  font-size: var(--fs-14);
+  font-weight: var(--fw-500);
+  color: var(--color-text-100);
+  margin-bottom: var(--margin-2);
+
+  i{
+    font-size: var(--fs-18);
+    color: #CEB700;
+  }
 }

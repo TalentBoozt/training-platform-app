@@ -55,10 +55,10 @@ export class LoginComponent implements OnInit, AfterViewInit{
     private alertService: AlertsService) { }
 
   ngOnInit() {
-    this.googleAuthService.configureOAuth();
-    this.gitHubAuthService.handleRedirectCallback();
-    this.facebookAuthService.initializeFacebookSdk().then(r => {});
-    this.linkedInAuthService.initializeLinkedInSdk().then(r => {});
+    // this.googleAuthService.configureOAuth();
+    // this.gitHubAuthService.handleRedirectCallback();
+    // this.facebookAuthService.initializeFacebookSdk().then(r => {});
+    // this.linkedInAuthService.initializeLinkedInSdk().then(r => {});
   }
 
   ngAfterViewInit() {
