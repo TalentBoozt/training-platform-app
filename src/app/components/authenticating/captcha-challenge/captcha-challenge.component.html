@@ -1,0 +1,8 @@
+<div class="container">
+  <re-captcha
+    (resolved)="onCaptchaResolved($event)"
+    siteKey="6LdAtUUrAAAAAN8oCAPEo__9F9K7XRuwhL6C57c1">
+  </re-captcha>
+
+  <button [disabled]="!captchaToken" (click)="submitCaptcha()">Submit</button>
+</div>

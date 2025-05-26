@@ -3,7 +3,7 @@ import {AuthGuard} from './guards/auth.guard';
 
 export const routes: Routes = [
   {path: '', redirectTo: '/dashboard', pathMatch: 'full'},
-  {path: 'dashboard', loadComponent: () => import('./components/dashboard/dashboard.component').then(c => c.DashboardComponent), canActivate: [AuthGuard]},
+  {path: 'dashboard', loadComponent: () => import('./components/dashboard/dashboard.component').then(c => c.DashboardComponent)},
   {path: 'post-course', loadComponent: () => import('./components/post-course/post-course.component').then(c => c.PostCourseComponent), canActivate: [AuthGuard]},
   {path: 'participants', loadComponent: () => import('./components/participants/participants.component').then(c => c.ParticipantsComponent), canActivate: [AuthGuard]},
   {path: 'courses', loadComponent: () => import('./components/my-courses/my-courses.component').then(c => c.MyCoursesComponent), canActivate: [AuthGuard]},
@@ -18,4 +18,5 @@ export const routes: Routes = [
   {path: 'register', loadComponent: () => import('./components/authenticating/register/register.component').then(m => m.RegisterComponent)},
   {path: 'reset', loadComponent: () => import('./components/authenticating/reset-password/reset-password.component').then(m => m.ResetPasswordComponent)},
   {path: 'reset-password', loadComponent: () => import('./components/authenticating/reset-password-form/reset-password-form.component').then(m => m.ResetPasswordFormComponent)},
+  {path: 'captcha-challenge', loadComponent: () => import('./components/authenticating/captcha-challenge/captcha-challenge.component').then(m => m.CaptchaChallengeComponent)},
 ];

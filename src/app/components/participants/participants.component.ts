@@ -71,53 +71,81 @@ export class ParticipantsComponent implements OnInit {
   // }
 
   getParticipants(courseId: any): void {
-    console.log(courseId)
     if (!courseId) return;
     this.courseService.getFullParticipants(courseId).subscribe((response: any) => {
-      console.log(response)
-      let participants = response.enrolls.flatMap((enroll: any) => {
-        let user = response.user?.filter((user: any) => user.id === enroll.employeeId);
-        let userId = user[0]?.id
-        let userName = user[0]?.firstname + ' ' + user[0]?.lastname
-        let userEmail = user[0]?.email
+      const getUser = (employeeId: string) => {
+        const user = response.user?.find((user: any) => user.id === employeeId);
+        return {
+          id: user?.id,
+          name: `${user?.firstname} ${user?.lastname}`,
+          email: user?.email,
+        };
+      };
 
-        return enroll.courses?.map((course: any) => {
-          return course.installment?.map((installment: any) => {
-            return {
-              id: userId,
-              name: userName,
-              email: userEmail,
-              pStatus: installment.paid === 'paid' ? 'paid' : installment.paid === null || installment.paid === 'unpaid' ? 'unpaid' : 'pending',
-              aStatus: course.status === 'enrolled' ? 'enrolled' : course.status === null || course.status === 'dropped' ? 'dropped' : 'completed',
+      this.participants = response.enrolls.flatMap((enroll: any) => {
+        const user = getUser(enroll.employeeId);
+        if (!user.id) return []; // Skip if no user found
+
+        return enroll.courses?.flatMap((course: any) => {
+          if (!course.installment) {
+            return [{
+              id: user.id,
+              name: user.name,
+              email: user.email,
+              pStatus: 'pending', // Default to 'pending' if no installments
+              aStatus: this.getEnrollmentStatus(course.status),
               courseId: course.courseId,
-              installmentId: installment.id,
-            };
-          });
-        });
+              installmentId: null,
+            }];
+          }
+
+          return course.installment.map((installment: any) => ({
+            id: user.id,
+            name: user.name,
+            email: user.email,
+            pStatus: this.getPaymentStatus(installment.paid),
+            aStatus: this.getEnrollmentStatus(course.status),
+            courseId: course.courseId,
+            installmentId: installment.id,
+          }));
+        }) || [];
       });
 
-      // Flatten the array and assign it to participants
-      this.participants = participants.flat();
+      this.courses = this.getCourses(response.enrolls, courseId);
 
-      // Populate courses and installments (you can use your own logic to populate these arrays)
-      this.courses = response.enrolls.flatMap((enroll: any) =>
-        enroll.courses?.filter((course: any) => (courseId ? course.courseId === courseId : true)).
-        map((course: any) => ({
-          id: course?.courseId,
-          name: course?.courseName,
-        }))
-      );
-
-      this.installments = response.enrolls.flatMap((enroll: any) =>
-        enroll.courses?.filter((course: any) => (courseId ? course.courseId === courseId : true))
-        .flatMap((course: any) =>
-          course.installment?.map((installment: any) => ({
-            id: installment?.id,
-            name: installment?.name,
-          }))
-        )
-      );
+      this.installments = this.getInstallments(response.enrolls, courseId);
     });
+  }
+
+  getPaymentStatus(paymentStatus: string | null): string {
+    if (paymentStatus === 'paid') return 'paid';
+    if (paymentStatus === null || paymentStatus === 'unpaid') return 'unpaid';
+    return 'pending';
+  }
+
+  getEnrollmentStatus(status: string | null): string {
+    if (status === 'enrolled') return 'enrolled';
+    if (status === null || status === 'dropped') return 'dropped';
+    return 'completed';
+  }
+
+  getCourses(enrolls: any[], courseId: string | null) {
+    return enrolls.flatMap((enroll: any) =>
+      enroll.courses?.filter((course: any) => !courseId || course.courseId === courseId).map((course: any) => ({
+        id: course?.courseId,
+        name: course?.courseName,
+      })) || []
+    );
+  }
+
+  getInstallments(enrolls: any[], courseId: string | null) {
+    return enrolls.flatMap((enroll: any) =>
+      enroll.courses?.filter((course: any) => !courseId || course.courseId === courseId)
+        .flatMap((course: any) => course.installment?.map((installment: any) => ({
+          id: installment?.id,
+          name: installment?.name,
+        })) || [])
+    );
   }
 
   // Filter participants based on courseId, installmentId, and searchTerm

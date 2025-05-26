@@ -11,6 +11,7 @@ import {LinkedInAuthService} from '../../../services/authentication/linked-in-au
 import {WindowService} from '../../../services/common/window.service';
 import {CoursesService} from '../../../services/courses.service';
 import {tap} from 'rxjs';
+import {CommonService} from '../../../services/common/common.service';
 
 @Component({
   selector: 'app-header',
@@ -40,6 +41,7 @@ export class HeaderComponent implements OnInit, AfterViewInit {
   constructor(public themeService: ThemeService,
               private router: Router,
               private renderer: Renderer2,
+              private commonService: CommonService,
               private employeeService: EmployeeService,
               private coursesService: CoursesService,
               private credentialsService: CredentialService,
@@ -157,10 +159,42 @@ export class HeaderComponent implements OnInit, AfterViewInit {
   }
 
   logout() {
-    this.cookieService.logout()
-    this.removeUnwantedSession()
-    this.linkedInAuthService.logoutFromLinkedIn().then(r => {});
-    this.router.navigate(['/login']);
+    this.commonService.logout().subscribe(() => {
+      this.cookieService.logout()
+      this.removeUnwantedSession()
+      this.linkedInAuthService.logoutFromLinkedIn().then(r => {});
+      this.alertService.successMessage('You have been logged out successfully.', 'Success');
+    });
+  }
+
+  login(profile: string, action: string) {
+    const referrer = this.cookieService.getReferer();
+    const platform = this.cookieService.getPlatform();
+    const promo = this.cookieService.getPromotion();
+    if (this.windowService.nativeDocument) {
+      const aElm: HTMLAnchorElement = document.createElement('a');
+      const currentUrl = window.location.origin + window.location.pathname;
+      const redirectParams = new URLSearchParams({
+        plat: platform,
+        ref: referrer,
+        prom: promo,
+        rb: 'TRAINER',
+        lv: '5',
+      });
+      if (profile === 'trainer'){
+        if (action === 'login')
+          aElm.href = `https://login.talentboozt.com/login?redirectUri=${encodeURIComponent(currentUrl + '?' + redirectParams.toString())}`;
+        else if (action === 'register')
+          aElm.href = `https://login.talentboozt.com/login?redirectUri=${encodeURIComponent(currentUrl + '?' + redirectParams.toString())}`;
+      } else {
+        if (action === 'login')
+          aElm.href = 'https://login.talentboozt.com/login?redirectUri='+window.location.href+'?&plat='+platform+'&ref='+referrer+'&prom='+promo;
+        else if (action === 'register')
+          aElm.href = 'https://login.talentboozt.com/register?redirectUri='+window.location.href+'?&plat='+platform+'&ref='+referrer+'&prom='+promo;
+      }
+      aElm.target = '_self';
+      aElm.click();
+    }
   }
 
   toggleTheme() {

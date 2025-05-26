@@ -1,9 +1,10 @@
 import { Injectable } from '@angular/core';
-import {HttpRequest, HttpHandler, HttpEvent, HttpInterceptor, HttpClient} from '@angular/common/http';
-import {BehaviorSubject, catchError, finalize, map, Observable, switchMap, throwError} from 'rxjs';
+import {HttpRequest, HttpHandler, HttpEvent, HttpInterceptor, HttpClient, HttpResponse} from '@angular/common/http';
+import {BehaviorSubject, catchError, finalize, map, Observable, switchMap, tap, throwError} from 'rxjs';
 import {AuthService} from '../services/support/auth.service';
 import {Router} from '@angular/router';
 import {environment} from '../../environments/environment';
+import {WindowService} from '../services/common/window.service';
 
 
 @Injectable()
@@ -15,22 +16,42 @@ export class AuthInterceptor implements HttpInterceptor {
 
   constructor(
     private authService: AuthService,
+    private windowService: WindowService,
     private http: HttpClient,
     private router: Router
   ) {}
 
   intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
-    let token = this.authService.getRefreshToken();
+    const isRefreshRequest = request.url.includes('/auth/refresh-token');
+    let sessionId = '';
+    if (this.windowService.nativeSessionStorage) {
+      sessionId = sessionStorage.getItem("session_id") || '';
+    }
 
-    if (token) {
+    if (!isRefreshRequest) {
+      const token = this.authService.getRefreshToken();
+      const offset = String(new Date().getTimezoneOffset());
+
       request = request.clone({
-        setHeaders: { Authorization: `Bearer ${token}` }
+        setHeaders: {
+          ...(token ? { Authorization: `Bearer ${token}` } : {}),
+          'X-Session-Id': sessionId,
+          'X-Offset': offset
+        }
       });
     }
 
     return next.handle(request).pipe(
+      tap((event: HttpEvent<any>) => {
+        if (event instanceof HttpResponse) {
+          const mismatch = event.headers.get('X-Timezone-Mismatch');
+          if (mismatch === 'true') {
+            this.router.navigate(['/captcha-challenge']);
+          }
+        }
+      }),
       catchError((error) => {
-        if (error.status === 401 && error.error.error === 'Token has expired') {
+        if (error.status === 401 && error.error?.error === 'Token has expired') {
           return this.handleTokenExpiration(request, next);
         } else {
           return throwError(error);
@@ -40,36 +61,47 @@ export class AuthInterceptor implements HttpInterceptor {
   }
 
   private handleTokenExpiration(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
+    let sessionId = '';
+    if (this.windowService.nativeSessionStorage) {
+      sessionId = sessionStorage.getItem("session_id") || '';
+    }
+
     if (!this.refreshTokenInProgress) {
       this.refreshTokenInProgress = true;
 
       this.refreshToken().pipe(
         switchMap((newToken: string) => {
-          // Retry the original request with the new token
+          // Retry the original request with the new token and headers
           request = request.clone({
-            setHeaders: { Authorization: `Bearer ${newToken}` }
+            setHeaders: {
+              Authorization: `Bearer ${newToken}`,
+              'X-Session-Id': sessionId,
+              'X-Offset': String(new Date().getTimezoneOffset())
+            }
           });
           return next.handle(request);
         }),
         catchError((refreshError) => {
-          // If refresh fails, logout the user
           this.authService.logout();
-          this.router.navigate(['/login']);
+          this.authService.redirectToLogin();
           return throwError(refreshError);
         }),
         finalize(() => {
           this.refreshTokenInProgress = false;
-          this.refreshTokenSubject.next(null);  // Reset the subject when refresh is done
+          this.refreshTokenSubject.next(null);
         })
       ).subscribe();
     }
 
-    // Wait until the refresh token request is done, then retry the failed request
     return this.refreshTokenSubject.pipe(
       switchMap(() => {
-        const newToken = this.authService.getAuthToken(); // Get the new token
+        const newToken = this.authService.getAuthToken();
         request = request.clone({
-          setHeaders: { Authorization: `Bearer ${newToken}` }
+          setHeaders: {
+            Authorization: `Bearer ${newToken}`,
+            'X-Session-Id': sessionId,
+            'X-Offset': String(new Date().getTimezoneOffset())
+          }
         });
         return next.handle(request);
       })

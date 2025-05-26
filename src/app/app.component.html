@@ -5,6 +5,15 @@
       <app-header *ngIf="showNavbar"></app-header>
 
       <router-outlet (activate)="toggleCommonComponent($event)"/>
+
+      <div class="cookie-banner" *ngIf="!isCookiesAccepted">
+        <p>
+          We use cookies and tracking technologies essential for security, fraud prevention, and ensuring proper website functionality.
+          We don’t use ads, profiling, or sell any personal data. Learn more in our
+          <a href="https://talentboozt.com/privacy-policy" target="_blank">Privacy Policy</a>.
+        </p>
+        <button id="TRAINER_APP_AcceptCookie" type="button" (click)="acceptCookies()">Understood</button>
+      </div>
     </div>
   </div>
 </div>
