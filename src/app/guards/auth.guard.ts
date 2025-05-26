@@ -8,7 +8,7 @@ import { AuthService } from '../services/support/auth.service';
 })
 export class AuthGuard implements CanActivate {
 
-  constructor(private cookieService: AuthService, private router: Router) {}
+  constructor(private cookieService: AuthService) {}
 
   canActivate(
     next: ActivatedRouteSnapshot,
@@ -21,7 +21,7 @@ export class AuthGuard implements CanActivate {
     if (userId && companyId && refreshToken) {
       return true;
     } else {
-      this.router.navigate(['/login']);
+      this.cookieService.redirectToLogin();
       return false;
     }
   }

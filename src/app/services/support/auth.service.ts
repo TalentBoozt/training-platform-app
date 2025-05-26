@@ -169,4 +169,16 @@ export class AuthService {
   isRefreshToken(): boolean {
     return !!this.getRefreshToken();
   }
+
+  public redirectToLogin() {
+    const referrer = this.getReferer();
+    const platform = this.getPlatform();
+    const promo = this.getPromotion();
+    if (this.windowService.nativeDocument) {
+      const aElm: HTMLAnchorElement = document.createElement('a');
+      aElm.href = 'https://login.talentboozt.com/register?redirectUri='+window.location.href+'?&plat='+platform+'&ref='+referrer+'&prom='+promo+'&rb=TRAINER&lv=5';
+      aElm.target = '_self';
+      aElm.click();
+    }
+  }
 }

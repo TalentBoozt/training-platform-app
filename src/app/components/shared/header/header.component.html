@@ -24,8 +24,8 @@
       </li>
       <li *ngIf="!isTokenFound" class="d-block d-lg-none nav-item" (click)="collapseNavbar()">
         <div class="d-flex align-items-center justify-content-end gap-2">
-          <div class="btn-outline btn-o-1" routerLink="/login" [class.active]="isActive('/login')">Login</div>
-          <div class="btn-fill btn-f-1" routerLink="/register" [class.active]="isActive('/register')">Sign Up</div>
+          <div class="btn-outline btn-o-1" (click)="login('trainer', 'login')" [class.active]="isActive('/login')">Login</div>
+          <div class="btn-fill btn-f-1" (click)="login('trainer', 'register')" [class.active]="isActive('/register')">Sign Up</div>
         </div>
       </li>
       <li class="nav-item d-block d-lg-none ms-2">
@@ -64,8 +64,8 @@
               </li>
               <li *ngIf="!isTokenFound" class="d-none d-lg-block nav-item" (click)="collapseNavbar()">
                 <div class="d-flex align-items-center justify-content-end gap-2">
-                  <div class="btn-outline btn-o-1" routerLink="/login" [class.active]="isActive('/login')">Login</div>
-                  <div class="btn-fill btn-f-1" routerLink="/register" [class.active]="isActive('/register')">Sign Up</div>
+                  <div class="btn-outline btn-o-1" (click)="login('trainer', 'login')" [class.active]="isActive('/login')">Login</div>
+                  <div class="btn-fill btn-f-1" (click)="login('trainer', 'register')" [class.active]="isActive('/register')">Sign Up</div>
                 </div>
               </li>
               <li *ngIf="isTokenFound" class="nav-item d-none d-lg-block ms-2 dropdown">
