@@ -1,16 +1,15 @@
 import {Component, ElementRef, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {DecimalPipe, NgForOf, NgIf} from '@angular/common';
 import {CourseCardComponent} from '../shared/cards/course-card/course-card.component';
-import {Router, RouterLink} from '@angular/router';
+import {RouterLink} from '@angular/router';
 import {CoursesService} from '../../services/courses.service';
-import {AuthService} from '../../services/support/auth.service';
 import {AlertsService} from '../../services/support/alerts.service';
-import {WindowService} from '../../services/common/window.service';
 import {ResumeStorageService} from '../../services/support/resume-storage.service';
 import {Subscription} from 'rxjs';
 import {CourseManagementService} from '../../services/support/course-management.service';
 import {Card1x2LoaderComponent} from '../shared/cards/loaders/card1x2-loader/card1x2-loader.component';
 import {CardFullLoaderComponent} from '../shared/cards/loaders/card-full-loader/card-full-loader.component';
+import {EmployeeAuthStateService} from '../../services/cacheStates/employee-auth-state.service';
 
 @Component({
   selector: 'app-dashboard',
@@ -73,23 +72,28 @@ export class DashboardComponent implements OnInit, OnDestroy {
   u_loading: boolean = true;
 
   constructor(private courseService: CoursesService,
+              private authState: EmployeeAuthStateService,
               private courseManagementService: CourseManagementService,
               private resumeStorage: ResumeStorageService,
-              private alertService: AlertsService,
-              private router: Router,
-              private windowService: WindowService,
-              private cookieService: AuthService) {
+              private alertService: AlertsService) {
   }
 
   ngOnInit() {
-    this.companyId = this.cookieService.organization();
+    this.companyId = this.authState.currentUser?.employee?.companyId || '';
     this.courseSub = this.courseManagementService
       .getCourseUpdateListener()
       .subscribe(() => {
-        this.getCourses(this.companyId);
+        if (this.authState.currentUser?.employee?.companyId) {
+          this.getCourses(this.authState.currentUser.employee.companyId);
+        }
       });
-    this.getCourses(this.companyId);
-    this.getOverview(this.companyId);
+    this.authState.employee$.subscribe(profile => {
+      const companyId = profile?.employee?.companyId;
+      if (companyId) {
+        this.getCourses(companyId);
+        this.getOverview(companyId);
+      }
+    });
   }
 
   ngOnDestroy() {
@@ -140,9 +144,10 @@ export class DashboardComponent implements OnInit, OnDestroy {
     this.courseManagementService.deleteCourse(event).subscribe(
       () => {
         this.getCourses(this.companyId);
+        this.alertService.successMessage('Course deleted successfully.', 'Success');
       },
       (error) => {
-        // Handle error if needed
+        this.alertService.errorMessage(error.message, 'Error');
       }
     );
   }

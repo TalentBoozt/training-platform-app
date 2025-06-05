@@ -12,6 +12,7 @@ import {WindowService} from './services/common/window.service';
 import {CommonService} from './services/common/common.service';
 import {AlertsService} from './services/support/alerts.service';
 import {LoginService} from './services/common/login.service';
+import {EmployeeAuthStateService} from './services/cacheStates/employee-auth-state.service';
 
 @Component({
   selector: 'app-root',
@@ -26,7 +27,6 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
   showNavbar = true;
   showFooter = true;
 
-  employee: any;
   employeeId: any;
   employeeLevel: any;
 
@@ -35,6 +35,7 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
   constructor(private route: ActivatedRoute,
               private commonService: CommonService,
               private loginService: LoginService,
+              private authStateService: EmployeeAuthStateService,
               private windowService: WindowService,
               private cookieService: AuthService,
               private alertService: AlertsService,
@@ -42,51 +43,68 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   async ngOnInit(): Promise<void> {
-    if (
-      this.windowService.nativeDocument &&
+    if (this.windowService.nativeDocument &&
       this.windowService.nativeSessionStorage &&
-      this.windowService.nativeLocalStorage
-    ) {
-      this.fetchTokensFromLogin();
-
-      try {
-        await this.autoLogin();
-      } catch {
-        const referrer = this.cookieService.getReferer();
-        const platform = this.cookieService.getPlatform();
-        const promo = this.cookieService.getPromotion();
-        if (this.windowService.nativeDocument) {
-          const aElm: HTMLAnchorElement = document.createElement('a');
-          const currentUrl = window.location.origin + window.location.pathname;
-          const redirectParams = new URLSearchParams({
-            plat: platform,
-            ref: referrer,
-            prom: promo,
-            rb: 'TRAINER',
-            lv: '5',
-          });
-
-          aElm.href = `https://login.talentboozt.com/login?redirectUri=${encodeURIComponent(currentUrl + '?' + redirectParams.toString())}`;
-          aElm.target = '_self';
-          aElm.click();
-        }
-      }
-
-      this.route.queryParams.subscribe(params => {
-        const platform = params['platform'] || 'TrainerPlatform';
-        const ref = params['ref'] || '';
-        const promo = params['promo'] || '';
-        this.cookieService.createPlatform(platform);
-        this.cookieService.createReferer(ref);
-        this.cookieService.createPromotion(promo);
+      this.windowService.nativeLocalStorage) {
+      window.addEventListener('cookieConsentAccepted', async () => {
+        await this.startApp();
       });
 
-      this.employeeId = this.cookieService.userID();
-      this.employeeLevel = this.cookieService.level();
-      this.themeService.applyTheme();
-
-      this.isAcceptCookies();
+      if (this.isAcceptCookies()) {
+        await this.startApp();
+      }
     }
+  }
+
+  async startApp() {
+    this.fetchTokensFromLogin();
+
+    try {
+      await this.autoLogin();
+      this.authStateService.initializeUser().subscribe();
+    } catch {
+      const referrer = this.cookieService.getReferer();
+      const platform = this.cookieService.getPlatform();
+      const promo = this.cookieService.getPromotion();
+      if (this.windowService.nativeDocument) {
+        const aElm: HTMLAnchorElement = document.createElement('a');
+        const currentUrl = window.location.origin + window.location.pathname;
+        const redirectParams = new URLSearchParams({
+          plat: platform,
+          ref: referrer,
+          prom: promo,
+          rb: 'TRAINER',
+          lv: '5',
+        });
+
+        aElm.href = `https://login.talentboozt.com/login?redirectUri=${currentUrl}?&${redirectParams.toString()}`;
+        aElm.target = '_self';
+        aElm.click();
+      }
+    }
+
+    this.route.queryParams.subscribe(params => {
+      const platform = params['platform'] || 'TrainerPlatform';
+      const ref = params['ref'] || '';
+      const promo = params['promo'] || '';
+      this.cookieService.createPlatform(platform);
+      this.cookieService.createReferer(ref);
+      this.cookieService.createPromotion(promo);
+    });
+
+    this.employeeId = this.cookieService.userID();
+    this.employeeLevel = this.cookieService.level();
+    this.themeService.applyTheme();
+
+    // this.showApp();
+  }
+
+  private showApp() {
+    const loadingScreen = document.getElementById('loading-screen');
+    const appRoot = document.querySelector('app-root') as HTMLElement;
+
+    if (loadingScreen) loadingScreen.style.display = 'none';
+    if (appRoot) appRoot.style.display = 'block';
   }
 
   ngAfterViewInit() {
@@ -97,7 +115,8 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
       });
     }
 
-    this.markAttendance()
+    if (this.isAcceptCookies())
+      this.markAttendance()
   }
 
   ngOnDestroy() {
@@ -129,9 +148,9 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
             resolve(true);
           });
         },
-        error: () => {
+        error: (err) => {
           this.alertService.successMessage('Claim your free account today!', 'Talent Boozt ✨');
-          reject();
+          reject(err);
         }
       });
     });
@@ -219,9 +238,10 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   isAcceptCookies() {
-    if (this.cookieService.isCookiesAccepted()) {
-      this.isCookiesAccepted = true;
+    if (this.windowService.nativeLocalStorage) {
+      return localStorage.getItem('TB_COOKIES_ACCEPTED') === 'true';
     }
+    return false;
   }
 
   toggleCommonComponent(component: any) {
