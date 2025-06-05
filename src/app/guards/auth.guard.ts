@@ -10,15 +10,14 @@ export class AuthGuard implements CanActivate {
 
   constructor(private cookieService: AuthService) {}
 
-  canActivate(
-    next: ActivatedRouteSnapshot,
-    state: RouterStateSnapshot): Observable<boolean> | Promise<boolean> | boolean {
+  async canActivate(next: ActivatedRouteSnapshot, state: RouterStateSnapshot): Promise<boolean> {
+    const initialized = await this.cookieService.initSSO();
 
     const userId = this.cookieService.userID();
     const companyId = this.cookieService.organization();
     const refreshToken = this.cookieService.isRefreshToken();
 
-    if (userId && companyId && refreshToken) {
+    if (initialized && userId && companyId && refreshToken) {
       return true;
     } else {
       this.cookieService.redirectToLogin();

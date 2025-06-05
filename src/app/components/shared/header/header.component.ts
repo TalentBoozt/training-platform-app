@@ -1,24 +1,24 @@
 import {AfterViewInit, Component, ElementRef, OnInit, Renderer2, ViewChild} from '@angular/core';
 import {NavigationEnd, Router, RouterLink} from '@angular/router';
-import {NgForOf, NgIf} from '@angular/common';
+import {AsyncPipe, NgForOf, NgIf} from '@angular/common';
 import {ThemeService} from '../../../services/support/theme.service';
-import {HttpErrorResponse} from '@angular/common/http';
 import {AlertsService} from '../../../services/support/alerts.service';
 import {AuthService} from '../../../services/support/auth.service';
-import {EmployeeService} from '../../../services/employee.service';
-import {CredentialService} from '../../../services/credential.service';
 import {LinkedInAuthService} from '../../../services/authentication/linked-in-auth.service';
 import {WindowService} from '../../../services/common/window.service';
 import {CoursesService} from '../../../services/courses.service';
 import {tap} from 'rxjs';
 import {CommonService} from '../../../services/common/common.service';
+import {EmployeeProfile} from '../../../shared/data-models/cache/EmployeeProfile.model';
+import {EmployeeAuthStateService} from '../../../services/cacheStates/employee-auth-state.service';
 
 @Component({
   selector: 'app-header',
   imports: [
     RouterLink,
     NgIf,
-    NgForOf
+    NgForOf,
+    AsyncPipe
   ],
   templateUrl: './header.component.html',
   styleUrl: './header.component.scss',
@@ -33,77 +33,58 @@ export class HeaderComponent implements OnInit, AfterViewInit {
   filteredSearchResults: any[] = [];
   targetInput: any;
 
-  employee: any;
-  employeeId: any;
-  companyId: any;
-  isTokenFound: boolean = false;
+  employeeProfile: EmployeeProfile | null = null;
 
-  constructor(public themeService: ThemeService,
-              private router: Router,
-              private renderer: Renderer2,
-              private commonService: CommonService,
-              private employeeService: EmployeeService,
-              private coursesService: CoursesService,
-              private credentialsService: CredentialService,
-              private linkedInAuthService: LinkedInAuthService,
-              private windowService: WindowService,
-              private alertService: AlertsService,
-              private cookieService: AuthService) {
-  }
+  constructor(
+    public themeService: ThemeService,
+    private router: Router,
+    private renderer: Renderer2,
+    private commonService: CommonService,
+    private coursesService: CoursesService,
+    private linkedInAuthService: LinkedInAuthService,
+    private windowService: WindowService,
+    private alertService: AlertsService,
+    private cookieService: AuthService,
+    public authState: EmployeeAuthStateService
+  ) {}
 
   ngOnInit() {
-    this.employeeId = this.cookieService.userID();
-    this.companyId = this.cookieService.organization();
-    this.isTokenFound = this.cookieService.isRefreshToken();
     this.themeService.applyTheme();
+
+    this.authState.employee$.subscribe(profile => {
+      this.employeeProfile = profile;
+    });
+
     if (this.windowService.nativeWindow && this.windowService.nativeDocument) {
       this.router.events.subscribe(event => {
         if (event instanceof NavigationEnd) {
-          // Logic to update active class based on the current route
           this.updateActiveClass();
-
           const mainBody = document.querySelector('.main-body');
-          if (mainBody) {
-            mainBody.scrollTop = 0;
-          } else {
-            window.scrollTo(0, 0);
-          }
+          mainBody ? (mainBody.scrollTop = 0) : window.scrollTo(0, 0);
         }
       });
     }
 
-    if (this.employeeId){
-      this.getEmployee(this.employeeId);
-    }
-    this.getCourses(this.companyId).subscribe();
+    this.authState.employee$.subscribe((profile) => {
+      if (profile?.employee?.id) {
+        this.getCourses(profile.employee.companyId).subscribe();
+      }
+    });
   }
 
   ngAfterViewInit() {
-    if (this.windowService.nativeDocument){
+    if (this.windowService.nativeDocument) {
       const icons = document.querySelectorAll('.material-icons');
-      icons.forEach((icon) => {
-        icon.setAttribute('translate', 'no');
-      });
+      icons.forEach((icon) => icon.setAttribute('translate', 'no'));
     }
-  }
-
-  getEmployee(id: any) {
-    this.employeeService.getEmployee(id).subscribe(
-      (data) => {
-        this.employee = data;
-      },
-      (error: HttpErrorResponse) => {
-        console.log(error)
-      }
-    );
   }
 
   getCourses(companyId: any) {
     return this.coursesService.getCoursesByOrganization(companyId).pipe(
       tap(data => {
-        this.commonSearchResults = data
+        this.commonSearchResults = data;
       })
-    )
+    );
   }
 
   updateActiveClass() {
@@ -134,35 +115,37 @@ export class HeaderComponent implements OnInit, AfterViewInit {
 
   filterSearchResults(): any[] {
     if (this.targetInput === undefined) {
-      this.filteredSearchResults = this.commonSearchResults
+      this.filteredSearchResults = this.commonSearchResults;
     }
     return this.filteredSearchResults;
   }
 
   handleSearch(data: any) {
     this.targetInput = data as HTMLInputElement;
-    const value = this.targetInput.value
+    const value = this.targetInput.value;
     if (value) {
-      this.openSearchResults = true
+      this.openSearchResults = true;
       this.filteredSearchResults = this.commonSearchResults.filter((data: any) =>
         data.name.toLowerCase().includes(value.toLowerCase())
       );
     } else {
-      this.openSearchResults = false
+      this.openSearchResults = false;
       this.filteredSearchResults = this.commonSearchResults;
     }
   }
 
   removeUnwantedSession() {
-    if (this.windowService.nativeSessionStorage)
+    if (this.windowService.nativeSessionStorage) {
       sessionStorage.clear();
+    }
   }
 
   logout() {
     this.commonService.logout().subscribe(() => {
-      this.cookieService.logout()
-      this.removeUnwantedSession()
-      this.linkedInAuthService.logoutFromLinkedIn().then(r => {});
+      this.cookieService.logout();
+      this.removeUnwantedSession();
+      this.authState.clearUser();
+      this.linkedInAuthService.logoutFromLinkedIn().then(() => {});
       this.alertService.successMessage('You have been logged out successfully.', 'Success');
     });
   }
@@ -171,6 +154,7 @@ export class HeaderComponent implements OnInit, AfterViewInit {
     const referrer = this.cookieService.getReferer();
     const platform = this.cookieService.getPlatform();
     const promo = this.cookieService.getPromotion();
+
     if (this.windowService.nativeDocument) {
       const aElm: HTMLAnchorElement = document.createElement('a');
       const currentUrl = window.location.origin + window.location.pathname;
@@ -181,17 +165,21 @@ export class HeaderComponent implements OnInit, AfterViewInit {
         rb: 'TRAINER',
         lv: '5',
       });
-      if (profile === 'trainer'){
-        if (action === 'login')
-          aElm.href = `https://login.talentboozt.com/login?redirectUri=${encodeURIComponent(currentUrl + '?' + redirectParams.toString())}`;
-        else if (action === 'register')
-          aElm.href = `https://login.talentboozt.com/login?redirectUri=${encodeURIComponent(currentUrl + '?' + redirectParams.toString())}`;
-      } else {
-        if (action === 'login')
-          aElm.href = 'https://login.talentboozt.com/login?redirectUri='+window.location.href+'?&plat='+platform+'&ref='+referrer+'&prom='+promo;
-        else if (action === 'register')
-          aElm.href = 'https://login.talentboozt.com/register?redirectUri='+window.location.href+'?&plat='+platform+'&ref='+referrer+'&prom='+promo;
-      }
+
+      const shortRedirectParams = new URLSearchParams({
+        plat: platform,
+        ref: referrer,
+        prom: promo,
+      });
+
+      let finalRedirectParams = profile === 'trainer' ? redirectParams : shortRedirectParams;
+      let finalRedirectUrl = `https://login.talentboozt.com/login?redirectUri=${currentUrl}?&${finalRedirectParams.toString()}`;
+      if (action === 'login')
+        finalRedirectUrl = `https://login.talentboozt.com/login?redirectUri=${currentUrl}?&${finalRedirectParams.toString()}`;
+      else if (action === 'register')
+        finalRedirectUrl = `https://login.talentboozt.com/register?redirectUri=${currentUrl}?&${finalRedirectParams.toString()}`;
+
+      aElm.href = finalRedirectUrl;
       aElm.target = '_self';
       aElm.click();
     }
