@@ -1,7 +1,7 @@
 import {Component, ElementRef, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {DecimalPipe, NgForOf, NgIf} from '@angular/common';
 import {CourseCardComponent} from '../shared/cards/course-card/course-card.component';
-import {RouterLink} from '@angular/router';
+import {Router, RouterLink} from '@angular/router';
 import {CoursesService} from '../../services/courses.service';
 import {AlertsService} from '../../services/support/alerts.service';
 import {ResumeStorageService} from '../../services/support/resume-storage.service';
@@ -75,6 +75,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
               private authState: EmployeeAuthStateService,
               private courseManagementService: CourseManagementService,
               private resumeStorage: ResumeStorageService,
+              private router: Router,
               private alertService: AlertsService) {
   }
 
@@ -154,5 +155,20 @@ export class DashboardComponent implements OnInit, OnDestroy {
 
   editCourse(event: any) {
     this.courseManagementService.editCourse(event);
+  }
+
+  openMaterials($event: any) {
+    this.router.navigate(['/materials', $event]);
+  }
+
+  toggleAudience($event: any) {
+    this.courseManagementService.toggleAudience($event).subscribe({
+      next: () => {
+        // do nothing -> handled by courseManagementService
+      },
+      error: (error) => {
+        this.alertService.errorMessage(error.message, 'Error');
+      }
+    });
   }
 }

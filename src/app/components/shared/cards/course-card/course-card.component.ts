@@ -18,6 +18,8 @@ export class CourseCardComponent implements OnInit {
   @Input('course') course: any;
   @Output() delete: EventEmitter<any> = new EventEmitter<any>();
   @Output() edit: EventEmitter<any> = new EventEmitter<any>();
+  @Output() openMaterials: EventEmitter<any> = new EventEmitter<any>();
+  @Output() audience: EventEmitter<any> = new EventEmitter<any>();
 
   participants: any[] = [];
 
@@ -48,5 +50,13 @@ export class CourseCardComponent implements OnInit {
 
   editCourse(course: any) {
     this.edit.emit(course);
+  }
+
+  toggleAudience(courseId: any) {
+    this.audience.emit(courseId);
+  }
+
+  navigateToMaterials(id: any) {
+    this.openMaterials.emit(id);
   }
 }

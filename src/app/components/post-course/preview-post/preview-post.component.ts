@@ -97,7 +97,8 @@ export class PreviewPostComponent implements OnInit{
         fromTime: savedData.relevantDetails.startTime,
         toTime: savedData.relevantDetails.endTime,
         courseStatus: savedData.relevantDetails.courseStatus,
-        paymentMethod: savedData.basicDetails.paymentMethod
+        paymentMethod: savedData.basicDetails.paymentMethod,
+        publicity: savedData.relevantDetails.publicity
       }
 
       if (this.isUpdateId) {

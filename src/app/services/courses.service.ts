@@ -74,4 +74,20 @@ export class CoursesService {
   public deleteModule(courseId: any, moduleId: any){
     return this.http.delete<any>(`${this.baseUrl}/course/delete-module/${courseId}/${moduleId}`)
   }
+
+  public toggleAudience(courseId: any): Observable<any> {
+    return this.http.put<any>(`${this.baseUrl}/course/update-publicity/${courseId}`, {});
+  }
+
+  public addMaterial(material: any): Observable<any> {
+    return this.http.post<any>(`${this.baseUrl}/course/add/material/${material.courseId}`, material);
+  }
+
+  public deleteMaterial(courseId: any, id: any): Observable<any> {
+    return this.http.delete<any>(`${this.baseUrl}/course/delete/material/${courseId}/${id}`);
+  }
+
+  public updateMaterial(dto: any) {
+    return this.http.put<any>(`${this.baseUrl}/course/update/material/${dto.courseId}/${dto.id}`, dto);
+  }
 }

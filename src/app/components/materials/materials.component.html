@@ -1,0 +1,39 @@
+<div class="container py-4">
+  <div class="d-flex flex-column align-items-center justify-content-center w-100">
+    <div class="modules-wrapper d-flex flex-column gap-2">
+      <div class="d-flex flex-column gap-2 module-wrapper" *ngFor="let m of modules">
+        <div class="module-title">{{m.name}}</div>
+        <div class="module-desc">{{m.description}}</div>
+        <app-materials-upload-form
+          [moduleId]="m.id"
+          [courseId]="courseId"
+          [editMaterial]="editMaterialsMap[m.id]"
+          (successUpload)="successUpload($event)"
+        ></app-materials-upload-form>
+        <div class="materials-list mt-3" *ngIf="filterMaterialsByModule(m.id) && filterMaterialsByModule(m.id).length">
+          <h5>Uploaded Materials</h5>
+          <div class="material-item" *ngFor="let material of filterMaterialsByModule(m.id)">
+            <div class="icon">
+              <img [src]="getMaterialIcon(material.url)" alt="source icon" />
+            </div>
+
+            <div class="details">
+              <a [href]="material.url" target="_blank" class="material-name">{{ material.name }}</a>
+              <div class="material-meta">
+                <span class="type">{{ material.type }}</span> |
+                <span class="category">{{ material.category }}</span>
+              </div>
+            </div>
+
+            <div class="actions">
+              <button class="btn edit" (click)="onEdit(material)">Edit</button>
+              <button class="btn delete" (click)="onDelete(material)">Delete</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<app-course-preview-loader *ngIf="loading"></app-course-preview-loader>

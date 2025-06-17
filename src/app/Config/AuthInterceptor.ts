@@ -1,11 +1,10 @@
 import { Injectable } from '@angular/core';
 import {HttpRequest, HttpHandler, HttpEvent, HttpInterceptor, HttpClient, HttpResponse} from '@angular/common/http';
-import {BehaviorSubject, catchError, finalize, map, Observable, switchMap, tap, throwError} from 'rxjs';
-import {AuthService} from '../services/support/auth.service';
+import {catchError, map, Observable, switchMap, throwError, BehaviorSubject, finalize, tap} from 'rxjs';
 import {Router} from '@angular/router';
 import {environment} from '../../environments/environment';
-import {WindowService} from '../services/common/window.service';
-
+import {AuthService} from "../services/support/auth.service";
+import {WindowService} from "../services/common/window.service";
 
 @Injectable()
 export class AuthInterceptor implements HttpInterceptor {
@@ -37,7 +36,8 @@ export class AuthInterceptor implements HttpInterceptor {
           ...(token ? { Authorization: `Bearer ${token}` } : {}),
           'X-Session-Id': sessionId,
           'X-Offset': offset
-        }
+        },
+        withCredentials: true
       });
     }
 
@@ -77,7 +77,8 @@ export class AuthInterceptor implements HttpInterceptor {
               Authorization: `Bearer ${newToken}`,
               'X-Session-Id': sessionId,
               'X-Offset': String(new Date().getTimezoneOffset())
-            }
+            },
+            withCredentials: true
           });
           return next.handle(request);
         }),
@@ -101,7 +102,8 @@ export class AuthInterceptor implements HttpInterceptor {
             Authorization: `Bearer ${newToken}`,
             'X-Session-Id': sessionId,
             'X-Offset': String(new Date().getTimezoneOffset())
-          }
+          },
+          withCredentials: true
         });
         return next.handle(request);
       })
@@ -114,7 +116,7 @@ export class AuthInterceptor implements HttpInterceptor {
       return throwError('No refresh token available');
     }
 
-    return this.http.post<{ token: string }>(`${this.baseUrlSimple}/api/auth/refresh-token`, { refreshToken }).pipe(
+    return this.http.post<{ token: string }>(`${this.baseUrlSimple}/api/auth/refresh-token`, { refreshToken }, { withCredentials: true }).pipe(
       map((response) => {
         const newToken = response.token;
         this.authService.createAuthToken(newToken);
