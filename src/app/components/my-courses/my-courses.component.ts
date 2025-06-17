@@ -6,6 +6,7 @@ import {CourseCardComponent} from '../shared/cards/course-card/course-card.compo
 import {NgForOf, NgIf} from '@angular/common';
 import {CourseManagementService} from '../../services/support/course-management.service';
 import {Card1x2LoaderComponent} from '../shared/cards/loaders/card1x2-loader/card1x2-loader.component';
+import {Router} from '@angular/router';
 
 @Component({
   selector: 'app-my-courses',
@@ -28,6 +29,7 @@ export class MyCoursesComponent implements OnInit, OnDestroy {
 
   constructor(private courseService: CoursesService,
               private courseManagementService: CourseManagementService,
+              private router: Router,
               private cookieService: AuthService) {}
 
   ngOnInit(): void {
@@ -68,5 +70,20 @@ export class MyCoursesComponent implements OnInit, OnDestroy {
 
   editCourse(event: any) {
     this.courseManagementService.editCourse(event);
+  }
+
+  navigateToMaterials($event: any) {
+    this.router.navigate(['/materials', $event]);
+  }
+
+  toggleAudience($event: any) {
+    this.courseManagementService.toggleAudience($event).subscribe({
+      next: () => {
+        // do nothing -> handled by courseManagementService
+      },
+      error: (error) => {
+        console.error('Error toggling audience', error);
+      }
+    });
   }
 }

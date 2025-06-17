@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Observable, Subject } from 'rxjs';
+import {Observable, Subject, tap} from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { ResumeStorageService } from './resume-storage.service';
@@ -89,5 +89,19 @@ export class CourseManagementService {
 
       this.router.navigate(['/post-course']);
     }
+  }
+
+  toggleAudience(event: any): Observable<void> {
+    if (!event) {
+      this.alertService.errorMessage('Failed to update course. Please try again.', 'Error');
+      return new Observable((observer) => observer.error('No course event provided'));
+    }
+
+    return this.courseService.toggleAudience(event).pipe(
+      tap((data) => {
+        this.courseUpdated.next();
+        this.alertService.successMessage('Course updated successfully!', 'Success');
+      })
+    );
   }
 }

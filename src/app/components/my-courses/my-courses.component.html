@@ -5,6 +5,8 @@
         [course]="course"
         (delete)="deleteCourse($event)"
         (edit)="editCourse($event)"
+        (openMaterials)="navigateToMaterials($event)"
+        (audience)="toggleAudience($event)"
       ></app-course-card>
     </div>
   </div>

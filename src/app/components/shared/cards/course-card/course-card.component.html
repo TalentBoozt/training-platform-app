@@ -41,9 +41,12 @@
               <li><a class="dropdown-item" routerLink="/preview/{{course.id}}">Preview</a></li>
               <li><hr class="dropdown-divider"></li>
               <li><a class="dropdown-item" (click)="navigateToParticipant(course.id)">Participants</a></li>
+              <li><a class="dropdown-item" (click)="navigateToMaterials(course.id)">Learning Materials</a></li>
+              <li><hr class="dropdown-divider"></li>
               <li><a class="dropdown-item" (click)="editCourse(course)">Edit Course</a></li>
               <li><a class="dropdown-item" routerLink="/edit-modules/{{course.id}}">Edit Modules</a></li>
               <li><hr class="dropdown-divider"></li>
+              <li><a class="dropdown-item" (click)="toggleAudience(course.id)">{{course.publicity ? 'Make Private' : 'Make Public'}}</a></li>
               <li><a class="dropdown-item text-danger" (click)="deleteCourse(course.id)">Delete</a></li>
             </ul>
           </div>
