@@ -10,27 +10,6 @@
           [editMaterial]="editMaterialsMap[m.id]"
           (successUpload)="successUpload($event)"
         ></app-materials-upload-form>
-        <div class="materials-list mt-3" *ngIf="filterMaterialsByModule(m.id) && filterMaterialsByModule(m.id).length">
-          <h5>Uploaded Materials</h5>
-          <div class="material-item" *ngFor="let material of filterMaterialsByModule(m.id)">
-            <div class="icon">
-              <img [src]="getMaterialIcon(material.url)" alt="source icon" />
-            </div>
-
-            <div class="details">
-              <a [href]="material.url" target="_blank" class="material-name">{{ material.name }}</a>
-              <div class="material-meta">
-                <span class="type">{{ material.type }}</span> |
-                <span class="category">{{ material.category }}</span>
-              </div>
-            </div>
-
-            <div class="actions">
-              <button class="btn edit" (click)="onEdit(material)">Edit</button>
-              <button class="btn delete" (click)="onDelete(material)">Delete</button>
-            </div>
-          </div>
-        </div>
       </div>
     </div>
   </div>

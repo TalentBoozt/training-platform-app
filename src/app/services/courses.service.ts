@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import {environment} from '../../environments/environment';
 import {HttpClient} from '@angular/common/http';
 import {BehaviorSubject, Observable} from 'rxjs';
+import {QuizDTO} from '../shared/data-models/QuizDTO';
 
 @Injectable({
   providedIn: 'root'
@@ -75,6 +76,10 @@ export class CoursesService {
     return this.http.delete<any>(`${this.baseUrl}/course/delete-module/${courseId}/${moduleId}`)
   }
 
+  public updateCourseStatus(courseId: any, status: any): Observable<any> {
+    return this.http.put<any>(`${this.baseUrl}/course/update-status/${courseId}/${status}`, {});
+  }
+
   public toggleAudience(courseId: any): Observable<any> {
     return this.http.put<any>(`${this.baseUrl}/course/update-publicity/${courseId}`, {});
   }
@@ -89,5 +94,21 @@ export class CoursesService {
 
   public updateMaterial(dto: any) {
     return this.http.put<any>(`${this.baseUrl}/course/update/material/${dto.courseId}/${dto.id}`, dto);
+  }
+
+  public changeMaterialVisibility(courseId: any, id: any, status: any): Observable<any> {
+    return this.http.put<any>(`${this.baseUrl}/course/visibility/material/${courseId}/${id}/${status}`, {});
+  }
+
+  public createQuiz(quizData: QuizDTO) {
+    return this.http.post<any>(`${this.baseUrl}/course/add/quiz/${quizData.courseId}`, quizData);
+  }
+
+  public deleteQuiz(courseId: any, id: any): Observable<any> {
+    return this.http.delete<any>(`${this.baseUrl}/course/delete/quiz/${courseId}/${id}`);
+  }
+
+  public updateQuiz(quiz: QuizDTO) {
+    return this.http.put<any>(`${this.baseUrl}/course/update/quiz/${quiz.courseId}/${quiz.id}`, quiz);
   }
 }

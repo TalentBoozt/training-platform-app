@@ -158,7 +158,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
   }
 
   openMaterials($event: any) {
-    this.router.navigate(['/materials', $event]);
+    this.router.navigate(['/manage-materials', $event]);
   }
 
   toggleAudience($event: any) {

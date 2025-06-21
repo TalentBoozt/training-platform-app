@@ -60,6 +60,27 @@
           .material-meta {
             font-size: 0.9rem;
             color: #555;
+            display: flex;
+            align-items: center;
+            justify-content: flex-start;
+            gap: 4px;
+
+            .views{
+              display: flex;
+              align-items: center;
+              gap: 3px;
+
+              i{
+                font-size: 16px;
+                color: #007bff;
+              }
+            }
+          }
+
+          #dropdownMenuButton{
+            i{
+              font-size: 18px;
+            }
           }
         }
 

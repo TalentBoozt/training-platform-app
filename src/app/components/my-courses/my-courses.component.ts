@@ -73,7 +73,7 @@ export class MyCoursesComponent implements OnInit, OnDestroy {
   }
 
   navigateToMaterials($event: any) {
-    this.router.navigate(['/materials', $event]);
+    this.router.navigate(['/manage-materials', $event]);
   }
 
   toggleAudience($event: any) {
