@@ -1,0 +1,96 @@
+<div class="question-builder">
+  <div class="header">
+    <h2>Dynamic Question Builder</h2>
+    <div class="d-flex align-items-center gap-2">
+      <button class="add-btn" (click)="addQuestion()">+ Add Question</button>
+      <button class="add-btn" (click)="exportQuestions()">Finish</button>
+    </div>
+  </div>
+
+  <form [formGroup]="form">
+    <div formArrayName="questions" class="question-list">
+      <div *ngFor="let q of questions.controls; let i = index" [formGroupName]="i" class="question-box">
+
+        <div class="question-header">
+          <h3>Question {{ i + 1 }}</h3>
+          <button class="remove-btn" (click)="removeQuestion(i)">✕</button>
+        </div>
+
+        <input type="text" formControlName="questionText" placeholder="Enter question" />
+
+        <select formControlName="questionType">
+          <option *ngFor="let type of questionTypes" [value]="type.value">{{ type.label }}</option>
+        </select>
+
+        <div class="options" *ngIf="['multiple-choice', 'multiple-select', 'likert'].includes(q.get('questionType')?.value)">
+          <label>Options</label>
+          <div formArrayName="options">
+            <div *ngFor="let opt of getOptions(i).controls; let j = index" class="option-item">
+              <input [formControlName]="j" placeholder="Option text" />
+              <button type="button" (click)="removeOption(i, j)">Remove</button>
+            </div>
+          </div>
+          <button class="btn btn-primary" type="button" (click)="addOption(i)">+ Add Option</button>
+        </div>
+
+        <div class="correct-answers">
+          <label>Correct Answer<span *ngIf="(q.get('questionType')?.value || '').includes('multiple')">s</span></label>
+
+          <ng-container [ngSwitch]="q.get('questionType')?.value">
+
+            <!-- For multiple-choice and multiple-select -->
+            <div *ngSwitchCase="'multiple-choice'">
+              <select formControlName="correctAnswer">
+                <option *ngFor="let opt of getOptions(i).controls" [value]="opt.value">{{ opt.value }}</option>
+              </select>
+
+<!--              <input type="text" formControlName="correctAnswer" placeholder="Enter correct answer" />-->
+            </div>
+
+            <div *ngSwitchCase="'multiple-select'">
+              <div *ngFor="let opt of getOptions(i).controls; let j = index">
+                <label>
+                  <input
+                    type="checkbox"
+                    [checked]="isChecked(i, opt.value)"
+                    (change)="onCheckboxChange(i, opt.value, $event)" />
+                  {{ opt.value }}
+                </label>
+              </div>
+            </div>
+
+            <!-- For true-false -->
+            <div *ngSwitchCase="'true-false'">
+<!--              <label>Correct Answer</label>-->
+              <div class="true-false-options">
+                <label>
+                  <input type="radio" [value]="'True'" formControlName="correctAnswer" />
+                  True
+                </label>
+                <label>
+                  <input type="radio" [value]="'False'" formControlName="correctAnswer" />
+                  False
+                </label>
+              </div>
+            </div>
+
+            <!-- For short answer or fill-in-the-blank -->
+            <div *ngSwitchDefault>
+              <input type="text" formControlName="correctAnswer" placeholder="Enter correct answer" />
+            </div>
+          </ng-container>
+        </div>
+
+        <div class="explanation">
+          <label>Explanation</label>
+          <textarea formControlName="explanation" rows="3" placeholder="Add explanation or feedback here"></textarea>
+        </div>
+
+        <label>
+          <input type="checkbox" formControlName="required" />
+          Required
+        </label>
+      </div>
+    </div>
+  </form>
+</div>

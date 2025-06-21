@@ -1,0 +1,43 @@
+.modules{
+  width: fit-content;
+  margin-right: 0;
+  min-width: 300px;
+
+  @media screen and (max-width: 768px){
+    width: 100%;
+    margin-right: auto;
+  }
+}
+
+.module {
+  width: 100%;
+  padding: 10px 16px;
+  border-bottom: 1px solid var(--color-text-500);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+
+  .module-name{
+    color: var(--color-text-100);
+    font-weight: 500;
+    font-size: 16px;
+    cursor: pointer;
+
+    &:hover{
+      text-decoration: underline;
+    }
+  }
+
+  .module-action{
+    display: flex;
+    align-items: center;
+    gap: 10px;
+
+    .vr{
+      width: 1px;
+      height: auto;
+      background-color: var(--color-text-500);
+    }
+  }
+}

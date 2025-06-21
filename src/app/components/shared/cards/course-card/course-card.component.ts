@@ -1,13 +1,16 @@
 import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
-import {NgIf} from '@angular/common';
+import {NgClass, NgIf} from '@angular/common';
 import {Router, RouterLink} from '@angular/router';
 import {CoursesService} from '../../../../services/courses.service';
+import {finalize} from 'rxjs';
+import {AlertsService} from '../../../../services/support/alerts.service';
 
 @Component({
   selector: 'app-course-card',
   imports: [
     NgIf,
-    RouterLink
+    RouterLink,
+    NgClass
   ],
   templateUrl: './course-card.component.html',
   styleUrl: './course-card.component.scss',
@@ -22,8 +25,9 @@ export class CourseCardComponent implements OnInit {
   @Output() audience: EventEmitter<any> = new EventEmitter<any>();
 
   participants: any[] = [];
+  isUpdating: boolean = false;
 
-  constructor(private router: Router, private courseService: CoursesService) {
+  constructor(private router: Router, private courseService: CoursesService, private alertService: AlertsService) {
   }
 
   ngOnInit() {
@@ -58,5 +62,33 @@ export class CourseCardComponent implements OnInit {
 
   navigateToMaterials(id: any) {
     this.openMaterials.emit(id);
+  }
+
+  getClassForStatus(status: string): string {
+    switch (status) {
+      case 'upcoming': return 'upcoming';
+      case 'ongoing': return 'ongoing';
+      case 'completed': return 'completed';
+      case 'cancelled': return 'cancelled';
+      default: return '--';
+    }
+  }
+
+  changeStatus(status: string, course: any) {
+    if (course.courseStatus === status || this.isUpdating) return;
+
+    this.isUpdating = true;
+
+    this.courseService.updateCourseStatus(course.id, status)
+      .pipe(finalize(() => this.isUpdating = false))
+      .subscribe({
+        next: () => {
+          course.courseStatus = status;
+          this.alertService.successMessage('Status changed successfully.', 'Success');
+        },
+        error: (err) => {
+          this.alertService.errorMessage(err.message, 'Error');
+        }
+      });
   }
 }

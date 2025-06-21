@@ -1,4 +1,18 @@
 <div class="d-md-flex">
+  <div class="form-card-1 modules" *ngIf="modules.length > 0">
+    <h5>Modules List :</h5>
+    <div class="d-flex flex-column align-items-start justify-content-start w-100 h-100">
+      <div class="module" *ngFor="let module of modules; let i = index">
+        <div class="module-name" (click)="editModule(module)">
+          {{module.name}}
+        </div>
+        <div class="module-action">
+          <div class="vr"></div>
+          <button class="btn-fill btn-f-4" (click)="removeModule(i, module)"><i class="material-icons" translate="no">delete</i></button>
+        </div>
+      </div>
+    </div>
+  </div>
   <div class="form-card-1 justify-content-start">
     <div class="d-flex align-items-center justify-content-between w-100">
       <h5>Update Modules :</h5>
@@ -66,23 +80,23 @@
       </div>
     </form>
 
-    <div class="skill-set w-100" *ngIf="modules.length > 0">
-      <hr>
-      <div class="row my-2" *ngFor="let module of modules; let i = index">
-        <div class="col-6">
-          <p>{{module.name}}</p>
-        </div>
-        <div class="col-3">
-          <p>{{module.date}}</p>
-        </div>
-        <div class="col-3">
-          <div class="d-flex align-items-center gap-2">
-            <button class="btn-fill btn-f-5" (click)="editModule(module)"><i class="material-icons" translate="no">edit</i></button>
-            <button class="btn-fill btn-f-4" (click)="removeModule(i, module)"><i class="material-icons" translate="no">delete</i></button>
-          </div>
-        </div>
-      </div>
-    </div>
+<!--    <div class="skill-set w-100" *ngIf="modules.length > 0">-->
+<!--      <hr>-->
+<!--      <div class="row my-2" *ngFor="let module of modules; let i = index">-->
+<!--        <div class="col-6">-->
+<!--          <p>{{module.name}}</p>-->
+<!--        </div>-->
+<!--        <div class="col-3">-->
+<!--          <p>{{module.date}}</p>-->
+<!--        </div>-->
+<!--        <div class="col-3">-->
+<!--          <div class="d-flex align-items-center gap-2">-->
+<!--            <button class="btn-fill btn-f-5" (click)="editModule(module)"><i class="material-icons" translate="no">edit</i></button>-->
+<!--            <button class="btn-fill btn-f-4" (click)="removeModule(i, module)"><i class="material-icons" translate="no">delete</i></button>-->
+<!--          </div>-->
+<!--        </div>-->
+<!--      </div>-->
+<!--    </div>-->
 
   </div>
 </div>

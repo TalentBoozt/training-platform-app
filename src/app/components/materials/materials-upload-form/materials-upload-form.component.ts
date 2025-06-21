@@ -1,4 +1,4 @@
-import {Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges} from '@angular/core';
+import {AfterViewInit, Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges} from '@angular/core';
 import {FormBuilder, FormGroup, ReactiveFormsModule, Validators} from '@angular/forms';
 import {NgIf} from '@angular/common';
 import {FileUploadService} from '../../../services/support/file-upload.service';
@@ -15,7 +15,7 @@ import {CoursesService} from '../../../services/courses.service';
   styleUrl: './materials-upload-form.component.scss',
   standalone: true
 })
-export class MaterialsUploadFormComponent implements OnInit, OnChanges {
+export class MaterialsUploadFormComponent implements OnInit, OnChanges, AfterViewInit {
   @Input() courseId!: string;
   @Input() moduleId!: string;
   @Input() editMaterial?: any;
@@ -41,8 +41,20 @@ export class MaterialsUploadFormComponent implements OnInit, OnChanges {
     });
   }
 
+  ngAfterViewInit(): void {
+    if (this.editMaterial) {
+      this.materialsForm.patchValue({
+        name: this.editMaterial.name,
+        type: this.editMaterial.type,
+        category: this.editMaterial.category,
+        uploadOption: this.editMaterial.url && !this.editMaterial.url.includes('firebase') ? 'url' : 'file',
+        url: this.editMaterial.url
+      });
+    }
+  }
+
   ngOnChanges(changes: SimpleChanges): void {
-    if (changes['editMaterial'] && this.editMaterial) {
+    if (changes['editMaterial'] && this.editMaterial && this.materialsForm) {
       const material = this.editMaterial;
       const isUrl = material.url && !material.url.includes('firebase');
       this.materialsForm.patchValue({
@@ -74,6 +86,8 @@ export class MaterialsUploadFormComponent implements OnInit, OnChanges {
       type: formValue.type,
       url: formValue.uploadOption === 'url' ? formValue.url : null,
       category: formValue.category,
+      visibility: 'participant', // default
+      viewCount: 0
     };
 
     if (formValue.uploadOption === 'file') {
@@ -103,7 +117,7 @@ export class MaterialsUploadFormComponent implements OnInit, OnChanges {
           return;
         }
         this.uploading = true;
-        this.fileUploadService.uploadFile(filePath, this.uploadedFile).subscribe(url => {
+        this.fileUploadService.uploadFile(filePath + this.uploadedFile.name, this.uploadedFile).subscribe(url => {
           this.uploading = false;
           dto.url = url;
           this.alertService.successMessage('File uploaded successfully.', 'Success');
@@ -128,6 +142,7 @@ export class MaterialsUploadFormComponent implements OnInit, OnChanges {
 
   submit(dto: any) {
     if (dto) {
+      dto.uploadDate = new Date();
       this.courseService.addMaterial(dto).subscribe(() => {
         this.alertService.successMessage('Successfully uploaded material.', 'Success');
         this.successUpload.emit(dto);
@@ -139,6 +154,7 @@ export class MaterialsUploadFormComponent implements OnInit, OnChanges {
   }
 
   updateMaterial(dto: any) {
+    dto.updateDate = new Date();
     this.courseService.updateMaterial(dto).subscribe(() => {
       this.alertService.successMessage('Successfully updated material.', 'Success');
       this.successUpload.emit(dto);

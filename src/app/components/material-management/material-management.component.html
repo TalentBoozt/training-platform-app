@@ -1,0 +1,116 @@
+<div class="container">
+  <ul class="nav nav-tabs my-3">
+    <li class="nav-item">
+      <button class="nav-link" [class.active]="activeTab === 'materials'" (click)="activeTab = 'materials'">Learning Materials</button>
+    </li>
+    <li class="nav-item">
+      <button class="nav-link" [class.active]="activeTab === 'quizzes'" (click)="activeTab = 'quizzes'">Quizzes</button>
+    </li>
+    <li class="nav-item">
+      <button class="nav-link" [class.active]="activeTab === 'recordings'" (click)="activeTab = 'recordings'">Recordings</button>
+    </li>
+  </ul>
+
+  <!-- Loop over modules -->
+  <div *ngFor="let module of modules" class="mb-4">
+    <h5>{{ module.name }}</h5>
+    <div *ngIf="activeTab === 'materials'">
+      <ng-container *ngIf="getMaterialsByType('all', module.id)?.length > 0; else addOnly">
+        <div class="d-flex flex-wrap gap-3">
+          <div class="material-item card p-3" *ngFor="let material of getMaterialsByType('all', module.id)">
+            <div class="d-flex gap-3 align-items-start">
+              <!-- Icon -->
+              <div class="icon">
+                <img [src]="getMaterialIcon(material.url)" alt="material icon" />
+              </div>
+
+              <!-- Details -->
+              <div class="flex-grow-1">
+                <div class="d-flex align-items-center gap-2">
+                  <a [href]="material.url" target="_blank" class="material-name fw-500">{{ material.name }}</a>
+
+                  <!-- Visibility dropdown -->
+                  <div class="dropdown">
+                    <button class="btn btn-link p-0" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
+                      <i class="material-icons">{{ getIconForVisibility(material.visibility) }}</i>
+                    </button>
+                    <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                      <li>
+                        <a class="dropdown-item d-flex align-items-center" (click)="changeVisibility('public', material)">
+                          <i class="material-icons me-2">public</i> Public
+                        </a>
+                      </li>
+                      <li>
+                        <a class="dropdown-item d-flex align-items-center" (click)="changeVisibility('participant', material)">
+                          <i class="material-icons me-2">people</i> Participants
+                        </a>
+                      </li>
+                      <li>
+                        <a class="dropdown-item d-flex align-items-center" (click)="changeVisibility('only-me', material)">
+                          <i class="material-icons me-2">lock</i> Only Me
+                        </a>
+                      </li>
+                    </ul>
+                  </div>
+                </div>
+
+                <div class="text-muted small">
+                  <span class="type">{{ material.type }}</span> |
+                  <span class="category">{{ material.category }}</span> |
+                  <span class="views"><i class="material-icons">remove_red_eye</i> {{ material.viewCount || 0 }}</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Actions -->
+            <div class="actions d-flex gap-2 mt-2 align-items-center justify-content-end">
+              <button class="btn btn-sm btn-outline-secondary" (click)="onEdit(module.id, material.id, 'material')">Edit</button>
+              <button class="btn btn-sm btn-outline-danger" (click)="onDelete(material, 'material')">Delete</button>
+            </div>
+          </div>
+
+          <button class="btn btn-sm btn-primary" (click)="onAdd(module.id, 'material')">+</button>
+        </div>
+      </ng-container>
+      <ng-template #addOnly>
+        <button class="btn btn-sm btn-primary" (click)="onAdd(module.id, 'material')">Add Material</button>
+      </ng-template>
+    </div>
+
+    <div *ngIf="activeTab === 'quizzes'">
+      <ng-container *ngIf="getQuizzesByModule(module.id)?.length > 0; else addQuizOnly">
+        <div class="d-flex flex-wrap gap-3">
+          <div class="card" *ngFor="let quiz of getQuizzesByModule(module.id)">
+            <div class="card-body">
+              <h6>{{ quiz.title }}</h6>
+              <button class="btn btn-sm btn-outline-secondary" (click)="onEdit(module.id, quiz.id, 'quiz')">Edit</button>
+              <button class="btn btn-sm btn-outline-danger" (click)="onDelete(quiz, 'quiz')">Delete</button>
+            </div>
+          </div>
+
+          <button class="btn btn-sm btn-primary" (click)="onAdd(module.id, 'quiz')">+</button>
+        </div>
+      </ng-container>
+      <ng-template #addQuizOnly>
+        <button class="btn btn-sm btn-primary" (click)="onAdd(module.id, 'quiz')">Add Quiz</button>
+      </ng-template>
+    </div>
+
+    <div *ngIf="activeTab === 'recordings'">
+      <ng-container *ngIf="getMaterialsByType('recording', module.id)?.length > 0; else addRecordingOnly">
+        <div class="d-flex flex-wrap gap-3">
+          <div class="card" *ngFor="let rec of getMaterialsByType('recording', module.id)">
+            <div class="card-body">
+              <h6>{{ rec.name }}</h6>
+              <button class="btn btn-sm btn-outline-secondary">Edit</button>
+              <button class="btn btn-sm btn-outline-danger">Delete</button>
+            </div>
+          </div>
+        </div>
+      </ng-container>
+      <ng-template #addRecordingOnly>
+        <button class="btn btn-sm btn-primary">Add Recording</button>
+      </ng-template>
+    </div>
+  </div>
+</div>

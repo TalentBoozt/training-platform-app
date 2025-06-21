@@ -1,0 +1,22 @@
+<form [formGroup]="quizForm">
+  <input type="text" formControlName="title" class="form-control mb-2" placeholder="Quiz Title" />
+  <textarea formControlName="description" class="form-control mb-2" placeholder="Description"></textarea>
+
+  <div class="mb-2">
+    <label>Visibility</label>
+    <select formControlName="visibility" class="form-select">
+      <option value="public">Public</option>
+      <option value="participant">Participant</option>
+      <option value="only-me">Only Me</option>
+    </select>
+  </div>
+
+  <label>Attempt Limit</label>
+  <input formControlName="attemptLimit" type="number" class="form-control mb-3" placeholder="Attempt Limit" />
+
+  <app-question-builder
+    [editQuestions]="questions"
+    (questionsChange)="onQuestionsChange($event)"></app-question-builder>
+
+  <button class="btn btn-success mt-3" (click)="submit()" [disabled]="quizForm.invalid || questions.length === 0">{{editMaterial ? 'Update' : 'Create'}} Quiz</button>
+</form>

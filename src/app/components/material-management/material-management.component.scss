@@ -1,0 +1,175 @@
+:host {
+  display: block;
+  padding: var(--padding-4);
+  background-color: var(--color-surface-200);
+  color: var(--color-text-100);
+  font-size: var(--fs-14);
+}
+
+// Nav tabs
+.nav-tabs {
+  border-bottom: 2px solid var(--color-primary-100);
+
+  .nav-link {
+    font-weight: var(--fw-500);
+    font-size: var(--fs-14);
+    color: var(--color-text-500);
+    padding: var(--padding-2) var(--padding-4);
+    border: none;
+    border-bottom: 3px solid transparent;
+    transition: var(--transition-1);
+    background-color: transparent;
+
+    &:hover {
+      color: var(--color-primary-100);
+      background-color: var(--color-surface-100);
+    }
+
+    &.active {
+      color: var(--color-primary-100);
+      border-bottom: 3px solid var(--color-primary-100);
+      background-color: var(--color-surface-100);
+    }
+  }
+}
+
+// Module Section
+.module-section {
+  margin-bottom: var(--margin-6);
+
+  h5 {
+    font-size: var(--fs-18);
+    margin-bottom: var(--margin-3);
+    color: var(--color-text-200);
+  }
+}
+
+// Cards container
+.card-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--margin-3);
+}
+
+// Material / Quiz / Recording Card
+.card {
+  width: 250px;
+  background-color: var(--color-surface-300);
+  border-radius: var(--br-10);
+  box-shadow: var(--box-shadow-1);
+  transition: var(--transition-1);
+
+  &:hover {
+    box-shadow: var(--box-shadow-2);
+  }
+
+  .card-body {
+    padding: var(--padding-3);
+
+    h6 {
+      font-size: var(--fs-16);
+      margin-bottom: var(--margin-2);
+      color: var(--color-text-300);
+    }
+
+    .btn {
+      margin-right: var(--margin-2);
+      font-size: var(--fs-12);
+      padding: var(--padding-0-2) var(--padding-2);
+
+      &.btn-outline-secondary {
+        border-color: var(--color-text-500);
+        color: var(--color-text-500);
+
+        &:hover {
+          background-color: var(--color-text-500);
+          color: var(--color-white);
+        }
+      }
+
+      &.btn-outline-danger {
+        border-color: var(--color-danger-100);
+        color: var(--color-danger-100);
+
+        &:hover {
+          background-color: var(--color-danger-100);
+          color: var(--color-white);
+        }
+      }
+    }
+  }
+}
+
+// Add Button Only
+.add-only {
+  .btn {
+    font-size: var(--fs-14);
+    font-weight: var(--fw-500);
+    padding: var(--padding-2) var(--padding-4);
+    background-color: var(--color-primary-100);
+    color: var(--color-white);
+    border-radius: var(--br-5);
+    border: none;
+    transition: var(--transition-1);
+
+    &:hover {
+      background-color: var(--color-secondary-100);
+    }
+  }
+}
+
+.material-item {
+  border-radius: var(--br-10);
+  background-color: var(--color-surface-300);
+  box-shadow: var(--box-shadow-1);
+  margin-bottom: var(--margin-3);
+  transition: var(--transition-1);
+
+  &:hover {
+    box-shadow: var(--box-shadow-2);
+  }
+
+  .icon img {
+    width: 20px;
+    height: 20px;
+    object-fit: contain;
+  }
+
+  .material-name {
+    color: var(--color-primary-100);
+    text-decoration: none;
+
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+
+  .dropdown-menu {
+    font-size: var(--fs-14);
+  }
+
+  .text-muted {
+    color: var(--color-text-300) !important;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+
+    .views{
+      display: flex;
+      align-items: center;
+      gap: 5px;
+
+      i{
+        font-size: var(--fs-14);
+      }
+    }
+  }
+
+  .actions {
+    width: 100%;
+    button {
+      font-size: var(--fs-12);
+      padding: var(--padding-0-2) var(--padding-2);
+    }
+  }
+}
