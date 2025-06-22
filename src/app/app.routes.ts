@@ -13,6 +13,7 @@ export const routes: Routes = [
   {path: 'courses/:courseId/modules/:moduleId/materials/upload', loadComponent: () => import('./components/materials/materials.component').then(c => c.MaterialsComponent), canActivate: [AuthGuard]},
   {path: 'courses/:courseId/modules/:moduleId/quizzes/upload', loadComponent: () => import('./components/quiz-manager/quiz-manager.component').then(c => c.QuizManagerComponent), canActivate: [AuthGuard]},
   {path: 'manage-materials/:courseId', loadComponent: () => import('./components/material-management/material-management.component').then(c => c.MaterialManagementComponent), canActivate: [AuthGuard]},
+  {path: 'quiz/:courseId/:quizId', loadComponent: () => import('./components/quizzes/quiz-detail/quiz-detail.component').then(c => c.QuizDetailComponent), canActivate: [AuthGuard]},
   {path: 'oauth-callback', loadComponent: () => import('./components/authenticating/callbacks/o-auth-callback/o-auth-callback.component').then(m => m.OAuthCallbackComponent)},
   {path: 'oauth-callback/github', loadComponent: () => import('./components/authenticating/callbacks/o-auth-callback-github/o-auth-callback-github.component').then(m => m.OAuthCallbackGithubComponent)},
   {path: 'oauth-callback/linkedin', loadComponent: () => import('./components/authenticating/callbacks/o-auth-callback-linkedin/o-auth-callback-linkedin.component').then(m => m.OAuthCallbackLinkedinComponent)},

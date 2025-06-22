@@ -1,0 +1,111 @@
+<div class="question-block">
+  <p class="question-text">{{ question.questionText }}</p>
+
+  <ng-container [ngSwitch]="question.questionType">
+
+    <!-- Single Choice -->
+    <ng-container *ngSwitchCase="'multiple-choice'">
+      <label class="option" *ngFor="let opt of question.options" [ngClass]="getAnswerClass(opt)">
+        <input
+          type="radio"
+          [value]="opt"
+          [checked]="answer === opt"
+          (change)="onSelectOption(opt)"
+          [disabled]="submitted"
+        />
+        {{ opt }}
+      </label>
+    </ng-container>
+
+    <!-- Multi-select -->
+    <ng-container *ngSwitchCase="'multiple-select'">
+      <label class="option" *ngFor="let opt of question.options" [ngClass]="getAnswerClass(opt)">
+        <input
+          type="checkbox"
+          [checked]="answer?.includes(opt)"
+          (change)="onSelectMulti(opt, $event)"
+          [disabled]="submitted"
+        />
+        {{ opt }}
+      </label>
+    </ng-container>
+
+    <!-- True/False -->
+    <ng-container *ngSwitchCase="'true-false'">
+      <label class="option" [ngClass]="getAnswerClass('true')">
+        <input
+          type="radio"
+          value="true"
+          [checked]="answer === 'true'"
+          (change)="onSelectOption('true')"
+          [disabled]="submitted"
+        />
+        True
+      </label>
+      <label class="option" [ngClass]="getAnswerClass('false')">
+        <input
+          type="radio"
+          value="false"
+          [checked]="answer === 'false'"
+          (change)="onSelectOption('false')"
+          [disabled]="submitted"
+        />
+        False
+      </label>
+    </ng-container>
+
+    <!-- Likert -->
+    <ng-container *ngSwitchCase="'likert'">
+      <label class="option" *ngFor="let opt of question.options" [ngClass]="getAnswerClass(opt)">
+        <input
+          type="radio"
+          [value]="opt"
+          [checked]="answer === opt"
+          (change)="onSelectOption(opt)"
+          [disabled]="submitted"
+        />
+        {{ opt }}
+      </label>
+    </ng-container>
+
+    <!-- Text -->
+    <ng-container *ngSwitchCase="'text'">
+      <input
+        type="text"
+        [(ngModel)]="answer"
+        (ngModelChange)="answerChange.emit($event)"
+        [disabled]="submitted"
+      />
+    </ng-container>
+
+    <!-- Paragraph -->
+    <ng-container *ngSwitchCase="'paragraph'">
+    <textarea
+      [(ngModel)]="answer"
+      (ngModelChange)="answerChange.emit($event)"
+      [disabled]="submitted"
+    ></textarea>
+    </ng-container>
+
+    <!-- Fill in the Blank -->
+    <ng-container *ngSwitchCase="'fill-blank'">
+      <input
+        type="text"
+        [(ngModel)]="answer"
+        (ngModelChange)="answerChange.emit($event)"
+        [disabled]="submitted"
+      />
+    </ng-container>
+
+  </ng-container>
+
+  <div *ngIf="submitted && showExplanation" class="explanation">
+    <p><strong>Explanation:</strong> {{ question.explanation }}</p>
+  </div>
+
+  <div *ngIf="submitted && !showExplanation" class="warning">
+    <p><strong>Answer submitted.</strong> Explanation will be visible after last attempt.</p>
+  </div>
+
+  <button (click)="submitAnswer()">Submit Answer</button>
+</div>

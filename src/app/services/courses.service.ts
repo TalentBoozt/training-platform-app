@@ -111,4 +111,8 @@ export class CoursesService {
   public updateQuiz(quiz: QuizDTO) {
     return this.http.put<any>(`${this.baseUrl}/course/update/quiz/${quiz.courseId}/${quiz.id}`, quiz);
   }
+
+  public getQuizById(courseId: any, quizId: any) {
+    return this.http.get<any>(`${this.baseUrl}/course/get/quiz/${courseId}/${quizId}`);
+  }
 }

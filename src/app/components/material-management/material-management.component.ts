@@ -159,4 +159,10 @@ export class MaterialManagementComponent implements OnInit {
       }
     }
   }
+
+  onView(quizzId: any, type: string) {
+    if (type === 'quiz' && this.courseId) {
+      this.router.navigate(['quiz', this.courseId, quizzId]);
+    }
+  }
 }

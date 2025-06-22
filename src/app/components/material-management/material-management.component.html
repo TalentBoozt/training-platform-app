@@ -83,6 +83,7 @@
           <div class="card" *ngFor="let quiz of getQuizzesByModule(module.id)">
             <div class="card-body">
               <h6>{{ quiz.title }}</h6>
+              <button class="btn btn-sm btn-outline-primary" (click)="onView(quiz.id, 'quiz')">View</button>
               <button class="btn btn-sm btn-outline-secondary" (click)="onEdit(module.id, quiz.id, 'quiz')">Edit</button>
               <button class="btn btn-sm btn-outline-danger" (click)="onDelete(quiz, 'quiz')">Delete</button>
             </div>
