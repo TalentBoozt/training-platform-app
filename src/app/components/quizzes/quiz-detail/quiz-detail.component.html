@@ -1,0 +1,23 @@
+<div *ngIf="quiz && currentQuestion">
+  <div class="quiz-exam-header">
+    <h2>{{ quiz.title }}</h2>
+    <p>Question {{ currentIndex + 1 }} of {{ quiz.questions.length }}</p>
+  </div>
+
+  <app-question-display
+    [question]="currentQuestion"
+    [answer]="userAnswers[currentQuestion.id]"
+    [submitted]="submitted[currentQuestion.id]"
+    [showExplanation]="shouldShowExplanation(currentQuestion.id)"
+    (answerChange)="onAnswerChange($event)"
+    (submit)="onQuestionSubmit()"
+  ></app-question-display>
+
+  <div class="quiz-controls">
+    <button (click)="prevQuestion()" [disabled]="currentIndex === 0">Previous</button>
+    <button *ngIf="!isLastQuestion()" (click)="nextQuestion()">Next</button>
+    <button *ngIf="isLastQuestion()" (click)="submitQuiz()">Finish</button>
+  </div>
+</div>
+
+<app-quiz-report *ngIf="showReport" [quiz]="quiz" [userAnswers]="userAnswers" [submitted]="submitted"></app-quiz-report>

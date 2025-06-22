@@ -1,0 +1,48 @@
+:host {
+  display: block;
+  padding: var(--padding-5);
+  background-color: var(--color-surface-100);
+  color: var(--color-text-100);
+  font-family: 'Segoe UI', sans-serif;
+}
+
+.quiz-exam-header {
+  margin-bottom: var(--margin-4);
+
+  h2 {
+    font-size: var(--fs-28);
+    font-weight: var(--fw-700);
+    color: var(--color-primary-100);
+  }
+
+  p {
+    font-size: var(--fs-16);
+    color: var(--color-text-400);
+  }
+}
+
+.quiz-controls {
+  display: flex;
+  justify-content: space-between;
+  margin-top: var(--margin-4);
+
+  button {
+    padding: var(--padding-2) var(--padding-4);
+    font-size: var(--fs-16);
+    font-weight: var(--fw-500);
+    background-color: var(--color-primary-100);
+    color: var(--color-white);
+    border: none;
+    border-radius: var(--br-5);
+    transition: var(--transition-1);
+
+    &:hover {
+      background-color: var(--color-secondary-100);
+    }
+
+    &:disabled {
+      background-color: var(--color-surface-mixed-100);
+      cursor: not-allowed;
+    }
+  }
+}

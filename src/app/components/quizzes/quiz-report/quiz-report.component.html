@@ -1,0 +1,14 @@
+<div class="report">
+  <h3>Quiz Report - {{ quiz.title }}</h3>
+  <p>You answered {{ correctCount }} / {{ quiz.questions.length }} correctly.</p>
+  <p>Marks: {{ marks(correctCount, quiz.questions.length) }}</p>
+
+  <div class="hr"></div>
+  <ul>
+    <li *ngFor="let q of quiz.questions; let i = index">
+      {{ i+1 + '. ' + q.questionText }}
+      <span [class.correct]="isCorrect(q.id)">✅</span>
+      <span [class.wrong]="!isCorrect(q.id)">❌</span>
+    </li>
+  </ul>
+</div>
