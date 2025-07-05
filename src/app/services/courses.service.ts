@@ -115,4 +115,17 @@ export class CoursesService {
   public getQuizById(courseId: any, quizId: any) {
     return this.http.get<any>(`${this.baseUrl}/course/get/quiz/${courseId}/${quizId}`);
   }
+
+  public createStripeProduct(course: string, name: string, currency: string, price: string) {
+    const courseName = course.replace(' ', '-');
+    return this.http.post<any>(`${this.baseUrl}/course/create/stripe/product/${courseName}`, {name, currency, price});
+  }
+
+  public submitQuiz(quiz: any) {
+    return this.http.post<any>(`${this.baseUrl}/course/quiz/submit`, quiz);
+  }
+
+  public getAttempts(courseId: any, userId: any) {
+    return this.http.get<any>(`${this.baseUrl}/course/quiz/attempts/${courseId}/${userId}`);
+  }
 }

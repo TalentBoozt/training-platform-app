@@ -1,5 +1,6 @@
 import {Component, Input} from '@angular/core';
 import {NgForOf} from '@angular/common';
+import {WindowService} from '../../../services/common/window.service';
 
 @Component({
   selector: 'app-quiz-report',
@@ -15,6 +16,8 @@ export class QuizReportComponent {
   @Input() userAnswers: any;
   @Input() submitted: any;
 
+  constructor(private windowService: WindowService ) {}
+
   isCorrect(qId: string): boolean {
     const q = this.quiz.questions.find((q: any) => q.id === qId);
     const a = this.userAnswers[qId];
@@ -28,5 +31,11 @@ export class QuizReportComponent {
   marks(correctCount: number, length: number): string {
     const percentage = (correctCount / length) * 100;
     return `${percentage.toFixed(2)}%`;
+  }
+
+  tryAgain() {
+    if (this.windowService.nativeWindow) {
+      window.location.reload();
+    }
   }
 }

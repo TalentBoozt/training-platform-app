@@ -3,6 +3,10 @@ import {ResumeStorageService} from '../../../services/support/resume-storage.ser
 import {AlertsService} from '../../../services/support/alerts.service';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {NgForOf, NgIf} from '@angular/common';
+import {TimezoneService} from '../../../services/support/timezone.service';
+
+import * as moment from 'moment-timezone';
+import { zonedTimeToUtc } from 'date-fns-tz';
 
 @Component({
   selector: 'app-module-details',
@@ -27,6 +31,9 @@ export class ModuleDetailsComponent implements OnInit{
     date: '',
     start: '',
     end: '',
+    utcStart: '',
+    utcEnd: '',
+    trainerTimezone: '',
     paid: false,
     status: 'upcoming'
   }
@@ -35,12 +42,19 @@ export class ModuleDetailsComponent implements OnInit{
 
   isFreeCheck = false
 
-  constructor(private resumeStorage: ResumeStorageService, private alertService: AlertsService) {}
+  timezones: string[] = moment.tz.names();
+  trainerTimezone: string = '';
+
+  constructor(private resumeStorage: ResumeStorageService,
+              private timezoneService: TimezoneService,
+              private alertService: AlertsService) {}
 
   ngOnInit(): void {
+    this.trainerTimezone = this.timezoneService.getTimezone();
     const savedData = this.resumeStorage.getData();
     if (savedData.modules) {
       this.modules = savedData.modules;
+      this.trainerTimezone = savedData.relevantDetails.trainerTimezone
     }
     if (savedData?.relevantDetails?.freeCheck) {
       this.isFreeCheck = true;
@@ -66,6 +80,20 @@ export class ModuleDetailsComponent implements OnInit{
         this.alertService.errorMessage('Please enter a valid url', 'Error');
         return;
       }
+
+      const { date, start, end } = this.newModule;
+      const timezone = this.trainerTimezone;
+
+      const startDateTimeStr = `${date}T${start}`;
+      const endDateTimeStr = `${date}T${end}`;
+
+      const utcStart = zonedTimeToUtc(startDateTimeStr, timezone);
+      const utcEnd = zonedTimeToUtc(endDateTimeStr, timezone);
+
+      this.newModule.utcStart = utcStart.toISOString();
+      this.newModule.utcEnd = utcEnd.toISOString();
+      this.newModule.trainerTimezone = timezone;
+
       this.newModule.id = this.generateRandomId();
       this.modules.push({ ...this.newModule });
       this.saveData();
@@ -94,6 +122,9 @@ export class ModuleDetailsComponent implements OnInit{
       date: '',
       start: '',
       end: '',
+      utcStart: '',
+      utcEnd: '',
+      trainerTimezone: this.timezoneService.getTimezone(),
       paid: false,
       status: 'upcoming'
     }

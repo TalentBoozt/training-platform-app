@@ -96,6 +96,9 @@ export class PreviewPostComponent implements OnInit{
         startDate: savedData.relevantDetails.startDate,
         fromTime: savedData.relevantDetails.startTime,
         toTime: savedData.relevantDetails.endTime,
+        utcStart: savedData.relevantDetails.utcStart,
+        utcEnd: savedData.relevantDetails.utcEnd,
+        trainerTimezone: savedData.relevantDetails.trainerTimezone,
         courseStatus: savedData.relevantDetails.courseStatus,
         paymentMethod: savedData.basicDetails.paymentMethod,
         publicity: savedData.relevantDetails.publicity

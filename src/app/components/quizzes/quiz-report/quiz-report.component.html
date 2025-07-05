@@ -11,4 +11,8 @@
       <span [class.wrong]="!isCorrect(q.id)">❌</span>
     </li>
   </ul>
+
+  <div class="d-flex align-items-center justify-content-end gap-2 w-100 py-2">
+    <button class="btn btn-fill btn-f-2" (click)="tryAgain()"><span>Try Again</span></button>
+  </div>
 </div>
