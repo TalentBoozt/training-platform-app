@@ -59,7 +59,15 @@
             <input type="text" class="form-control" id="mlink" placeholder="https://zoom.us/join/" [(ngModel)]="newModule.meetingLink" [ngModelOptions]="{standalone: true}">
           </div>
         </div>
-        <div class="col-12 col-md-6">
+        <div class="col-12 col-md-3">
+          <div class="form-group">
+            <label for="timezone">TimeZone *</label>
+            <select [(ngModel)]="newModule.trainerTimezone" class="form-control" id="timezone" [ngModelOptions]="{standalone: true}">
+              <option *ngFor="let tz of timezones" [value]="tz">{{ tz }}</option>
+            </select>
+          </div>
+        </div>
+        <div class="col-12 col-md-3">
           <div class="form-group">
             <label for="date">Start Date *</label>
             <input type="date" class="form-control" id="date" [(ngModel)]="newModule.date" [ngModelOptions]="{standalone: true}" required>

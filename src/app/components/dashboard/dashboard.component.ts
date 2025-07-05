@@ -11,6 +11,8 @@ import {Card1x2LoaderComponent} from '../shared/cards/loaders/card1x2-loader/car
 import {CardFullLoaderComponent} from '../shared/cards/loaders/card-full-loader/card-full-loader.component';
 import {EmployeeAuthStateService} from '../../services/cacheStates/employee-auth-state.service';
 
+import { utcToZonedTime, format } from 'date-fns-tz';
+
 @Component({
   selector: 'app-dashboard',
   imports: [
@@ -105,8 +107,22 @@ export class DashboardComponent implements OnInit, OnDestroy {
 
   // Get Courses
   getCourses(id: string) {
+    const userTimezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+    this.loading = true;
+
     this.courseService.getCoursesByOrganization(id).subscribe(courses => {
-      this.courseCards = courses;
+      this.courseCards = courses.map((course: any) => {
+        const startLocal = utcToZonedTime(course.utcStart, userTimezone);
+        const endLocal = utcToZonedTime(course.utcEnd, userTimezone);
+
+        return {
+          ...course,
+          startDate: format(startLocal, 'yyyy-MM-dd', { timeZone: userTimezone }),
+          fromTime: format(startLocal, 'HH:mm', { timeZone: userTimezone }),
+          toTime: format(endLocal, 'HH:mm', { timeZone: userTimezone }),
+        };
+      });
+
       this.updateFilteredCourses();
       this.loading = false;
     });

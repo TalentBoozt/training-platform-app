@@ -5,6 +5,8 @@ import {NgIf} from '@angular/common';
 import {FormsModule} from '@angular/forms';
 import {QuestionDisplayComponent} from '../question-display/question-display.component';
 import {QuizReportComponent} from '../quiz-report/quiz-report.component';
+import {AuthService} from '../../../services/support/auth.service';
+import {AlertsService} from '../../../services/support/alerts.service';
 
 @Component({
   selector: 'app-quiz-detail',
@@ -28,8 +30,16 @@ export class QuizDetailComponent {
   submitted: { [id: string]: boolean } = {};
   showReport = false;
 
+  userId: any;
+
+  hasReachedLimit = false;
+  attempts: any[] = [];
+
   get currentQuestion() {
     return this.quiz?.questions[this.currentIndex];
+  }
+
+  constructor(private authService: AuthService, private alertService: AlertsService) {
   }
 
   ngOnInit() {
@@ -40,9 +50,23 @@ export class QuizDetailComponent {
       if (quizId && courseId) {
         this.quizService.getQuizById(courseId, quizId).subscribe((res) => {
           this.quiz = res;
+
+          // After loading quiz, check previous attempts
+          this.userId = this.authService.userID();
+          this.getAllAttempts(this.userId, quizId, res.attemptLimit);
         });
       }
-    })
+    });
+  }
+
+  getAllAttempts(userId: any, quizId: any, attemptLimit: any) {
+    this.quizService.getAttempts(this.userId, quizId).subscribe((attempts) => {
+      this.attempts = attempts;
+      if (attempts.length >= attemptLimit) {
+        this.hasReachedLimit = true;
+        alert('You have reached the maximum number of attempts for this quiz.');
+      }
+    });
   }
 
   onAnswerChange(value: any) {
@@ -58,7 +82,7 @@ export class QuizDetailComponent {
   shouldShowExplanation(qId: string) {
     const question = this.quiz.questions.find((q: any) => q.id === qId);
     const isCorrect = this.isAnswerCorrect(qId);
-    const isFinalAttempt = this.isFinalAttempt();
+    const isFinalAttempt = this.hasReachedLimit;
     return this.submitted[qId] && (isCorrect || isFinalAttempt);
   }
 
@@ -97,6 +121,42 @@ export class QuizDetailComponent {
   }
 
   submitQuiz() {
-    this.showReport = true;
+    if (!this.allRequiredAnswered()) {
+      this.alertService.errorMessage('Please answer all required questions', 'Error');
+      return;
+    }
+
+    const answers = Object.keys(this.userAnswers).map(qId => ({
+      questionId: qId,
+      selectedAnswers: Array.isArray(this.userAnswers[qId])
+        ? this.userAnswers[qId]
+        : [this.userAnswers[qId]]
+    }));
+
+    const submissionPayload = {
+      employeeId: this.userId,
+      courseId: this.quiz.courseId,
+      moduleId: this.quiz.moduleId,
+      quizId: this.quiz.id,
+      answers
+    };
+
+    this.quizService.submitQuiz(submissionPayload).subscribe({
+      next: (res) => {
+        this.showReport = true;
+        this.alertService.successMessage('Quiz submitted successfully', 'Success');
+      },
+      error: (err) => {
+        this.alertService.errorMessage(err.message, 'Error');
+      }
+    });
+  }
+
+  allRequiredAnswered(): boolean {
+    return this.quiz.questions.every((q: any) => {
+      if (!q.required) return true;
+      const a = this.userAnswers[q.id];
+      return a && (Array.isArray(a) ? a.length > 0 : a !== '');
+    });
   }
 }

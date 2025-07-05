@@ -5,6 +5,9 @@ import {FormsModule} from '@angular/forms';
 import {NgForOf, NgIf} from '@angular/common';
 import {ActivatedRoute} from '@angular/router';
 import {CoursesService} from '../../services/courses.service';
+import {zonedTimeToUtc} from 'date-fns-tz';
+import * as moment from 'moment-timezone';
+import {TimezoneService} from '../../services/support/timezone.service';
 
 @Component({
   selector: 'app-update-modules',
@@ -28,6 +31,9 @@ export class UpdateModulesComponent {
     date: '',
     start: '',
     end: '',
+    utcStart: '',
+    utcEnd: '',
+    trainerTimezone: '',
     paid: false,
     status: 'upcoming'
   }
@@ -42,9 +48,12 @@ export class UpdateModulesComponent {
 
   courseId: any;
 
+  timezones: string[] = moment.tz.names();
+
   constructor(private resumeStorage: ResumeStorageService,
               private courseService: CoursesService,
               private route: ActivatedRoute,
+              private timezoneService: TimezoneService,
               private alertService: AlertsService) {}
 
   ngOnInit(): void {
@@ -93,6 +102,19 @@ export class UpdateModulesComponent {
   }
 
   updateData(): void {
+    const { date, start, end } = this.newModule;
+    const timezone = this.newModule.trainerTimezone || this.timezoneService.getTimezone();
+
+    const startDateTimeStr = `${date}T${start}`;
+    const endDateTimeStr = `${date}T${end}`;
+
+    const utcStart = zonedTimeToUtc(startDateTimeStr, timezone);
+    const utcEnd = zonedTimeToUtc(endDateTimeStr, timezone);
+
+    this.newModule.utcStart = utcStart.toISOString();
+    this.newModule.utcEnd = utcEnd.toISOString();
+    this.newModule.trainerTimezone = timezone;
+
     this.courseService.updateModule(this.courseId, this.newModule).subscribe(response => {
       this.resetForm();
       this.getCourse(this.courseId);
@@ -110,6 +132,9 @@ export class UpdateModulesComponent {
       date: '',
       start: '',
       end: '',
+      utcStart: '',
+      utcEnd: '',
+      trainerTimezone: '',
       paid: false,
       status: 'upcoming'
     }
@@ -135,6 +160,9 @@ export class UpdateModulesComponent {
         date: module.date,
         start: module.start,
         end: module.end,
+        utcStart: module.utcStart,
+        utcEnd: module.utcEnd,
+        trainerTimezone: module.trainerTimezone,
         paid: module.paid,
         status: module.status
       }

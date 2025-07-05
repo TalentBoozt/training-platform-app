@@ -45,7 +45,10 @@
             "allowedCommonJsDependencies": [
               "crypto-js",
               "@grpc/proto-loader",
-              "@grpc/grpc-js"
+              "@grpc/grpc-js",
+              "date-fns-tz",
+              "date-fns",
+              "moment-timezone"
             ]
           },
           "configurations": {

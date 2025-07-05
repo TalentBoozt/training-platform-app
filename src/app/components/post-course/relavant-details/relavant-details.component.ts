@@ -6,6 +6,10 @@ import {FileUploadService} from '../../../services/support/file-upload.service';
 import {NgClass, NgForOf, NgIf} from '@angular/common';
 import {CoursesService} from '../../../services/courses.service';
 import {tap} from 'rxjs';
+import {TimezoneService} from '../../../services/support/timezone.service';
+
+import * as moment from 'moment-timezone';
+import { zonedTimeToUtc } from 'date-fns-tz';
 
 @Component({
   selector: 'app-relavant-details',
@@ -27,6 +31,9 @@ export class RelavantDetailsComponent implements OnInit, OnChanges, OnDestroy {
     startDate: '',
     startTime: '',
     endTime: '',
+    utcStart: '',
+    utcEnd: '',
+    trainerTimezone: '',
     coverImage: '',
     freeCheck: false,
     currency: '$',
@@ -43,15 +50,22 @@ export class RelavantDetailsComponent implements OnInit, OnChanges, OnDestroy {
   loading = false;
   inputValue: string = ''; // for skills
 
+  timezones: string[] = moment.tz.names();
+  trainerTimezone: string = '';
+
   constructor(private resumeStorage: ResumeStorageService,
               private alertService: AlertsService,
               private courseService: CoursesService,
-              private fileUploadService: FileUploadService) {}
+              private timezoneService: TimezoneService,
+              private fileUploadService: FileUploadService) {
+  }
 
   ngOnInit(): void {
+    this.trainerTimezone = this.timezoneService.getTimezone();
     const savedData = this.resumeStorage.getData();
     if (savedData?.relevantDetails) {
       this.relevantDetails = savedData.relevantDetails;
+      this.trainerTimezone = this.relevantDetails.trainerTimezone;
       this.selectedPrice = this.relevantDetails.price;
       this.selectedCurrency = this.relevantDetails.currency;
     }
@@ -130,6 +144,21 @@ export class RelavantDetailsComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   saveData(): void {
+    const { startDate, startTime, endTime } = this.relevantDetails;
+    const timezone = this.trainerTimezone;
+
+    const startDateTimeStr = `${startDate}T${startTime}`;
+    const endDateTimeStr = `${startDate}T${endTime}`;
+
+    const utcStart = zonedTimeToUtc(startDateTimeStr, timezone);
+    const utcEnd = zonedTimeToUtc(endDateTimeStr, timezone);
+
+    this.relevantDetails.utcStart = utcStart.toISOString();
+    this.relevantDetails.utcEnd = utcEnd.toISOString();
+
+    // Store the trainer's timezone for converting back
+    this.relevantDetails.trainerTimezone = timezone;
+
     if (this.relevantDetails.startDate &&
       this.relevantDetails.startTime &&
       this.relevantDetails.endTime &&
@@ -173,7 +202,7 @@ export class RelavantDetailsComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   downloadSampleBanner() {
-    const imageUrl = 'https://firebasestorage.googleapis.com/v0/b/sparkc-ad442.appspot.com/o/talentboozt%2Fpublic%2Fbanner_size.jpg?alt=media&token=6db5aeaf-75dd-409b-98f0-91a32e31c172';
+    const imageUrl = 'https://firebasestorage.googleapis.com/v0/b/sparkc-ad442.appspot.com/o/talentboozt%2Fpublic%2Fcourse_banner_size.png?alt=media&token=d83b7cd2-ce1b-4994-b367-bfe8b1bf4ec6';
     const link = document.createElement('a');
     link.href = imageUrl;
     link.target = '_blank';

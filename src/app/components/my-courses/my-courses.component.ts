@@ -7,6 +7,7 @@ import {NgForOf, NgIf} from '@angular/common';
 import {CourseManagementService} from '../../services/support/course-management.service';
 import {Card1x2LoaderComponent} from '../shared/cards/loaders/card1x2-loader/card1x2-loader.component';
 import {Router} from '@angular/router';
+import {format, utcToZonedTime} from 'date-fns-tz';
 
 @Component({
   selector: 'app-my-courses',
@@ -49,10 +50,21 @@ export class MyCoursesComponent implements OnInit, OnDestroy {
   }
 
   getAllCourses() {
+    const userTimezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
     this.loading = true;
     return this.courseService.getCoursesByOrganization(this.companyId).pipe(
       tap((courses: any) => {
-        this.courses = courses
+        this.courses = courses.map((course: any) => {
+          const startLocal = utcToZonedTime(course.utcStart, userTimezone);
+          const endLocal = utcToZonedTime(course.utcEnd, userTimezone);
+
+          return {
+            ...course,
+            startDate: format(startLocal, 'yyyy-MM-dd', { timeZone: userTimezone }),
+            fromTime: format(startLocal, 'HH:mm', { timeZone: userTimezone }),
+            toTime: format(endLocal, 'HH:mm', { timeZone: userTimezone }),
+          };
+        });
       })
     )
   }

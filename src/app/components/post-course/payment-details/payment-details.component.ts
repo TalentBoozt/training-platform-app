@@ -3,6 +3,7 @@ import {ResumeStorageService} from '../../../services/support/resume-storage.ser
 import {FormsModule} from '@angular/forms';
 import {NgForOf, NgIf} from '@angular/common';
 import {AlertsService} from '../../../services/support/alerts.service';
+import {CoursesService} from '../../../services/courses.service';
 
 @Component({
   selector: 'app-payment-details',
@@ -33,21 +34,27 @@ export class PaymentDetailsComponent implements OnInit{
   cardInstallments: any[] = [];
   newCardInstallment = {
     id: '',
-    paymentLink: '',
     name: '',
     currency: '$',
-    price: ''
+    price: '',
+    productId: '',
+    priceId: ''
   }
 
   isFreeCheck: boolean = false;
 
-  constructor(private resumeStorage: ResumeStorageService, private alertService: AlertsService) {}
+  courseName: string = '';
+
+  constructor(private resumeStorage: ResumeStorageService, private alertService: AlertsService, private courseService: CoursesService) {}
 
   ngOnInit(): void {
     const savedData = this.resumeStorage.getData();
     if (savedData.installment) {
       this.bankInstallments = savedData.installment;
       this.cardInstallments = savedData.installment
+    }
+    if (savedData?.basicDetails?.name) {
+      this.courseName = savedData.basicDetails.name;
     }
 
     if (savedData?.relevantDetails?.freeCheck) {
@@ -64,29 +71,28 @@ export class PaymentDetailsComponent implements OnInit{
 
   addInstallment(): void {
     if (this.paymentMethod == 'card'){
-      if (this.newCardInstallment.paymentLink &&
-        this.newCardInstallment.name &&
-        this.newCardInstallment.price &&
-        this.newCardInstallment.currency){
-        if (!this.isValidUrl(this.newCardInstallment.paymentLink)){
-          this.alertService.errorMessage('Invalid payment link!', 'Error');
-          return;
-        }
-        this.newCardInstallment.id = this.generateRandomId();
-        this.cardInstallments.push({ ...this.newCardInstallment });
-        this.saveData();
-        this.resetForm();
+      const { name, currency, price } = this.newCardInstallment;
+      if (name && currency && price) {
+        this.courseService.createStripeProduct(this.courseName, name, currency, price).subscribe(response => {
+          const installment = {
+            ...this.newCardInstallment,
+            id: this.generateRandomId(),
+            paymentMethod: 'card',
+            productId: response.productId,
+            priceId: response.priceId
+          };
+          this.cardInstallments.push(installment);
+          this.saveData();
+          this.resetForm();
+        }, err => {
+          this.alertService.errorMessage('Failed to create Stripe product.', 'Error');
+        });
       } else {
         this.alertService.errorMessage('Fill all required fields!', 'Error')
       }
     } else if (this.paymentMethod == 'bank'){
-      if (this.newBankInstallment.bank &&
-        this.newBankInstallment.accountNb &&
-        this.newBankInstallment.branch &&
-        this.newBankInstallment.holder &&
-        this.newBankInstallment.name &&
-        this.newBankInstallment.price &&
-        this.newBankInstallment.currency){
+      const {bank, accountNb, branch, holder, name, currency, price} = this.newBankInstallment;
+      if (bank && accountNb && branch && holder && name && price && currency){
         this.newBankInstallment.id = this.generateRandomId();
         this.bankInstallments.push({ ...this.newBankInstallment });
         this.saveData();
@@ -125,10 +131,11 @@ export class PaymentDetailsComponent implements OnInit{
     if (this.paymentMethod == 'card'){
       this.newCardInstallment = {
         id: '',
-        paymentLink: '',
         name: '',
         currency: '',
-        price: ''
+        price: '',
+        productId: '',
+        priceId: ''
       }
     } else if (this.paymentMethod == 'bank'){
       this.newBankInstallment = {
