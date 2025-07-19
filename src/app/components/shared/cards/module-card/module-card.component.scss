@@ -20,67 +20,226 @@ $screen-xxl: 1401px;
   }
 }
 
-.card-wrapper{
+.card-wrapper {
   width: 100%;
   border: 2px solid var(--color-text-100);
   border-radius: 5px;
   padding: var(--padding-3) var(--padding-4);
+  transition: all 0.3s ease;
 
-  .title{
+  &:hover {
+    background-color: var(--color-surface-100);
+  }
+
+  .title {
     color: var(--color-text-100);
     font-weight: var(--fw-500);
     font-size: var(--fs-18);
     cursor: pointer;
   }
 
-  .lock-icon{
-    i{
+  .lock-icon {
+    i {
       color: var(--color-highlight-100);
       font-size: var(--fs-22);
     }
   }
 
-  .description{
+  .description {
     color: var(--color-text-400);
     font-weight: var(--fw-400);
     font-size: var(--fs-14);
+    margin-top: var(--padding-2);
   }
 
-  .fee{
+  .fee {
     color: var(--color-text-200);
     font-weight: var(--fw-400);
     font-size: var(--fs-14);
   }
 
-  .btn-f-2{
+  .btn-f-2 {
     padding: var(--padding-1) var(--padding-3);
   }
 
-  @include respond-to(md) {
-    .title{
-      font-size: var(--fs-18);
+  .material-icons {
+    font-size: var(--fs-18);
+    vertical-align: middle;
+    color: var(--color-text-300);
+  }
+
+  .img-material-icon {
+    width: 20px;
+    height: 20px;
+    vertical-align: middle;
+  }
+
+  .resource-section {
+    margin-top: var(--padding-3);
+    border-left: 3px solid var(--color-text-500);
+    padding-left: var(--padding-3);
+
+    .section-title {
+      font-weight: var(--fw-500);
+      font-size: var(--fs-15);
+      margin-bottom: var(--padding-2);
+      color: var(--color-text-300);
     }
-    .lock-icon{
-      i{
-        font-size: var(--fs-20);
+
+    ul {
+      list-style: none;
+      padding-left: 10px;
+
+      li {
+        font-size: var(--fs-14);
+        color: var(--color-text-300);
+        margin-bottom: 4px;
+        cursor: pointer;
+      }
+
+      a {
+        color: var(--color-link-100);
+        text-decoration: none;
+
+        &:hover {
+          text-decoration: underline;
+        }
       }
     }
-    .description{
+  }
+
+  .payment-actions {
+    margin-top: var(--padding-3);
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--padding-2);
+
+    .btn {
       font-size: var(--fs-14);
+    }
+
+    .text-warning {
+      font-size: var(--fs-13);
+      color: var(--color-warning-100);
+    }
+  }
+
+  @include respond-to(md) {
+    .title {
+      font-size: var(--fs-18);
+    }
+    .lock-icon i {
+      font-size: var(--fs-20);
+    }
+    .description {
+      font-size: var(--fs-14);
+    }
+    .resource-section .section-title {
+      font-size: var(--fs-14);
+    }
+    .resource-section ul li {
+      font-size: var(--fs-12);
     }
   }
 
   @include respond-to(sm) {
-    .title{
+    .title {
       font-size: var(--fs-16);
     }
-    .lock-icon{
-      i{
-        font-size: var(--fs-18);
-      }
+    .lock-icon i {
+      font-size: var(--fs-18);
     }
-    .description{
+    .description {
+      font-size: var(--fs-12);
+    }
+    .resource-section .section-title {
+      font-size: var(--fs-12);
+    }
+    .resource-section ul li {
       font-size: var(--fs-12);
     }
   }
+}
+
+.session-info {
+  .content-title {
+    font-weight: var(--fw-500);
+    color: var(--color-text-300);
+    font-size: var(--fs-14);
+    margin-bottom: 0.25rem;
+  }
+
+  .content-value {
+    font-size: var(--fs-14);
+    color: var(--color-text-200);
+    margin-bottom: var(--padding-2);
+  }
+
+  a {
+    color: var(--color-link-100);
+    text-decoration: underline;
+    word-break: break-all;
+  }
+
+  .upcoming {
+    color: var(--color-warning-100);
+  }
+
+  .inprogress {
+    color: var(--color-success-100);
+  }
+
+  .concluded {
+    color: var(--color-danger-100);
+  }
+
+  .unknown {
+    color: var(--color-text-300);
+  }
+
+  .no-access {
+    font-weight: var(--fw-500);
+    font-size: var(--fs-14);
+  }
+}
+
+.material-item {
+  cursor: pointer;
+  &:hover {
+    text-decoration: underline;
+  }
+}
+
+.material-modal {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  width: 90%;
+  max-width: 800px;
+  transform: translate(-50%, -50%);
+  background-color: white;
+  border-radius: 8px;
+  z-index: 1055;
+  padding: 1.5rem;
+  box-shadow: 0 0 20px rgba(0,0,0,0.2);
+}
+
+.modal-header {
+  border-bottom: 1px solid #ddd;
+  margin-bottom: 1rem;
+}
+
+.modal-backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0,0,0,0.5);
+  z-index: 1050;
+}
+
+.coupon-error {
+  color: var(--color-danger-100);
+  font-size: 12px;
 }

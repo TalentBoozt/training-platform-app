@@ -18,5 +18,7 @@
     [editQuestions]="questions"
     (questionsChange)="onQuestionsChange($event)"></app-question-builder>
 
-  <button class="btn btn-success mt-3" (click)="submit()" [disabled]="quizForm.invalid || questions.length === 0">{{editMaterial ? 'Update' : 'Create'}} Quiz</button>
+  <div class="d-flex align-items-center justify-content-end w-100 sticky-bottom py-2">
+    <button [ngClass]="{'animate-shake': isAnimated}" class="btn btn-success mt-3" (click)="editMaterial ? update() : submit()" [disabled]="quizForm.invalid || questions.length === 0">{{editMaterial ? 'Update' : 'Create'}} Quiz</button>
+  </div>
 </form>

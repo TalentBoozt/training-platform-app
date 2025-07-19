@@ -35,12 +35,14 @@ export class ModuleDetailsComponent implements OnInit{
     utcEnd: '',
     trainerTimezone: '',
     paid: false,
-    status: 'upcoming'
+    status: 'upcoming',
+    onetimePayment: false
   }
 
   installments: any[] = []
 
   isFreeCheck = false
+  isOnetimePayment = false
 
   timezones: string[] = moment.tz.names();
   trainerTimezone: string = '';
@@ -56,12 +58,21 @@ export class ModuleDetailsComponent implements OnInit{
       this.modules = savedData.modules;
       this.trainerTimezone = savedData.relevantDetails.trainerTimezone
     }
+    if (savedData?.basicDetails?.paymentType == 'onetime') {
+      this.isOnetimePayment = true;
+      this.newModule.installmentId = 'onetime';
+    } else {
+      if (!savedData?.basicDetails?.paymentType) {
+        this.alertService.errorMessage('Payment type not found! Add it first in step 1', 'Error');
+        return;
+      }
+    }
     if (savedData?.relevantDetails?.freeCheck) {
       this.isFreeCheck = true;
       this.newModule.installmentId = 'free';
     } else {
       if (savedData.installment && savedData.installment.length > 0){
-        this.installments = savedData.installment;
+        if (!this.isOnetimePayment) this.installments = savedData.installment;
       } else {
         this.alertService.errorMessage('You have not initialized any installment plan. You should initialize at least one installment plan in 4th step!', 'Error');
         return;
@@ -70,12 +81,8 @@ export class ModuleDetailsComponent implements OnInit{
   }
 
   addModule(): void {
-    if (this.newModule.name &&
-      this.newModule.description &&
-      this.newModule.installmentId &&
-      this.newModule.date &&
-      this.newModule.start &&
-      this.newModule.end){
+    const { name, description, installmentId, date, start, end } = this.newModule;
+    if (name && description && installmentId && date && start && end){
       if (this.newModule.meetingLink &&!this.isValidUrl(this.newModule.meetingLink)){
         this.alertService.errorMessage('Please enter a valid url', 'Error');
         return;
@@ -95,6 +102,7 @@ export class ModuleDetailsComponent implements OnInit{
       this.newModule.trainerTimezone = timezone;
 
       this.newModule.id = this.generateRandomId();
+      this.newModule.onetimePayment = this.isOnetimePayment;
       this.modules.push({ ...this.newModule });
       this.saveData();
       this.resetForm();
@@ -117,7 +125,7 @@ export class ModuleDetailsComponent implements OnInit{
       id: '',
       name: '',
       description: '',
-      installmentId: this.isFreeCheck ? 'free' : '',
+      installmentId: this.isFreeCheck ? 'free' : this.isOnetimePayment ? 'onetime' : '',
       meetingLink: '',
       date: '',
       start: '',
@@ -126,7 +134,8 @@ export class ModuleDetailsComponent implements OnInit{
       utcEnd: '',
       trainerTimezone: this.timezoneService.getTimezone(),
       paid: false,
-      status: 'upcoming'
+      status: 'upcoming',
+      onetimePayment: false
     }
   }
 

@@ -82,6 +82,7 @@ export class PreviewPostComponent implements OnInit{
         level: savedData.basicDetails.level,
         currency: savedData.relevantDetails.currency,
         price: savedData.relevantDetails.price,
+        onetimePayment: savedData.basicDetails.paymentType === 'onetime',
         installment: savedData.installment,
         duration: savedData.basicDetails.duration,
         modules: savedData.modules,
@@ -107,7 +108,7 @@ export class PreviewPostComponent implements OnInit{
       if (this.isUpdateId) {
         this.courseService.editCourse(this.isUpdateId, course).subscribe(() => {
           this.router.navigate(['/courses']);
-          sessionStorage.removeItem('editCourse');
+          if (this.windowService.nativeSessionStorage) sessionStorage.removeItem('editCourse');
           this.alertService.successMessage('Course updated successfully', 'Success');
         }, error => {
           this.alertService.errorMessage(error.error.message, 'Error');

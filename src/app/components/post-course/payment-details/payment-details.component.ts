@@ -28,7 +28,9 @@ export class PaymentDetailsComponent implements OnInit{
     holder: '',
     name: '',
     currency: '$',
-    price: ''
+    price: 0,
+    discountedPrice: '',
+    discount: 0
   }
 
   cardInstallments: any[] = [];
@@ -36,12 +38,15 @@ export class PaymentDetailsComponent implements OnInit{
     id: '',
     name: '',
     currency: '$',
-    price: '',
+    price: 0,
+    discountedPrice: '',
+    discount: 0,
     productId: '',
     priceId: ''
   }
 
   isFreeCheck: boolean = false;
+  isOnetimePayment: boolean = false;
 
   courseName: string = '';
 
@@ -67,16 +72,27 @@ export class PaymentDetailsComponent implements OnInit{
         this.paymentMethod = savedData.basicDetails.paymentMethod;
       }
     }
+
+    if (savedData?.basicDetails?.paymentType == 'onetime') {
+      this.isOnetimePayment = true;
+    } else {
+      if (!savedData?.basicDetails?.paymentType) {
+        this.alertService.errorMessage('Payment type not found! Add it first in step 1', 'Error');
+        return;
+      }
+    }
   }
 
   addInstallment(): void {
     if (this.paymentMethod == 'card'){
-      const { name, currency, price } = this.newCardInstallment;
+      const { name, currency, price, discount } = this.newCardInstallment;
+      const productPrice = price - (price * discount / 100);
       if (name && currency && price) {
-        this.courseService.createStripeProduct(this.courseName, name, currency, price).subscribe(response => {
+        this.courseService.createStripeProduct(this.courseName, name, currency, productPrice.toFixed(2).toString()).subscribe(response => {
           const installment = {
             ...this.newCardInstallment,
             id: this.generateRandomId(),
+            discountedPrice: productPrice.toFixed(2),
             paymentMethod: 'card',
             productId: response.productId,
             priceId: response.priceId
@@ -94,6 +110,7 @@ export class PaymentDetailsComponent implements OnInit{
       const {bank, accountNb, branch, holder, name, currency, price} = this.newBankInstallment;
       if (bank && accountNb && branch && holder && name && price && currency){
         this.newBankInstallment.id = this.generateRandomId();
+        this.newBankInstallment.discountedPrice = (price - (price * this.newBankInstallment.discount / 100)).toFixed(2);
         this.bankInstallments.push({ ...this.newBankInstallment });
         this.saveData();
         this.resetForm();
@@ -133,7 +150,9 @@ export class PaymentDetailsComponent implements OnInit{
         id: '',
         name: '',
         currency: '',
-        price: '',
+        price: 0,
+        discountedPrice: '',
+        discount: 0,
         productId: '',
         priceId: ''
       }
@@ -146,7 +165,9 @@ export class PaymentDetailsComponent implements OnInit{
         holder: '',
         name: '',
         currency: '',
-        price: ''
+        price: 0,
+        discountedPrice: '',
+        discount: 0
       }
     } else {
       return;

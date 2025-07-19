@@ -6,7 +6,7 @@
         <div class="card-title" (click)="navigateToDetails(course.id)">{{course.name}}</div>
         <div class="dropdown">
           <button class="btn p-0" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
-            <span class="status-tag" [ngClass]="getClassForStatus(course.courseStatus)">{{ getClassForStatus(course.courseStatus) }}</span>
+            <span class="status-tag" [ngClass]="getClassForStatus(course.courseStatus)">{{ getClassForStatus(course.courseStatus) }} <span class="icon">▼</span></span>
           </button>
 
           <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">

@@ -1,6 +1,6 @@
 .question-builder {
   padding: var(--padding-4);
-  background-color: var(--color-surface-100);
+  background-color: var(--color-surface-200);
   color: var(--color-text-100);
   border-radius: var(--br-10);
   box-shadow: var(--box-shadow-2);
@@ -17,7 +17,7 @@
     top: 95px;
     left: 0;
     padding: 10px 0;
-    background-color: var(--color-surface-100);
+    background-color: var(--color-surface-200);
 
     h2 {
       font-size: var(--fs-24);
@@ -32,6 +32,7 @@
       border-radius: var(--br-5);
       cursor: pointer;
       transition: var(--transition-1);
+      font-size: var(--fs-16);
 
       &:hover {
         background-color: var(--color-secondary-100);

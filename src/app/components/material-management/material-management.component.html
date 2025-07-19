@@ -27,26 +27,27 @@
               <!-- Details -->
               <div class="flex-grow-1">
                 <div class="d-flex align-items-center gap-2">
-                  <a [href]="material.url" target="_blank" class="material-name fw-500">{{ material.name }}</a>
+                  <a [href]="material.url" target="_blank" class="material-name">{{ material.name }}</a>
 
                   <!-- Visibility dropdown -->
                   <div class="dropdown">
-                    <button class="btn btn-link p-0" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
-                      <i class="material-icons">{{ getIconForVisibility(material.visibility) }}</i>
+                    <button class="btn btn-sm btn-outline-primary p-1" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
+                      <i class="material-icons p-0 m-0" style="font-size: 16px">{{ getIconForVisibility(material.visibility) }}</i>
+                      <span>&triangledown;</span>
                     </button>
                     <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
                       <li>
-                        <a class="dropdown-item d-flex align-items-center" (click)="changeVisibility('public', material)">
+                        <a class="dropdown-item d-flex align-items-center" (click)="changeVisibility('public', material, 'material')">
                           <i class="material-icons me-2">public</i> Public
                         </a>
                       </li>
                       <li>
-                        <a class="dropdown-item d-flex align-items-center" (click)="changeVisibility('participant', material)">
+                        <a class="dropdown-item d-flex align-items-center" (click)="changeVisibility('participant', material, 'material')">
                           <i class="material-icons me-2">people</i> Participants
                         </a>
                       </li>
                       <li>
-                        <a class="dropdown-item d-flex align-items-center" (click)="changeVisibility('only-me', material)">
+                        <a class="dropdown-item d-flex align-items-center" (click)="changeVisibility('only-me', material, 'material')">
                           <i class="material-icons me-2">lock</i> Only Me
                         </a>
                       </li>
@@ -82,10 +83,41 @@
         <div class="d-flex flex-wrap gap-3">
           <div class="card" *ngFor="let quiz of getQuizzesByModule(module.id)">
             <div class="card-body">
-              <h6>{{ quiz.title }}</h6>
-              <button class="btn btn-sm btn-outline-primary" (click)="onView(quiz.id, 'quiz')">View</button>
-              <button class="btn btn-sm btn-outline-secondary" (click)="onEdit(module.id, quiz.id, 'quiz')">Edit</button>
-              <button class="btn btn-sm btn-outline-danger" (click)="onDelete(quiz, 'quiz')">Delete</button>
+              <div class="d-flex align-items-center gap-2 justify-content-between w-100 mb-1">
+                <h5>{{ quiz.title }}</h5>
+                <!-- Visibility dropdown -->
+                <div class="dropdown">
+                  <button class="btn btn-sm btn-outline-primary p-1" type="button" id="dropdownMenuButtonQuiz" data-bs-toggle="dropdown" aria-expanded="false">
+                    <i class="material-icons p-0 m-0" style="font-size: 16px">{{ getIconForVisibility(quiz.visibility) }}</i>
+                    <span>&triangledown;</span>
+                  </button>
+                  <ul class="dropdown-menu" aria-labelledby="dropdownMenuButtonQuiz">
+                    <li>
+                      <a class="dropdown-item d-flex align-items-center" (click)="changeVisibility('public', quiz, 'quiz')">
+                        <i class="material-icons me-2">public</i> Public
+                      </a>
+                    </li>
+                    <li>
+                      <a class="dropdown-item d-flex align-items-center" (click)="changeVisibility('participant', quiz, 'quiz')">
+                        <i class="material-icons me-2">people</i> Participants
+                      </a>
+                    </li>
+                    <li>
+                      <a class="dropdown-item d-flex align-items-center" (click)="changeVisibility('only-me', quiz, 'quiz')">
+                        <i class="material-icons me-2">lock</i> Only Me
+                      </a>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+              <div class="d-flex gap-2 align-items-center justify-content-start mb-1">
+                <button class="btn btn-sm btn-outline-primary w-100" (click)="onView(quiz.id, 'quiz')">View</button>
+                <button class="btn btn-sm btn-outline-success w-100" (click)="onCopyUrl(quiz.id, 'quiz')">Share</button>
+              </div>
+              <div class="d-flex gap-2 align-items-center justify-content-start">
+                <button class="btn btn-sm btn-outline-secondary w-100" (click)="onEdit(module.id, quiz.id, 'quiz')">Edit</button>
+                <button class="btn btn-sm btn-outline-danger w-100" (click)="onDelete(quiz, 'quiz')">Delete</button>
+              </div>
             </div>
           </div>
 

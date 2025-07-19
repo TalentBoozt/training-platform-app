@@ -86,22 +86,36 @@ export class MaterialManagementComponent implements OnInit {
     }
   }
 
-  changeVisibility(status: string, material: any) {
+  changeVisibility(status: string, material: any, type?: string) {
     if (material.visibility === status || this.isUpdating) return;
 
     this.isUpdating = true;
 
-    this.courseService.changeMaterialVisibility(this.courseId, material.id, status)
-      .pipe(finalize(() => this.isUpdating = false))
-      .subscribe({
-        next: () => {
-          material.visibility = status;
-          this.alertService.successMessage('Visibility changed successfully.', 'Success');
-        },
-        error: (err) => {
-          this.alertService.errorMessage(err.message, 'Error');
-        }
-      });
+    if (type === 'material') {
+      this.courseService.changeMaterialVisibility(this.courseId, material.id, status)
+        .pipe(finalize(() => this.isUpdating = false))
+        .subscribe({
+          next: () => {
+            material.visibility = status;
+            this.alertService.successMessage('Visibility changed successfully.', 'Success');
+          },
+          error: (err) => {
+            this.alertService.errorMessage(err.message, 'Error');
+          }
+        });
+    } else if (type === 'quiz') {
+      this.courseService.changeQuizVisibility(this.courseId, material.id, status)
+        .pipe(finalize(() => this.isUpdating = false))
+        .subscribe({
+          next: () => {
+            material.visibility = status;
+            this.alertService.successMessage('Visibility changed successfully.', 'Success');
+          },
+          error: (err) => {
+            this.alertService.errorMessage(err.message, 'Error');
+          }
+        });
+    }
   }
 
   onAdd(moduleId: any, type: any) {
@@ -126,7 +140,7 @@ export class MaterialManagementComponent implements OnInit {
 
   onDelete(material: any, type: any) {
     if (type === 'quiz') {
-      if (!confirm(`Are you sure you want to delete "${material.name}"?`)) return;
+      if (!confirm(`Are you sure you want to delete "${material.title}"?`)) return;
 
       this.courseService.deleteQuiz(this.courseId, material.id).subscribe(() => {
         this.course.quizzes = this.course.quizzes.filter((q: any) => q.id !== material.id);
@@ -163,6 +177,15 @@ export class MaterialManagementComponent implements OnInit {
   onView(quizzId: any, type: string) {
     if (type === 'quiz' && this.courseId) {
       this.router.navigate(['quiz', this.courseId, quizzId]);
+    }
+  }
+
+  onCopyUrl(id: any, type: string) {
+    if (type === 'quiz') {
+      const domain = 'https://courses.talentboozt.com/quiz/';
+      navigator.clipboard.writeText(domain + this.courseId + '/' + id).then(() => {
+        this.alertService.successMessage('Link copied to clipboard.', 'Success');
+      });
     }
   }
 }

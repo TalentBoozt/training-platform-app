@@ -8,6 +8,7 @@
         [courseId]="courseId"
         [moduleId]="m.id"
         [editMaterial]="editQuizzesMap[m.id]"
+        [clearQuestions]="clearQuestions"
         (quizUpdated)="onQuizUpdate($event)"
         (quizCreated)="onQuizSubmit($event)">
       </app-quizzes>

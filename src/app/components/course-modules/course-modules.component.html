@@ -2,23 +2,39 @@
   <div class="overview-wrapper">
     <div class="container mb-4">
       <div class="d-flex flex-column gap-4">
-        <div class="title-2">{{c.name}}</div>
-        <div class="paragraph-1">{{c.overview}}</div>
+        <div class="title-2">{{c?.name}}</div>
+        <div class="paragraph-1">{{c?.overview}}</div>
       </div>
     </div>
   </div>
 
-  <div class="course-content pb-3">
+  <div class="container mb-4">
+    <div class="btn-group">
+      <button
+        class="btn btn-secondary"
+        [class.active]="getActiveTab(c.id) === 'content'"
+        (click)="setActiveTab(c.id, 'content')"
+      >
+        Course Content
+      </button>
+    </div>
+  </div>
+
+  <div class="course-content pb-3" *ngIf="getActiveTab(c.id) === 'content'">
     <div class="container">
       <div class="content-title">Course Content</div>
       <div class="d-flex flex-column gap-4 w-100 p-5 module-wrapper">
         <div *ngFor="let m of c.modules; let i = index">
           <app-module-card
+            [employeeId]="employeeId"
             [courseId]="courseId"
             [module]="m"
             [moduleIndex]="i + 1"
             [installment]="findInstallment(m)"
-            (openDetails)="openCourseDetails($event)"
+            [employee]="employee"
+            [materials]="findMaterials(m, c)"
+            [recordings]="findRecordings(m, c)"
+            [assignments]="findQuizzes(m, c)"
             (bankPayment)="openBankCard($event)"
           ></app-module-card>
         </div>
@@ -34,60 +50,7 @@
 
 </div>
 
-<div class="container" *ngIf="loading">
-  <app-course-preview-loader></app-course-preview-loader>
-</div>
-
 <button class="d-none" id="offcanvas-btn" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasBottom"
         aria-controls="offcanvasBottom"></button>
 
-<div class="offcanvas offcanvas-bottom" tabindex="-1" id="offcanvasBottom" aria-labelledby="offcanvasBottomLabel" style="min-height: 50vh">
-  <div class="offcanvas-header">
-    <h5 class="offcanvas-title" id="offcanvasBottomLabel">Module information</h5>
-    <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
-  </div>
-  <div class="offcanvas-body">
-    <div class="row" *ngIf="currentInstallment?.paid == 'paid'">
-      <div class="col-12 col-md-6 pb-2">
-        <div class="d-flex flex-column">
-          <div class="content-title">Date</div>
-          <div class="content-Value">{{currentModule?.date}}</div>
-        </div>
-      </div>
-      <div class="col-6 col-md-3 pb-2">
-        <div class="d-flex flex-column">
-          <div class="content-title">Start</div>
-          <div class="content-Value">{{currentModule?.start}}</div>
-        </div>
-      </div>
-      <div class="col-6 col-md-3 pb-2">
-        <div class="d-flex flex-column">
-          <div class="content-title">End</div>
-          <div class="content-Value">{{currentModule?.end}}</div>
-        </div>
-      </div>
-      <div class="col-12 pb-2">
-        <div class="d-flex flex-column">
-          <div class="content-title">Join Through</div>
-          <div class="content-Value">
-            <a href="{{currentModule?.meetingLink || '#'}}">{{currentModule?.meetingLink || 'Link not updated!'}}</a>
-          </div>
-        </div>
-      </div>
-      <div class="col-12 pb-2">
-        <div class="d-flex flex-column">
-          <div class="content-title">Session Status</div>
-          <div class="content-Value"
-               [ngClass]="currentModule?.status === 'upcoming' ? 'upcoming' : currentModule?.status === 'inprogress' ? 'inprogress' : currentModule?.status === 'concluded' ? 'concluded' : ''">
-            {{currentModule?.status === 'upcoming' ? 'Session has not started yet. Stay tuned!' : currentModule?.status === 'inprogress' ? 'Session is currently in progress' : 'Session has concluded'}}
-          </div>
-        </div>
-      </div>
-    </div>
-    <div *ngIf="currentInstallment?.paid != 'paid'">
-      <div class="no-access">You are not eligible for this module yet! Make sure you have made payments!</div>
-      <p style="text-align: center">Payments updating process can take up to 24 hours. Feel free to contact
-        <a href="mailto:support&#64;talentboozt.com">support&#64;talentboozt.com</a></p>
-    </div>
-  </div>
-</div>
+<button id="bankCardBtn" type="button" class="d-none" data-bs-toggle="modal" data-bs-target="#bankCard"></button>

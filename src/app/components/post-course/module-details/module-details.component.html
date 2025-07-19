@@ -19,7 +19,9 @@
         <div class="col-12 col-md-4">
           <div class="form-group">
             <label for="installment">Installment Plan *</label>
-            <select class="form-control" id="installment" [(ngModel)]="newModule.installmentId" [ngModelOptions]="{standalone: true}" required [disabled]="isFreeCheck">
+            <select class="form-control" id="installment" [(ngModel)]="newModule.installmentId" [ngModelOptions]="{standalone: true}" required [disabled]="isFreeCheck || isOnetimePayment">
+              <option *ngIf="!isFreeCheck && !isOnetimePayment" value="free">Free</option>
+              <option *ngIf="isOnetimePayment" value="onetime">Onetime Payment</option>
               <option *ngFor="let i of installments" [value]="i.id">{{i.name}}</option>
               <option *ngIf="isFreeCheck" [value]="newModule.installmentId">Free</option>
             </select>
