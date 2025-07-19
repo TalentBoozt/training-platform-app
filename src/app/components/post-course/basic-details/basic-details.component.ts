@@ -22,7 +22,8 @@ export class BasicDetailsComponent implements OnInit {
     duration: '',
     email: '',
     certificate: true,
-    paymentMethod: 'bank' // 'card' or 'bank'
+    paymentMethod: 'bank', // 'card' or 'bank'
+    paymentType: 'installment' // 'onetime' or 'installment'
   };
 
   constructor(private resumeStorage: ResumeStorageService, private alertService: AlertsService) {}
@@ -35,12 +36,8 @@ export class BasicDetailsComponent implements OnInit {
   }
 
   saveData(): void {
-    if (this.basicDetails.email &&
-      this.basicDetails.name &&
-      this.basicDetails.overview &&
-      this.basicDetails.lecturer &&
-      this.basicDetails.language &&
-      this.basicDetails.level && this.basicDetails.paymentMethod) {
+    const { email, name, overview, lecturer, language, level, paymentMethod, paymentType } = this.basicDetails;
+    if (email && name && overview && lecturer && language && level && paymentMethod && paymentType) {
       if (!this.isValidEmail(this.basicDetails.email)){
         this.alertService.errorMessage('Please enter a valid email address', 'Error');
         return;

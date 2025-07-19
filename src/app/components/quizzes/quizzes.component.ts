@@ -1,30 +1,33 @@
-import {AfterViewInit, Component, EventEmitter, Input, Output} from '@angular/core';
+import {AfterViewInit, Component, EventEmitter, Input, OnChanges, Output, SimpleChanges} from '@angular/core';
 import {FormBuilder, FormGroup, ReactiveFormsModule, Validators} from '@angular/forms';
 import {QuestionBuilderComponent} from './question-builder/question-builder.component';
 import {QuestionDTO} from '../../shared/data-models/QuestionDTO';
 import {QuizDTO} from '../../shared/data-models/QuizDTO';
-import {NgForOf, NgIf} from "@angular/common";
+import {NgClass, NgForOf, NgIf} from "@angular/common";
 
 @Component({
   selector: 'app-quizzes',
-    imports: [
-        QuestionBuilderComponent,
-        ReactiveFormsModule
-    ],
+  imports: [
+    QuestionBuilderComponent,
+    ReactiveFormsModule,
+    NgClass
+  ],
   templateUrl: './quizzes.component.html',
   styleUrl: './quizzes.component.scss',
   standalone: true
 })
-export class QuizzesComponent implements AfterViewInit{
+export class QuizzesComponent implements AfterViewInit, OnChanges {
   @Input() courseId!: string;
   @Input() moduleId!: string;
   @Input() editMaterial: any;
+  @Input() clearQuestions: boolean = false;
   @Output() quizCreated = new EventEmitter<QuizDTO>();
   @Output() quizUpdated = new EventEmitter<QuizDTO>();
 
   quizForm: FormGroup;
 
   questions: QuestionDTO[] = [];
+  isAnimated = false;
 
   constructor(private fb: FormBuilder) {
     this.quizForm = this.fb.group({
@@ -42,8 +45,13 @@ export class QuizzesComponent implements AfterViewInit{
     }
   }
 
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes['clearQuestions'] && this.clearQuestions) this.questions = [];
+  }
+
   onQuestionsChange(qs: any) {
     this.questions = qs;
+    if (qs) this.isAnimated = true;
   }
 
   submit() {

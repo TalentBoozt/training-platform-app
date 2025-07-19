@@ -59,6 +59,15 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
   async startApp() {
     this.fetchTokensFromLogin();
 
+    this.route.queryParams.subscribe(params => {
+      const platform = params['platform'] || 'TrainerPlatform';
+      const ref = params['ref'] || '';
+      const promo = params['promo'] || '';
+      this.cookieService.createPlatform(platform);
+      this.cookieService.createReferer(ref);
+      this.cookieService.createPromotion(promo);
+    });
+
     try {
       await this.autoLogin();
       this.authStateService.initializeUser().subscribe();
@@ -82,15 +91,6 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
         aElm.click();
       }
     }
-
-    this.route.queryParams.subscribe(params => {
-      const platform = params['platform'] || 'TrainerPlatform';
-      const ref = params['ref'] || '';
-      const promo = params['promo'] || '';
-      this.cookieService.createPlatform(platform);
-      this.cookieService.createReferer(ref);
-      this.cookieService.createPromotion(promo);
-    });
 
     this.employeeId = this.cookieService.userID();
     this.employeeLevel = this.cookieService.level();
@@ -265,7 +265,9 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
 
   removeUnwantedSession() {
     if (this.windowService.nativeSessionStorage) {
-      sessionStorage.clear();
+      sessionStorage.removeItem('session_id');
+      sessionStorage.removeItem('captcha_verified');
+      sessionStorage.removeItem('captcha_verified_at');
     }
   }
 

@@ -191,6 +191,8 @@ export class QuestionBuilderComponent implements AfterViewInit, OnChanges {
       }));
 
       this.questionsChange.emit(normalizedQuestions);
+
+      this.questions.clear();
     }
   }
 }

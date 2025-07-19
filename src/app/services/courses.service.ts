@@ -116,6 +116,10 @@ export class CoursesService {
     return this.http.get<any>(`${this.baseUrl}/course/get/quiz/${courseId}/${quizId}`);
   }
 
+  public changeQuizVisibility(courseId: any, id: any, status: any): Observable<any> {
+    return this.http.put<any>(`${this.baseUrl}/course/visibility/quiz/${courseId}/${id}/${status}`, {});
+  }
+
   public createStripeProduct(course: string, name: string, currency: string, price: string) {
     const courseName = course.replace(' ', '-');
     return this.http.post<any>(`${this.baseUrl}/course/create/stripe/product/${courseName}`, {name, currency, price});

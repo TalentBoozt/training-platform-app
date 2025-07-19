@@ -53,7 +53,7 @@
 
 // Material / Quiz / Recording Card
 .card {
-  width: 250px;
+  min-width: 250px;
   background-color: var(--color-surface-300);
   border-radius: var(--br-10);
   box-shadow: var(--box-shadow-1);
@@ -138,6 +138,8 @@
   .material-name {
     color: var(--color-primary-100);
     text-decoration: none;
+    font-size: var(--fs-16);
+    font-weight: var(--fw-500);
 
     &:hover {
       text-decoration: underline;

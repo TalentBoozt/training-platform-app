@@ -1,18 +1,18 @@
 <div class="d-md-flex">
   <div class="form-card-1 justify-content-start">
-    <h5>Initialize Installment Plans :</h5>
+    <h5>Initialize Pricing Plans :</h5>
 
     <div *ngIf="!isFreeCheck">
       <div *ngIf="paymentMethod == 'card'">
         <form (ngSubmit)="addInstallment()">
           <div class="row form-wrapper">
-            <div class="col-12 col-lg-6">
+            <div class="col-12">
               <div class="form-group">
                 <label for="cname">Installment name *</label>
-                <input type="text" class="form-control" id="cname" [(ngModel)]="newCardInstallment.name" [ngModelOptions]="{standalone: true}" required>
+                <input type="text" class="form-control" id="cname" placeholder="COURSE-NAME-INSTALLMENT-1" [(ngModel)]="newCardInstallment.name" [ngModelOptions]="{standalone: true}" required>
               </div>
             </div>
-            <div class="col-6 col-md-3">
+            <div class="col-6 col-md-4">
               <div class="form-group">
                 <label for="ccurrency">Currency *</label>
                 <select class="form-control" id="ccurrency" [(ngModel)]="newCardInstallment.currency" [ngModelOptions]="{standalone: true}" required>
@@ -23,10 +23,16 @@
                 </select>
               </div>
             </div>
-            <div class="col-6 col-md-3">
+            <div class="col-6 col-md-4">
               <div class="form-group">
                 <label for="cprice">Price *</label>
-                <input type="text" class="form-control" id="cprice" placeholder="10.00" [(ngModel)]="newCardInstallment.price" required [ngModelOptions]="{standalone: true}">
+                <input type="number" class="form-control" id="cprice" placeholder="10" [(ngModel)]="newCardInstallment.price" required [ngModelOptions]="{standalone: true}">
+              </div>
+            </div>
+            <div class="col-6 col-md-4">
+              <div class="form-group">
+                <label for="cdprice">Discount (%)</label>
+                <input type="number" class="form-control" id="cdprice" placeholder="10" [(ngModel)]="newCardInstallment.discount" required [ngModelOptions]="{standalone: true}">
               </div>
             </div>
 <!--            <div class="col-12 col-md-6">-->
@@ -37,7 +43,8 @@
 <!--            </div>-->
             <div class="col-12 col-md-6 col-lg-3">
               <div class="form-group d-flex align-items-end w-100 h-100">
-                <button type="submit" class="btn-fill btn-f-2" translate="no">Add</button>
+                <button *ngIf="!isOnetimePayment" type="submit" class="btn-fill btn-f-2" translate="no">Add</button>
+                <button *ngIf="isOnetimePayment" type="submit" class="btn-fill btn-f-2" translate="no" [disabled]="bankInstallments.length > 0">Add</button>
               </div>
             </div>
           </div>
@@ -65,34 +72,34 @@
             <div class="col-12 col-lg-6">
               <div class="form-group">
                 <label for="bholder">Account Holder name *</label>
-                <input type="text" class="form-control" id="bholder" [(ngModel)]="newBankInstallment.holder" [ngModelOptions]="{standalone: true}" required>
+                <input type="text" class="form-control" id="bholder" placeholder="John Doe" [(ngModel)]="newBankInstallment.holder" [ngModelOptions]="{standalone: true}" required>
               </div>
             </div>
             <div class="col-12 col-lg-6">
               <div class="form-group">
                 <label for="baccount">Account Number *</label>
-                <input type="text" class="form-control" id="baccount" [(ngModel)]="newBankInstallment.accountNb" [ngModelOptions]="{standalone: true}" required>
+                <input type="text" class="form-control" id="baccount" placeholder="123456789" [(ngModel)]="newBankInstallment.accountNb" [ngModelOptions]="{standalone: true}" required>
               </div>
             </div>
             <div class="col-12 col-lg-6">
               <div class="form-group">
                 <label for="bbank">Bank name *</label>
-                <input type="text" class="form-control" id="bbank" [(ngModel)]="newBankInstallment.bank" [ngModelOptions]="{standalone: true}" required>
+                <input type="text" class="form-control" id="bbank" placeholder="Your Bank" [(ngModel)]="newBankInstallment.bank" [ngModelOptions]="{standalone: true}" required>
               </div>
             </div>
             <div class="col-12 col-lg-6">
               <div class="form-group">
                 <label for="bbranch">Branch name *</label>
-                <input type="text" class="form-control" id="bbranch" [(ngModel)]="newBankInstallment.branch" [ngModelOptions]="{standalone: true}" required>
+                <input type="text" class="form-control" id="bbranch" placeholder="Branch" [(ngModel)]="newBankInstallment.branch" [ngModelOptions]="{standalone: true}" required>
               </div>
             </div>
-            <div class="col-12 col-lg-6">
+            <div class="col-12">
               <div class="form-group">
                 <label for="bname">Installment name *</label>
-                <input type="text" class="form-control" id="bname" [(ngModel)]="newBankInstallment.name" [ngModelOptions]="{standalone: true}" required>
+                <input type="text" class="form-control" id="bname" placeholder="COURSE-NAME-INSTALLMENT-1" [(ngModel)]="newBankInstallment.name" [ngModelOptions]="{standalone: true}" required>
               </div>
             </div>
-            <div class="col-6 col-md-3">
+            <div class="col-6 col-md-4">
               <div class="form-group">
                 <label for="bcurrency">Currency *</label>
                 <select class="form-control" id="bcurrency" [(ngModel)]="newBankInstallment.currency" [ngModelOptions]="{standalone: true}" required>
@@ -103,15 +110,22 @@
                 </select>
               </div>
             </div>
-            <div class="col-6 col-md-3">
+            <div class="col-6 col-md-4">
               <div class="form-group">
                 <label for="bprice">Price *</label>
-                <input type="text" class="form-control" id="bprice" placeholder="10.00" [(ngModel)]="newBankInstallment.price" required [ngModelOptions]="{standalone: true}">
+                <input type="number" class="form-control" id="bprice" placeholder="10.00" [(ngModel)]="newBankInstallment.price" required [ngModelOptions]="{standalone: true}">
+              </div>
+            </div>
+            <div class="col-6 col-md-4">
+              <div class="form-group">
+                <label for="bdprice">Discount (%)</label>
+                <input type="number" class="form-control" id="bdprice" placeholder="10" [(ngModel)]="newBankInstallment.discount" required [ngModelOptions]="{standalone: true}">
               </div>
             </div>
             <div class="col-12 col-md-6 col-lg-3">
               <div class="form-group d-flex align-items-end w-100 h-100">
-                <button type="submit" class="btn-fill btn-f-2" translate="no">Add</button>
+                <button *ngIf="!isOnetimePayment" type="submit" class="btn-fill btn-f-2" translate="no">Add</button>
+                <button *ngIf="isOnetimePayment" type="submit" class="btn-fill btn-f-2" translate="no" [disabled]="bankInstallments.length > 0">Add</button>
               </div>
             </div>
           </div>
@@ -138,6 +152,13 @@
       <div class="warning-banner-content">
         <i class="material-icons">check_circle_outline</i>
         <p translate="no">This is a Free Course. An Installment Plan is not needed. If you want to make this a paid course go back an un tick the <strong>Initialize as a Free Course</strong> box</p>
+      </div>
+    </div>
+
+    <div class="warning-banner" *ngIf="isOnetimePayment">
+      <div class="warning-banner-content">
+        <i class="material-icons">check_circle_outline</i>
+        <p translate="no">This is a One Time Payment Course. Please make sure to add only <strong>One Price</strong>!</p>
       </div>
     </div>
 

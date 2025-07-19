@@ -54,6 +54,7 @@ export class MyCoursesComponent implements OnInit, OnDestroy {
     this.loading = true;
     return this.courseService.getCoursesByOrganization(this.companyId).pipe(
       tap((courses: any) => {
+        this.loading = false;
         this.courses = courses.map((course: any) => {
           const startLocal = utcToZonedTime(course.utcStart, userTimezone);
           const endLocal = utcToZonedTime(course.utcEnd, userTimezone);

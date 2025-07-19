@@ -44,9 +44,18 @@ export class AuthInterceptor implements HttpInterceptor {
     return next.handle(request).pipe(
       tap((event: HttpEvent<any>) => {
         if (event instanceof HttpResponse) {
-          const mismatch = event.headers.get('X-Timezone-Mismatch');
-          if (mismatch === 'true') {
-            this.router.navigate(['/captcha-challenge']);
+          if (this.windowService.nativeSessionStorage) {
+            const mismatch = event.headers.get('X-Timezone-Mismatch');
+            const captchaVerified = sessionStorage.getItem('captcha_verified') === 'true';
+            const verifiedAt = parseInt(sessionStorage.getItem('captcha_verified_at') || '0', 10);
+            const now = Date.now();
+
+            const captchaStillValid = captchaVerified && (now - verifiedAt < 60 * 60 * 1000); // 60 min
+
+            if (mismatch === 'true' && !captchaStillValid) {
+              sessionStorage.removeItem('captcha_verified'); // Just in case
+              this.router.navigate(['/captcha-challenge']);
+            }
           }
         }
       }),

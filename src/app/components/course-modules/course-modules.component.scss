@@ -57,3 +57,13 @@ $screen-xxl: 1401px;
   color: var(--color-text-100);
   font-weight: var(--fw-500);
 }
+
+.btn-group .btn {
+  margin-right: 10px;
+}
+
+.btn-group .btn.active {
+  font-weight: bold;
+  background-color: #007bff;
+  color: white;
+}

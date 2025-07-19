@@ -29,6 +29,7 @@ export class QuizManagerComponent {
   loading: boolean = false;
 
   editQuizzesMap: { [moduleId: string]: any } = {};
+  clearQuestions: boolean = false;
 
   constructor(
     private route: ActivatedRoute,
@@ -86,7 +87,10 @@ export class QuizManagerComponent {
   onQuizSubmit(quiz: QuizDTO) {
     if (quiz) {
       this.courseService.createQuiz(quiz).subscribe({
-        next: () => this.alertService.successMessage('Quiz created successfully', 'Success'),
+        next: () => {
+          this.clearQuestions = true;
+          this.alertService.successMessage('Quiz created successfully', 'Success')
+        },
         error: err => this.alertService.errorMessage(err.message, 'Failed to create quiz')
       });
     } else {
@@ -97,7 +101,10 @@ export class QuizManagerComponent {
   onQuizUpdate(quiz: QuizDTO) {
     if (quiz) {
       this.courseService.updateQuiz(quiz).subscribe({
-        next: () => this.alertService.successMessage('Quiz updated successfully', 'Success'),
+        next: () => {
+          this.clearQuestions = true;
+          this.alertService.successMessage('Quiz updated successfully', 'Success')
+        },
         error: err => this.alertService.errorMessage(err.message, 'Failed to update quiz')
       });
     } else {

@@ -3,6 +3,7 @@ import {RecaptchaModule} from "ng-recaptcha";
 import {HttpClient} from "@angular/common/http";
 import {environment} from "../../../../environments/environment";
 import {AuthService} from '../../../services/support/auth.service';
+import {WindowService} from '../../../services/common/window.service';
 
 @Component({
   selector: 'app-captcha-challenge',
@@ -17,7 +18,7 @@ export class CaptchaChallengeComponent {
   captchaToken: string | null = null;
   baseurl = environment.apiUrlSimple
 
-  constructor(private http: HttpClient, private authService: AuthService) {
+  constructor(private http: HttpClient, private authService: AuthService, private windowService: WindowService) {
   }
 
   onCaptchaResolved(token: any) {
@@ -29,6 +30,10 @@ export class CaptchaChallengeComponent {
       captchaToken: this.captchaToken
     }).subscribe({
       next: () => {
+        if (this.windowService.nativeSessionStorage) {
+          sessionStorage.setItem('captcha_verified', 'true');
+          sessionStorage.setItem('captcha_verified_at', Date.now().toString());
+        }
         history.back();
       },
       error: () => {
