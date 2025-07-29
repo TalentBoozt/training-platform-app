@@ -52,6 +52,10 @@ export class CoursesService {
     return this.http.put<any>(`${this.baseUrl}/course/update/${id}`, course);
   }
 
+  public updateWithNewBatch(id: any, course: any): Observable<any> {
+    return this.http.put<any>(`${this.baseUrl}/course/update-new-batch/${id}`, course);
+  }
+
   public deleteCourse(id: any): Observable<any> {
     return this.http.delete<any>(`${this.baseUrl}/course/delete/${id}`);
   }

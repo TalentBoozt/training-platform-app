@@ -1,4 +1,4 @@
-import {ChangeDetectionStrategy, Component, OnChanges, OnDestroy, OnInit} from '@angular/core';
+import {ChangeDetectionStrategy, Component, ElementRef, OnChanges, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 import {ResumeStorageService} from '../../../services/support/resume-storage.service';
 import {AlertsService} from '../../../services/support/alerts.service';
@@ -10,22 +10,27 @@ import {TimezoneService} from '../../../services/support/timezone.service';
 
 import * as moment from 'moment-timezone';
 import { zonedTimeToUtc } from 'date-fns-tz';
+import {ImageCropperComponent} from 'ngx-image-cropper';
 
 @Component({
   selector: 'app-relavant-details',
-    imports: [
-        FormsModule,
-        NgForOf,
-        NgClass,
-        NgIf,
-        ReactiveFormsModule
-    ],
+  imports: [
+    FormsModule,
+    NgForOf,
+    NgClass,
+    NgIf,
+    ReactiveFormsModule,
+    ImageCropperComponent
+  ],
   templateUrl: './relavant-details.component.html',
   styleUrl: './relavant-details.component.scss',
   standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class RelavantDetailsComponent implements OnInit, OnChanges, OnDestroy {
+  @ViewChild('triggerModal') triggerModalBtn!: ElementRef<HTMLButtonElement>;
+  @ViewChild('cancelCropBtn') cancelCropBtn!: ElementRef<HTMLButtonElement>;
+
   relevantDetails = {
     skills: [] as string[],
     startDate: '',
@@ -52,6 +57,9 @@ export class RelavantDetailsComponent implements OnInit, OnChanges, OnDestroy {
 
   timezones: string[] = moment.tz.names();
   trainerTimezone: string = '';
+
+  imageChangedEvent: any = '';
+  croppedImageBlob!: Blob | null;
 
   constructor(private resumeStorage: ResumeStorageService,
               private alertService: AlertsService,
@@ -208,6 +216,61 @@ export class RelavantDetailsComponent implements OnInit, OnChanges, OnDestroy {
     link.target = '_blank';
     link.download = 'sample_banner.png';
     link.click();
+  }
+
+  onFileChange(event: any): void {
+    const file = event.target.files[0];
+    const maxFileSize = 1.5 * 1024 * 1024;
+    const allowedFileTypes = ['image/png', 'image/jpeg'];
+
+    if (!file) return;
+
+    if (file.size > maxFileSize) {
+      this.alertService.warningMessage('File size exceeds 1.5MB.', 'Warning');
+      return;
+    }
+
+    if (!allowedFileTypes.includes(file.type)) {
+      this.alertService.warningMessage('Only PNG and JPEG are allowed.', 'Warning');
+      return;
+    }
+
+    this.imageChangedEvent = event;
+
+    // Trigger modal
+    this.triggerModalBtn.nativeElement.click();
+  }
+
+  imageCropped(event: any): void {
+    this.croppedImageBlob = event.blob;
+  }
+
+  uploadCroppedImage(): void {
+    if (!this.croppedImageBlob) return;
+
+    const filePath = 'trainingPlatform/courses/banners/' + this.generateRandomId();
+    const croppedFile = new File([this.croppedImageBlob], 'cropped-image.png', { type: 'image/png' });
+
+    this.loading = true;
+    this.fileUploadService.uploadFile(filePath, croppedFile).subscribe(url => {
+      this.loading = false;
+      this.relevantDetails.coverImage = url;
+      this.cancelCropBtn.nativeElement.click(); // Close modal after upload
+      this.alertService.successMessage('Successfully uploaded banner.', 'Success');
+      this.resetCropper();
+    }, () => {
+      this.loading = false;
+      this.alertService.errorMessage('Upload failed. Please try again.', 'Error');
+    });
+  }
+
+  cancelCrop(): void {
+    this.resetCropper();
+  }
+
+  resetCropper(): void {
+    this.imageChangedEvent = null;
+    this.croppedImageBlob = null;
   }
 
   get selectedCurrency(): string {

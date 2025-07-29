@@ -72,42 +72,11 @@ export class PreviewPostComponent implements OnInit{
   addCourse() {
     const savedData = this.resumeStorage.getData();
     if (savedData && Object.keys(savedData).length > 0){
-      let course = {
-        companyId: this.companyId || 'unknown',
-        name: savedData.basicDetails.name,
-        description: savedData.courseContent,
-        overview: savedData.basicDetails.overview,
-        category: savedData.relevantDetails.category,
-        organizer: savedData.basicDetails.email,
-        level: savedData.basicDetails.level,
-        currency: savedData.relevantDetails.currency,
-        price: savedData.relevantDetails.price,
-        onetimePayment: savedData.basicDetails.paymentType === 'onetime',
-        installment: savedData.installment,
-        duration: savedData.basicDetails.duration,
-        modules: savedData.modules,
-        rating: "",
-        language: savedData.basicDetails.language,
-        lecturer: savedData.basicDetails.lecturer,
-        image: savedData.relevantDetails.coverImage,
-        skills: savedData.relevantDetails.skills,
-        certificate: savedData.basicDetails.certificate,
-        platform: savedData.relevantDetails.mediaType,
-        location: savedData.relevantDetails.location,
-        startDate: savedData.relevantDetails.startDate,
-        fromTime: savedData.relevantDetails.startTime,
-        toTime: savedData.relevantDetails.endTime,
-        utcStart: savedData.relevantDetails.utcStart,
-        utcEnd: savedData.relevantDetails.utcEnd,
-        trainerTimezone: savedData.relevantDetails.trainerTimezone,
-        courseStatus: savedData.relevantDetails.courseStatus,
-        paymentMethod: savedData.basicDetails.paymentMethod,
-        publicity: savedData.relevantDetails.publicity
-      }
+      let course = this.returnCourse(savedData);
 
       if (this.isUpdateId) {
         this.courseService.editCourse(this.isUpdateId, course).subscribe(() => {
-          this.router.navigate(['/courses']);
+          this.router.navigate(['/courses']).then();
           if (this.windowService.nativeSessionStorage) sessionStorage.removeItem('editCourse');
           this.alertService.successMessage('Course updated successfully', 'Success');
         }, error => {
@@ -115,7 +84,7 @@ export class PreviewPostComponent implements OnInit{
         })
       } else {
         this.courseService.addCourse(course).subscribe(() => {
-          this.router.navigate(['/courses']);
+          this.router.navigate(['/courses']).then();
           this.alertService.successMessage('Course added successfully', 'Success');
         }, error => {
           this.alertService.errorMessage(error.error.message, 'Error');
@@ -125,5 +94,58 @@ export class PreviewPostComponent implements OnInit{
     else {
       this.alertService.errorMessage('Not enough data found to add course', 'Error');
     }
+  }
+
+  updateWithNewBatch() {
+    const savedData = this.resumeStorage.getData();
+    if (savedData && Object.keys(savedData).length > 0){
+      let course = this.returnCourse(savedData);
+      if (this.isUpdateId) {
+        this.courseService.updateWithNewBatch(this.isUpdateId, course).subscribe(() => {
+          this.router.navigate(['/courses']).then();
+          if (this.windowService.nativeSessionStorage) sessionStorage.removeItem('editCourse');
+          this.alertService.successMessage('Course updated and add new batch successfully', 'Success');
+        }, error => {
+          this.alertService.errorMessage(error.error.message, 'Error');
+        });
+      } else {
+        this.alertService.errorMessage('No course to update', 'Error');
+      }
+    }
+  }
+
+  returnCourse(savedData: any) {
+    return {
+      companyId: this.companyId || 'unknown',
+      name: savedData.basicDetails.name,
+      description: savedData.courseContent,
+      overview: savedData.basicDetails.overview,
+      category: savedData.relevantDetails.category,
+      organizer: savedData.basicDetails.email,
+      level: savedData.basicDetails.level,
+      currency: savedData.relevantDetails.currency,
+      price: savedData.relevantDetails.price,
+      onetimePayment: savedData.basicDetails.paymentType === 'onetime',
+      installment: savedData.installment,
+      duration: savedData.basicDetails.duration,
+      modules: savedData.modules,
+      rating: "",
+      language: savedData.basicDetails.language,
+      lecturer: savedData.basicDetails.lecturer,
+      image: savedData.relevantDetails.coverImage,
+      skills: savedData.relevantDetails.skills,
+      certificate: savedData.basicDetails.certificate,
+      platform: savedData.relevantDetails.mediaType,
+      location: savedData.relevantDetails.location,
+      startDate: savedData.relevantDetails.startDate,
+      fromTime: savedData.relevantDetails.startTime,
+      toTime: savedData.relevantDetails.endTime,
+      utcStart: savedData.relevantDetails.utcStart,
+      utcEnd: savedData.relevantDetails.utcEnd,
+      trainerTimezone: savedData.relevantDetails.trainerTimezone,
+      courseStatus: savedData.relevantDetails.courseStatus,
+      paymentMethod: savedData.basicDetails.paymentMethod,
+      publicity: savedData.relevantDetails.publicity
+    };
   }
 }
