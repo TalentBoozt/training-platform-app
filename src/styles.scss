@@ -894,6 +894,63 @@ p, ol, ul, li {
   }
 }
 
+// bootstrap model
+.modal{
+  .modal-dialog{
+    max-width: 600px;
+    max-height: calc(100vh - 100px);
+    margin: 1.75rem auto;
+
+    @include respond-to(xl) {
+      max-width: 450px;
+    }
+
+    @include respond-to(lg) {
+      max-width: 400px;
+    }
+
+    @include respond-to(md) {
+      max-width: 300px;
+    }
+  }
+
+  .modal-content{
+    background-color: var(--color-surface-300);
+    border-radius: var(--br-10);
+    padding: var(--padding-4);
+
+    .modal-header, .modal-footer{
+      border: none;
+    }
+
+    .modal-header{
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+
+      h5{
+        color: var(--color-text-100);
+        font-size: var(--fs-20);
+        font-weight: var(--fw-600);
+      }
+
+      button.close{
+        color: var(--color-text-100);
+        opacity: 0.8;
+
+        &:hover{
+          opacity: 1;
+        }
+      }
+    }
+
+    .modal-body{
+      color: var(--color-text-200);
+      font-size: var(--fs-16);
+    }
+  }
+}
+
 .offcanvas{
   background-color: var(--color-surface-300);
   .offcanvas-body{

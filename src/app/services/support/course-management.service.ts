@@ -61,7 +61,8 @@ export class CourseManagementService {
         duration: event.duration,
         email: event.organizer,
         certificate: event.certificate,
-        paymentMethod: event.paymentMethod // 'card' or 'bank'
+        paymentMethod: event.paymentMethod, // 'card' or 'bank'
+        paymentType: event.onetimePayment ? 'onetime' : 'installment' // 'onetime' or 'installment'
       };
       const courseContent = event.description;
       const relevantDetails = {

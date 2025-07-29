@@ -1,8 +1,9 @@
 <div class="form-card-1">
   <div class="d-flex align-items-center justify-content-between gap-2 w-100">
     <h5>Preview & Publish :</h5>
-    <div class="form-group">
-      <button id="TP_PP_AdCourse" type="submit" class="btn-fill btn-f-2" (click)="addCourse()">{{isUpdateId ? 'Update' : 'Publish'}}</button>
+    <div class="form-group d-flex align-items-center gap-2">
+      <button id="TP_PP_AdCourse" class="btn-fill btn-f-2" (click)="addCourse()">{{isUpdateId ? 'Update' : 'Publish'}}</button>
+      <button *ngIf="isUpdateId" id="TP_PP_NewBatch" class="btn-fill btn-f-2" (click)="updateWithNewBatch()">Publish for New Batch</button>
     </div>
   </div>
 

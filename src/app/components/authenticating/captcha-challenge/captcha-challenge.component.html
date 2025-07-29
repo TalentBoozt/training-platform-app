@@ -1,8 +1,22 @@
-<div class="container">
+<div class="captcha-wrapper container d-flex flex-column align-items-center justify-content-center">
+
   <re-captcha
     (resolved)="onCaptchaResolved($event)"
-    siteKey="6LdAtUUrAAAAAN8oCAPEo__9F9K7XRuwhL6C57c1">
+    siteKey="6LdAtUUrAAAAAN8oCAPEo__9F9K7XRuwhL6C57c1"
+    class="my-3">
   </re-captcha>
 
-  <button [disabled]="!captchaToken" (click)="submitCaptcha()">Submit</button>
+  <div *ngIf="verifying" class="text-primary fs-6 mb-2 d-flex align-items-center">
+    <div class="spinner-border spinner-border-sm me-2" role="status"></div>
+    Verifying your humanity...
+  </div>
+
+  <div *ngIf="errorMessage" class="alert alert-danger mt-2 py-2 px-3 small">
+    {{ errorMessage }}
+  </div>
+
+  <div *ngIf="successMessage" class="alert alert-success mt-2 py-2 px-3 small">
+    {{ successMessage }}
+  </div>
+
 </div>

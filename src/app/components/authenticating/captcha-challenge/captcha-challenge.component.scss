@@ -1,19 +1,20 @@
-.container {
-  min-height: 100vh;
-  padding-top: 20px;
+.captcha-wrapper {
+  padding: var(--padding-5);
+  background-color: var(--color-surface-200);
+  border-radius: var(--br-10);
+  box-shadow: var(--box-shadow-2);
+  max-width: 500px;
+  margin-top: var(--margin-6);
+  margin-bottom: var(--margin-6);
+  font-size: var(--fs-16);
+  color: var(--color-text-100);
 
-  button{
-    margin-top: 10px;
-    color: #FFFFFF;
-    background-color: #1a73e8;
-    border-radius: 5px;
-    border: none;
-    outline: none;
-    padding: 8px 15px;
+  .alert {
+    width: 100%;
+    font-weight: var(--fw-500);
+  }
 
-    &:disabled{
-      background-color: #6e7681;
-      cursor: not-allowed;
-    }
+  .spinner-border {
+    color: var(--color-primary-100);
   }
 }
