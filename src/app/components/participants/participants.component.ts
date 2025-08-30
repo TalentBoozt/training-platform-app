@@ -6,6 +6,8 @@ import {ActivatedRoute} from '@angular/router';
 import {AuthService} from '../../services/support/auth.service';
 import {tap} from 'rxjs';
 import {AlertsService} from '../../services/support/alerts.service';
+import {WindowService} from '../../services/common/window.service';
+import {NgxPaginationModule} from 'ngx-pagination';
 
 @Component({
   selector: 'app-participants',
@@ -13,6 +15,7 @@ import {AlertsService} from '../../services/support/alerts.service';
     NgForOf,
     NgIf,
     FormsModule,
+    NgxPaginationModule,
     NgStyle
   ],
   templateUrl: './participants.component.html',
@@ -22,7 +25,15 @@ import {AlertsService} from '../../services/support/alerts.service';
 export class ParticipantsComponent implements OnInit {
   courses: any[] = []; // Will contain all courses
   installments: any[] = []; // Will contain all installments
-  participants: any[] = []; // All participants from the API
+  participants: any[] = [];
+  filteredModalParticipants: any[] = [];
+
+  selectedCourseName = '';
+  selectedParticipant: any = null;
+  modalCourseId: any;
+  modalInstallments: any[] = [];
+  modalInstallmentId: any = '';
+  modalSearchTerm: string = '';
   paidStatus: any[] = [
     { name: 'Paid', value: 'paid' },
     { name: 'Unpaid', value: 'unpaid' },
@@ -40,8 +51,15 @@ export class ParticipantsComponent implements OnInit {
 
   organizationId: any;
 
+  currentParticipantsPage = 1;
+  currentCoursesPage = 1;
+
+  isUpdating: boolean = false;
+  isOneTimePayment: boolean = false;
+
   constructor(private courseService: CoursesService,
               private route: ActivatedRoute,
+              private windowService: WindowService,
               private alertService: AlertsService,
               private cookieService: AuthService) {}
 
@@ -71,10 +89,11 @@ export class ParticipantsComponent implements OnInit {
   // }
 
   getParticipants(courseId: any): void {
-    if (!courseId) return;
+    this.modalCourseId = courseId;
+
     this.courseService.getFullParticipants(courseId).subscribe((response: any) => {
       const getUser = (employeeId: string) => {
-        const user = response.user?.find((user: any) => user.id === employeeId);
+        const user = response.user?.find((u: any) => u.id === employeeId);
         return {
           id: user?.id,
           name: `${user?.firstname} ${user?.lastname}`,
@@ -84,37 +103,66 @@ export class ParticipantsComponent implements OnInit {
 
       this.participants = response.enrolls.flatMap((enroll: any) => {
         const user = getUser(enroll.employeeId);
-        if (!user.id) return []; // Skip if no user found
+        if (!user.id) return [];
 
-        return enroll.courses?.flatMap((course: any) => {
-          if (!course.installment) {
-            return [{
-              id: user.id,
-              name: user.name,
-              email: user.email,
-              pStatus: 'pending', // Default to 'pending' if no installments
+        return enroll.courses
+          ?.filter((course: any) => course.courseId === courseId)
+          .flatMap((course: any) => {
+            this.selectedCourseName = course?.courseName || 'Selected Course';
+            this.isOneTimePayment = course?.modules[0]?.installmentId === 'onetime';
+            if (!course.installment || course.installment.length === 0) {
+              return [{
+                ...user,
+                pStatus: 'pending',
+                aStatus: this.getEnrollmentStatus(course.status),
+                courseId: course.courseId,
+                installmentId: null,
+              }];
+            }
+
+            return course.installment.map((installment: any) => ({
+              ...user,
+              pStatus: this.getPaymentStatus(installment.paid),
               aStatus: this.getEnrollmentStatus(course.status),
               courseId: course.courseId,
-              installmentId: null,
-            }];
-          }
-
-          return course.installment.map((installment: any) => ({
-            id: user.id,
-            name: user.name,
-            email: user.email,
-            pStatus: this.getPaymentStatus(installment.paid),
-            aStatus: this.getEnrollmentStatus(course.status),
-            courseId: course.courseId,
-            installmentId: installment.id,
-          }));
-        }) || [];
+              installmentId: installment.id,
+            }));
+          }) || [];
       });
 
-      this.courses = this.getCourses(response.enrolls, courseId);
+      // Setup installment dropdown
+      this.modalInstallments = [];
 
-      this.installments = this.getInstallments(response.enrolls, courseId);
+      const selectedEnroll = response.enrolls.find((enroll: any) =>
+        enroll.courses?.some((course: any) => course.courseId === courseId)
+      );
+
+      if (selectedEnroll) {
+        const course = selectedEnroll.courses.find((c: any) => c.courseId === courseId);
+        this.modalInstallments = course?.installment?.map((i: any) => ({
+          id: i.id,
+          name: i.name || `Installment ${i.id}`
+        })) || [];
+      }
+
+      // Filter the table
+      this.filterModalParticipants();
+
+      // Show the modal
+      if (this.windowService.nativeDocument) {
+        this.currentParticipantsPage = 1;
+        document.getElementById('enrollsBtn')?.click();
+      }
     });
+  }
+
+  filterModalParticipants() {
+    this.filteredModalParticipants = this.participants.filter(p =>
+      (!this.modalInstallmentId || p.installmentId === this.modalInstallmentId) &&
+      (!this.modalSearchTerm ||
+        p.name.toLowerCase().includes(this.modalSearchTerm.toLowerCase()) ||
+        p.email.toLowerCase().includes(this.modalSearchTerm.toLowerCase()))
+    );
   }
 
   getPaymentStatus(paymentStatus: string | null): string {
@@ -165,12 +213,21 @@ export class ParticipantsComponent implements OnInit {
 
   updatePaymentStatus(eid: any, courseId: any, installmentId: any, pStatus: any) {
     if (!eid || !courseId || !installmentId || !pStatus) return;
-    this.courseService.updateInstallmentPaymentStatus(eid, courseId, installmentId, pStatus).subscribe((res) => {
-      this.alertService.successMessage('Payment status updated successfully', 'Success');
-      this.getParticipants(this.courseId)
-    }, (err) => {
-      this.alertService.errorMessage('Failed to update payment status', 'Error');
-    });
+    if (this.isOneTimePayment) {
+      this.courseService.updateInstallmentPaymentStatusFullCourse(eid, courseId, installmentId, pStatus).subscribe(() => {
+        this.alertService.successMessage('Payment status updated successfully', 'Success');
+        this.getParticipants(this.courseId)
+      }, () => {
+        this.alertService.errorMessage('Failed to update payment status', 'Error');
+      });
+    } else {
+      this.courseService.updateInstallmentPaymentStatus(eid, courseId, installmentId, pStatus).subscribe(() => {
+        this.alertService.successMessage('Payment status updated successfully', 'Success');
+        this.getParticipants(this.courseId)
+      }, () => {
+        this.alertService.errorMessage('Failed to update payment status', 'Error');
+      });
+    }
   }
 
   updateAccountStatus(eid: any, courseId: any, aStatus: any) {
@@ -181,5 +238,12 @@ export class ParticipantsComponent implements OnInit {
     }, (err) => {
       this.alertService.errorMessage('Failed to update account status', 'Error');
     });
+  }
+
+  viewParticipant(p: any) {
+    this.selectedParticipant = p;
+    if (this.windowService.nativeDocument) {
+      document.getElementById('participantProfileBtn')?.click();
+    }
   }
 }
