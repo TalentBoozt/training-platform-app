@@ -36,3 +36,14 @@
     color: #CEB700;
   }
 }
+
+.pagination {
+  display: flex;
+  flex-wrap: wrap; /* Allow wrapping of pagination items */
+  justify-content: center; /* Center pagination items */
+  background-color: var(--color-surface-200);
+}
+
+.pagination-controls {
+  flex-shrink: 0; /* Prevent pagination from shrinking */
+}

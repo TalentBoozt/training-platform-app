@@ -64,6 +64,10 @@ export class CoursesService {
     return this.http.put<any>(`${this.baseUrl}/emp-courses/update-installment-payment/${eid}/${cid}/${iid}/${status}`, {});
   }
 
+  public updateInstallmentPaymentStatusFullCourse(eid: any, cid: any, iid: any, status: any): Observable<any> {
+    return this.http.put<any>(`${this.baseUrl}/emp-courses/update-full-payment/${eid}/${cid}/${iid}/${status}`, {});
+  }
+
   public updateEnrollmentStatus(eid: any, cid: any, status: any): Observable<any> {
     return this.http.put<any>(`${this.baseUrl}/emp-courses/update-enrollment-status/${eid}/${cid}/${status}`, {});
   }

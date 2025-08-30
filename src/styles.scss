@@ -867,7 +867,7 @@ p, ol, ul, li {
     }
   }
 
-  tbody{
+  tbody, tfoot{
     td{
       background-color: var(--color-surface-200);
       color: var(--color-text-200);

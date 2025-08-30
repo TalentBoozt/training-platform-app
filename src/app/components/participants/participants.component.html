@@ -2,30 +2,25 @@
   <div class="title mt-3">Participants</div>
 
   <div class="form-card-1">
-    <div class="row form-wrapper w-100">
-      <div class="col-6 col-md-4">
-        <div class="form-group">
-          <label for="course">Course</label>
-          <select class="form-control" [(ngModel)]="courseId" [ngModelOptions]="{standalone: true}" id="course">
-            <option *ngIf="courses.length === 0" disabled value="n/a">Not Available</option>
-            <option *ngFor="let c of courses" [value]="c?.id">{{c?.name}}</option>
-          </select>
-        </div>
+    <div class="row form-wrapper w-100 mb-3">
+      <div class="col-md-6">
+        <label for="installmentFilter" class="form-label">Installment</label>
+        <select class="form-select" [(ngModel)]="modalInstallmentId" (change)="filterModalParticipants()"
+                id="installmentFilter">
+          <option value="">All</option>
+          <option *ngFor="let i of modalInstallments" [value]="i?.id">{{ i?.name }}</option>
+        </select>
       </div>
-      <div class="col-6 col-md-4">
-        <div class="form-group">
-          <label for="installment">Installment</label>
-          <select class="form-control" [(ngModel)]="installmentId" id="installment">
-            <option *ngIf="installments.length === 0 || !installments" disabled value="n/a">Not Available</option>
-            <option *ngFor="let i of installments" [value]="i?.id">{{i?.name}}</option>
-          </select>
-        </div>
-      </div>
-      <div class="col-12 col-md-4">
-        <div class="form-group">
-          <label for="search">Search</label>
-          <input type="text" class="form-control" id="search" placeholder="Search by name" [(ngModel)]="searchTerm"/>
-        </div>
+      <div class="col-md-6">
+        <label for="modalSearch" class="form-label">Search</label>
+        <input
+          type="text"
+          class="form-control"
+          id="modalSearch"
+          placeholder="Search by name or email"
+          [(ngModel)]="modalSearchTerm"
+          (input)="filterModalParticipants()"
+        />
       </div>
     </div>
   </div>
@@ -37,36 +32,93 @@
     </div>
   </div>
 
-  <div class="table-card-1">
-    <table class="table table-hover">
-      <thead>
+  <div class="table-responsive table-card-1">
+    <table class="table table-hover table-hover align-middle bg-white">
+      <thead class="table-light">
       <tr>
-        <th scope="col">Name</th>
-        <th scope="col">Payment Status</th>
-        <th scope="col" class="d-none d-md-table-cell">Installment</th>
-        <th scope="col">Email</th>
-        <th scope="col">Course Status</th>
+        <th>Name</th>
+        <th>Payment Status</th>
+        <th class="d-none d-md-table-cell">Installment</th>
+        <th>Email</th>
+        <th>Course Status</th>
+        <th>Actions</th>
       </tr>
       </thead>
       <tbody>
-      <tr *ngFor="let p of filteredParticipants">
-        <td>{{p?.name}}</td>
+      <tr
+        *ngFor="let p of filteredModalParticipants | paginate: { itemsPerPage: 5, currentPage: currentParticipantsPage, id: 'paginationEnrolls' }">
+        <td>{{ p.name }}</td>
         <td>
-          <select class="form-control p-status" [(ngModel)]="p.pStatus" [ngModelOptions]="{standalone: true}" [ngStyle]="{'background-color': p.pStatus == 'paid' ? 'green' : p.pStatus == 'unpaid' ? 'red' : 'orange'}" (change)="updatePaymentStatus(p.id, p.courseId, p.installmentId, p.pStatus)">
-            <option *ngFor="let ps of paidStatus" [value]="ps.value">{{ps.name}}</option>
+          <select
+            class="form-select text-white"
+            [(ngModel)]="p.pStatus"
+            [ngModelOptions]="{ standalone: true }"
+            [ngStyle]="{
+                      'background-color': p.pStatus === 'paid' ? '#28a745' :
+                                        p.pStatus === 'unpaid' ? '#dc3545' : '#ffc107'
+                    }"
+            (change)="updatePaymentStatus(p.id, p.courseId, p.installmentId, p.pStatus)"
+          >
+            <option *ngFor="let ps of paidStatus" [value]="ps.value">{{ ps.name }}</option>
           </select>
         </td>
-        <td class="d-none d-md-table-cell">{{p.installmentId}}</td>
-        <td>{{p.email}}</td>
+        <td class="d-none d-md-table-cell">{{ p.installmentId }}</td>
+        <td>{{ p.email }}</td>
         <td>
-          <select class="form-control p-status" [(ngModel)]="p.aStatus" [ngModelOptions]="{standalone: true}" [ngStyle]="{'background-color': p.aStatus == 'enrolled' ? 'green' : p.aStatus == 'dropped' ? 'red' : 'orange'}" (change)="updateAccountStatus(p.id, p.courseId, p.aStatus)">
-            <option *ngFor="let pa of accountStatus" [value]="pa.value">{{pa.name}}</option>
+          <select
+            class="form-select text-white"
+            [(ngModel)]="p.aStatus"
+            [ngModelOptions]="{ standalone: true }"
+            [ngStyle]="{
+                      'background-color': p.aStatus === 'enrolled' ? '#28a745' :
+                                        p.aStatus === 'dropped' ? '#dc3545' : '#ffc107'
+                    }"
+            (change)="updateAccountStatus(p.id, p.courseId, p.aStatus)"
+          >
+            <option *ngFor="let pa of accountStatus" [value]="pa.value">{{ pa.name }}</option>
           </select>
+        </td>
+        <td>
+          <button class="btn btn-sm btn-outline-success" (click)="viewParticipant(p)">
+            <i class="fas fa-eye"></i>
+          </button>
         </td>
       </tr>
-      <tr *ngIf="filteredParticipants.length === 0"><td colspan="4">No participants found</td></tr>
+      <tr *ngIf="filteredModalParticipants.length === 0">
+        <td colspan="6" class="text-center text-muted">No participants found.</td>
+      </tr>
       </tbody>
+      <tfoot>
+      <tr>
+        <td colspan="6" class="text-center">
+          <pagination-controls class="pagination pagination-controls"
+                               id="paginationEnrolls"
+                               [maxSize]="5"
+                               [directionLinks]="false"
+                               (pageChange)="currentParticipantsPage = $event">
+          </pagination-controls>
+        </td>
+      </tr>
+      </tfoot>
     </table>
   </div>
 
+  <button id="participantProfileBtn" type="button" class="d-none" data-bs-toggle="modal"
+          data-bs-target="#participantProfile"></button>
+  <div class="modal fade" id="participantProfile" tabindex="-1">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">{{ selectedParticipant?.name }}</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+        </div>
+        <div class="modal-body">
+          <p><strong>Email:</strong> {{ selectedParticipant?.email }}</p>
+          <p><strong>Status:</strong> {{ selectedParticipant?.aStatus }}</p>
+          <p><strong>Payment:</strong> {{ selectedParticipant?.pStatus }}</p>
+          <p><strong>Installment:</strong> {{ selectedParticipant?.installmentId ?? 'N/A' }}</p>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>
