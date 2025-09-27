@@ -1,0 +1,66 @@
+@keyframes fadeOut {
+  0% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(0);
+  }
+}
+
+.course-type-wrapper {
+  width: 100%;
+  min-height: calc(100vh - 100px);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 20px;
+
+  .type-btn {
+    padding: 10px 20px;
+    border-radius: 25px;
+    transition: all .3s ease-in-out;
+    cursor: pointer;
+    position: relative;
+
+    &:first-child{
+      background-color: var(--color-surface-300);
+      border: 2px solid #6B4F9C;
+      color: #6B4F9C;
+
+      &:hover{
+        background-color: #6B4F9C;
+        color: #ffffff;
+      }
+    }
+
+    &:last-child{
+      background-color: var(--color-surface-300);
+      border: 2px solid #28a745;
+      color: #28a745;
+
+      &:hover{
+        background-color: #28a745;
+        color: #ffffff;
+      }
+    }
+
+    .live-dot {
+      width: 12px;
+      height: 12px;
+      aspect-ratio: 1/1;
+      border-radius: 50%;
+      background-color: #9E0000;
+      position: absolute;
+      top: 0;
+      right: 0;
+      animation: infinite fadeOut 1s ease-in-out;
+    }
+
+    @media screen and (max-width: 768px) {
+      width: 100%;
+    }
+  }
+}
