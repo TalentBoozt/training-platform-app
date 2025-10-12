@@ -4,6 +4,7 @@ import {AuthGuard} from './guards/auth.guard';
 export const routes: Routes = [
   {path: '', redirectTo: '/dashboard', pathMatch: 'full'},
   {path: 'dashboard', loadComponent: () => import('./components/dashboard/dashboard.component').then(c => c.DashboardComponent)},
+  {path: 'my-profile', loadComponent: () => import('./components/trainer-profile/trainer-profile.component').then(c => c.TrainerProfileComponent), canActivate: [AuthGuard]},
   {path: 'post-course', loadComponent: () => import('./components/post-course/course-type/course-type.component').then(c => c.CourseTypeComponent), canActivate: [AuthGuard]},
   {path: 'post-live', loadComponent: () => import('./components/post-course/post-course.component').then(c => c.PostCourseComponent), canActivate: [AuthGuard]},
   {path: 'post-rec', loadComponent: () => import('./components/post-course/rec-course-iframe/rec-course-iframe.component').then(c => c.RecCourseIframeComponent), canActivate: [AuthGuard]},

@@ -1,3 +1,5 @@
+import {TrainerProfile} from '../TrainerProfile';
+
 export interface EmployeeProfile {
   employee: {
     id?: string;
@@ -39,4 +41,5 @@ export interface EmployeeProfile {
   empFollowers?: any;
   empFollowing?: any;
   empCourses?: any;
+  trainer?: TrainerProfile
 }

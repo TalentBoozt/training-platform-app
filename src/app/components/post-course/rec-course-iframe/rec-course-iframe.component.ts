@@ -1,6 +1,7 @@
 import {Component, inject} from '@angular/core';
 import {DomSanitizer, SafeResourceUrl} from '@angular/platform-browser';
 import {NgIf} from '@angular/common';
+import {AuthService} from '../../../services/support/auth.service';
 
 @Component({
   selector: 'app-rec-course-iframe',
@@ -15,10 +16,19 @@ export class RecCourseIframeComponent {
   iframeUrl: SafeResourceUrl;
   iframeLoaded = false;
 
+  private cookieService = inject(AuthService);
+  userId: any;
+  companyId: any;
+
   constructor(private sanitizer: DomSanitizer) {
     this.iframeUrl = this.sanitizer.bypassSecurityTrustResourceUrl(
-      'https://course-wizard.netlify.app/?embedded=true'
+      `https://course-wizard.netlify.app/getting-start?embedded=true&usr=${this.userId}&comp=${this.companyId}`
     );
+  }
+
+  ngOnInit() {
+    this.userId = this.cookieService.userID();
+    this.companyId = this.cookieService.organization();
   }
 
   onIframeLoad() {
@@ -28,6 +38,6 @@ export class RecCourseIframeComponent {
   }
 
   openInNewTab() {
-    window.open('https://course-wizard.netlify.app/', '_blank');
+    window.open(`https://course-wizard.netlify.app/getting-start?usr=${this.userId}&comp=${this.companyId}`, '_blank');
   }
 }

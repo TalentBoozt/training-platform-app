@@ -1,0 +1,112 @@
+@use 'sass:color';
+
+.trainer-profile {
+  background-color: var(--color-surface-300);
+  color: var(--color-text-200);
+
+  label{
+    color: var(--color-text-300);
+    font-weight: 500;
+  }
+
+  input, select, textarea{
+    border: 1px solid var(--color-text-500);
+    padding: 8px 15px;
+    border-radius: 12px;
+    background-color: var(--color-surface-200);
+    color: var(--color-text-100);
+    font-size: var(--fs-14);
+
+    &::placeholder{
+      color: var(--color-text-300);
+    }
+
+    &:active, &:focus{
+      border-color: var(--color-text-500);
+      outline: none;
+      box-shadow: none;
+    }
+  }
+
+  select{
+    option{
+      color: var(--color-text-100);
+      background-color: var(--color-surface-200);
+      border: none;
+      outline: none;
+      padding: 0 5px;
+      cursor: pointer;
+    }
+  }
+
+  input[type=file]::file-selector-button {
+    background-color: var(--color-primary-100);
+    color: var(--color-white);
+    transition: all var(--transition-1);
+
+    &:hover{
+      background-color: var(--color-primary-100);
+    }
+  }
+
+  .form-check-input {
+    border: 1px solid var(--color-text-500);
+    width: auto !important;
+  }
+
+  .form-check-input:checked {
+    background-color: var(--color-primary-100);
+    border-color: var(--color-primary-100);
+  }
+
+  .input-group{
+    .input-group-text{
+      background-color: var(--color-surface-200);
+      border: 1px solid var(--color-text-500);
+    }
+
+    input{
+      border-left: none;
+    }
+
+    .btn.btn-outline-secondary{
+      outline: none!important;
+      border: 1px solid var(--color-text-500)!important;
+    }
+  }
+
+  .text-muted {
+    color: var(--color-text-400) !important;
+  }
+
+  .badge {
+    font-size: 0.85rem;
+    cursor: pointer;
+  }
+
+  .tag-input input {
+    width: 100%;
+  }
+
+  .btn-primary {
+    background-color: var(--color-primary-100);
+    border: none;
+
+    &:hover {
+      background-color: var(--color-secondary-100);
+    }
+  }
+
+  .bg-surface {
+    background-color: var(--color-surface-200);
+  }
+
+  .cover-photo img {
+    max-height: 200px;
+    object-fit: cover;
+  }
+
+  .profile-photo img {
+    object-fit: cover;
+  }
+}
