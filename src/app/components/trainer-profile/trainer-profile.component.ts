@@ -5,6 +5,7 @@ import {TrainerProfileService} from '../../services/trainer-profile.service';
 import {NgForOf, NgIf} from '@angular/common';
 import {EmployeeAuthStateService} from '../../services/cacheStates/employee-auth-state.service';
 import {debounceTime} from 'rxjs';
+import {AlertsService} from '../../services/support/alerts.service';
 
 @Component({
   selector: 'app-trainer-profile',
@@ -21,11 +22,12 @@ export class TrainerProfileComponent implements OnInit {
   private fb = inject(FormBuilder);
   private trainerService = inject(TrainerProfileService);
   private employeeState = inject(EmployeeAuthStateService);
+  private alertService = inject(AlertsService);
 
   profileForm!: FormGroup;
   profile?: TrainerProfile;
   username = '';
-  employeeId = '';
+  employee: any;
   isEditing = false;
 
   currencies = ['USD', 'EUR', 'GBP', 'INR', 'JPY'];
@@ -35,7 +37,7 @@ export class TrainerProfileComponent implements OnInit {
     this.employeeState.employee$.subscribe(profile => {
       const employeeId = profile?.employee?.id;
       if (!employeeId) return;
-      this.employeeId = employeeId;
+      this.employee = profile?.employee;
 
       this.username = profile?.employee?.firstname + ' ' + profile?.employee?.lastname;
       const trainer = profile?.trainer ?? { employeeId } as TrainerProfile;
@@ -106,11 +108,11 @@ export class TrainerProfileComponent implements OnInit {
     const val = this.profileForm.value;
     const updatedProfile: TrainerProfile = {
       certifications: this.profile?.certifications ?? [],
-      coverImage: this.profile?.coverImage ?? '',
-      employeeId: this.profile?.employeeId ?? this.employeeId,
-      firstname: this.profile?.firstname ?? '',
-      image: this.profile?.image ?? '',
-      lastname: this.profile?.lastname ?? '',
+      coverImage: this.profile?.coverImage ?? this.employee.coverImage,
+      employeeId: this.profile?.employeeId ?? this.employee.id,
+      firstname: this.profile?.firstname ?? this.employee.firstname,
+      image: this.profile?.image ?? this.employee.image,
+      lastname: this.profile?.lastname ?? this.employee.lastname,
       rating: this.profile?.rating ?? 0,
       totalReviews: this.profile?.totalReviews ?? 0,
       trainerVideoIntro: this.profile?.trainerVideoIntro ?? '',
@@ -130,7 +132,9 @@ export class TrainerProfileComponent implements OnInit {
       next: (res) => {
         this.profile = res;
         this.isEditing = false;
-      }
+        this.alertService.successMessage('Profile updated successfully', 'Success');
+      },
+      error: err => this.alertService.errorMessage(err.message, 'Failed to update profile')
     });
   }
 
