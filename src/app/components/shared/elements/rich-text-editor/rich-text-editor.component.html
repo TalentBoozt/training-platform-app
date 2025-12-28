@@ -1,149 +1,183 @@
-<div class="rich-text-editor-container">
-  <div class="rte-header">
-    <h5 class="rte-title">{{title || 'Rich Text Editor'}}</h5>
-    <button type="button" class="btn-fill btn-f-2 save-btn" (click)="saveContent()" [class.pulsing]="contentModified">
-      <span class="save-icon">💾</span> Save
-    </button>
-  </div>
+<div class="rich-text-editor-wrapper"
+    [ngClass]="{'theme-dark': themeService.isDarkMode(), 'theme-light': !themeService.isDarkMode()}">
+    <div class="rich-text-editor-container">
+        <!-- Header -->
+        <div class="rte-header">
+            <div class="rte-header-left">
+                <h5 class="rte-title">{{title || 'Rich Text Editor'}}</h5>
+                <span class="rte-subtitle" *ngIf="contentModified">Unsaved changes</span>
+            </div>
+            <div class="rte-header-right">
+                <button type="button" class="theme-toggle-btn" (click)="toggleTheme()" title="Toggle theme">
+                    <i class="fas" [ngClass]="themeService.isDarkMode() ? 'fa-sun' : 'fa-moon'"></i>
+                </button>
+                <button type="button" class="save-btn" (click)="saveContent()" [class.pulsing]="contentModified"
+                    [disabled]="!contentModified">
+                    <i class="fas fa-save me-2"></i>
+                    Save
+                </button>
+            </div>
+        </div>
 
-  <div class="toolbar">
-    <div class="toolbar-group">
-      <select [value]="currentFontFamily" (change)="applyFontFamily($event)" title="Font Family" class="toolbar-select">
-        <option *ngFor="let font of fontFamilies" [value]="font.value">{{font.label}}</option>
-      </select>
-      <button
-        type="button"
-        (click)="applyStyle('bold')"
-        [class.active]="isActive('bold')"
-        title="Bold (Ctrl+B)"
-        class="toolbar-btn">
-        <b>B</b>
-      </button>
-      <button
-        type="button"
-        (click)="applyStyle('italic')"
-        [class.active]="isActive('italic')"
-        title="Italic (Ctrl+I)"
-        class="toolbar-btn">
-        <i>I</i>
-      </button>
-      <button
-        type="button"
-        (click)="applyStyle('underline')"
-        [class.active]="isActive('underline')"
-        title="Underline (Ctrl+U)"
-        class="toolbar-btn">
-        <u>U</u>
-      </button>
+        <!-- Toolbar -->
+        <div class="toolbar">
+            <!-- Text Formatting Group -->
+            <div class="toolbar-group">
+                <select [value]="currentHeading" (change)="applyHeading($event)" title="Heading" class="toolbar-select">
+                    <option *ngFor="let heading of headings" [value]="heading.value">
+                        {{heading.label}}
+                    </option>
+                </select>
+
+                <select [value]="currentFontFamily" (change)="applyFontFamily($event)" title="Font Family"
+                    class="toolbar-select">
+                    <option *ngFor="let font of fontFamilies" [value]="font.value">
+                        {{font.label}}
+                    </option>
+                </select>
+
+                <select [value]="currentFontSize" (change)="applyFontSize($event)" title="Font Size"
+                    class="toolbar-select toolbar-select-sm">
+                    <option *ngFor="let size of fontSizes" [value]="size.value">
+                        {{size.label}}
+                    </option>
+                </select>
+            </div>
+
+            <div class="toolbar-divider"></div>
+
+            <!-- Style Group -->
+            <div class="toolbar-group">
+                <button type="button" (click)="applyStyle('bold')" [class.active]="isActive('bold')"
+                    title="Bold (Ctrl+B)" class="toolbar-btn">
+                    <i class="fas fa-bold"></i>
+                </button>
+                <button type="button" (click)="applyStyle('italic')" [class.active]="isActive('italic')"
+                    title="Italic (Ctrl+I)" class="toolbar-btn">
+                    <i class="fas fa-italic"></i>
+                </button>
+                <button type="button" (click)="applyStyle('underline')" [class.active]="isActive('underline')"
+                    title="Underline (Ctrl+U)" class="toolbar-btn">
+                    <i class="fas fa-underline"></i>
+                </button>
+                <button type="button" (click)="applyStyle('strikethrough')" [class.active]="isActive('strikethrough')"
+                    title="Strikethrough" class="toolbar-btn">
+                    <i class="fas fa-strikethrough"></i>
+                </button>
+            </div>
+
+            <div class="toolbar-divider"></div>
+
+            <!-- Advanced Formatting -->
+            <div class="toolbar-group">
+                <button type="button" (click)="applyStyle('subscript')" [class.active]="isActive('subscript')"
+                    title="Subscript" class="toolbar-btn">
+                    <i class="fas fa-subscript"></i>
+                </button>
+                <button type="button" (click)="applyStyle('superscript')" [class.active]="isActive('superscript')"
+                    title="Superscript" class="toolbar-btn">
+                    <i class="fas fa-superscript"></i>
+                </button>
+                <button type="button" (click)="insertCode()" title="Code Block" class="toolbar-btn">
+                    <i class="fas fa-code"></i>
+                </button>
+                <button type="button" (click)="insertBlockquote()" title="Blockquote" class="toolbar-btn">
+                    <i class="fas fa-quote-right"></i>
+                </button>
+            </div>
+
+            <div class="toolbar-divider"></div>
+
+            <!-- Lists & Alignment -->
+            <div class="toolbar-group">
+                <button type="button" (click)="insertList(false)" title="Bullet List" class="toolbar-btn">
+                    <i class="fas fa-list-ul"></i>
+                </button>
+                <button type="button" (click)="insertList(true)" title="Numbered List" class="toolbar-btn">
+                    <i class="fas fa-list-ol"></i>
+                </button>
+            </div>
+
+            <div class="toolbar-divider"></div>
+
+            <div class="toolbar-group">
+                <button type="button" (click)="applyAlignment('left')" [class.active]="isActive('alignLeft')"
+                    title="Align Left" class="toolbar-btn">
+                    <i class="fas fa-align-left"></i>
+                </button>
+                <button type="button" (click)="applyAlignment('center')" [class.active]="isActive('alignCenter')"
+                    title="Align Center" class="toolbar-btn">
+                    <i class="fas fa-align-center"></i>
+                </button>
+                <button type="button" (click)="applyAlignment('right')" [class.active]="isActive('alignRight')"
+                    title="Align Right" class="toolbar-btn">
+                    <i class="fas fa-align-right"></i>
+                </button>
+                <button type="button" (click)="applyAlignment('justify')" [class.active]="isActive('alignJustify')"
+                    title="Justify" class="toolbar-btn">
+                    <i class="fas fa-align-justify"></i>
+                </button>
+            </div>
+
+            <div class="toolbar-divider"></div>
+
+            <!-- Colors & Link -->
+            <div class="toolbar-group">
+                <div class="color-picker-group">
+                    <button type="button" class="toolbar-btn color-btn" [style.color]="currentColor" title="Text Color">
+                        <i class="fas fa-font"></i>
+                    </button>
+                    <div class="color-palette">
+                        <button *ngFor="let color of colorPalette" type="button" class="color-swatch"
+                            [style.background-color]="color" (click)="applyColorFromPalette(color)" [title]="color">
+                        </button>
+                    </div>
+                </div>
+
+                <div class="color-picker-group">
+                    <button type="button" class="toolbar-btn color-btn" [style.background-color]="currentHighlight"
+                        title="Highlight Color">
+                        <i class="fas fa-highlighter"></i>
+                    </button>
+                    <div class="color-palette">
+                        <button *ngFor="let color of highlightPalette" type="button" class="color-swatch"
+                            [style.background-color]="color" (click)="applyHighlight(color)" [title]="color">
+                        </button>
+                    </div>
+                </div>
+
+                <button type="button" (click)="insertLink()" title="Insert Link" class="toolbar-btn">
+                    <i class="fas fa-link"></i>
+                </button>
+                <button type="button" (click)="removeFormat()" title="Clear Formatting" class="toolbar-btn">
+                    <i class="fas fa-eraser"></i>
+                </button>
+            </div>
+
+            <div class="toolbar-divider"></div>
+
+            <!-- History -->
+            <div class="toolbar-group">
+                <button type="button" (click)="undo()" [disabled]="undoStack.length <= 1" title="Undo (Ctrl+Z)"
+                    class="toolbar-btn">
+                    <i class="fas fa-undo"></i>
+                </button>
+                <button type="button" (click)="redo()" [disabled]="redoStack.length === 0" title="Redo (Ctrl+Y)"
+                    class="toolbar-btn">
+                    <i class="fas fa-redo"></i>
+                </button>
+            </div>
+        </div>
+
+        <!-- Editor -->
+        <div #editor contenteditable="true" class="editor" aria-label="Rich text content" tabindex="0"
+            spellcheck="true">
+        </div>
+
+        <!-- Footer Stats -->
+        <div class="rte-footer">
+            <span class="word-count">Words: {{wordCount}}</span>
+            <span class="char-count">Characters: {{charCount}}</span>
+        </div>
     </div>
-
-    <div class="toolbar-divider"></div>
-
-    <div class="toolbar-group">
-      <button
-        type="button"
-        (click)="insertList(false)"
-        title="Bullet List"
-        class="toolbar-btn">
-        <span class="icon">•</span>
-      </button>
-      <button
-        type="button"
-        (click)="insertList(true)"
-        title="Numbered List"
-        class="toolbar-btn">
-        <span class="icon">1.</span>
-      </button>
-    </div>
-
-    <div class="toolbar-divider"></div>
-
-    <div class="toolbar-group">
-      <button
-        type="button"
-        (click)="applyAlignment('left')"
-        [class.active]="isActive('alignLeft')"
-        title="Align Left"
-        class="toolbar-btn">
-        <span class="icon">☰</span>
-      </button>
-      <button
-        type="button"
-        (click)="applyAlignment('center')"
-        [class.active]="isActive('alignCenter')"
-        title="Align Center"
-        class="toolbar-btn">
-        <span class="icon">≡</span>
-      </button>
-      <button
-        type="button"
-        (click)="applyAlignment('right')"
-        [class.active]="isActive('alignRight')"
-        title="Align Right"
-        class="toolbar-btn">
-        <span class="icon">☰</span>
-      </button>
-    </div>
-
-    <div class="toolbar-divider"></div>
-
-    <div class="toolbar-group">
-      <div class="select-wrapper">
-        <select
-          [value]="currentFontSize"
-          (change)="applyFontSize($event)"
-          title="Font Size"
-          class="toolbar-select">
-          <option *ngFor="let size of fontSizes" [value]="size.value">{{size.label}}</option>
-        </select>
-      </div>
-
-      <div class="color-picker-wrapper">
-        <span class="color-preview" [style.background-color]="currentColor"></span>
-        <input
-          type="color"
-          [value]="currentColor"
-          (change)="applyColor($event)"
-          (mouseover)="showTooltip($event, 'We recommend not change automatic colors because it will effects to different color themes')"
-          (mouseleave)="hideTooltip()"
-          title="Text Color"
-          class="toolbar-color" />
-      </div>
-
-      <button
-        type="button"
-        (click)="insertLink()"
-        title="Insert Link"
-        class="toolbar-btn">
-        <span class="icon">🔗</span>
-      </button>
-    </div>
-
-    <div class="toolbar-divider"></div>
-
-    <div class="toolbar-group">
-      <button
-        type="button"
-        (click)="undo()"
-        title="Undo (Ctrl+Z)"
-        class="toolbar-btn">
-        <span class="icon">↩</span>
-      </button>
-      <button
-        type="button"
-        (click)="redo()"
-        title="Redo (Ctrl+Y or Ctrl+Shift+Z)"
-        class="toolbar-btn">
-        <span class="icon">↪</span>
-      </button>
-    </div>
-  </div>
-
-  <div
-    #editor
-    contenteditable="true"
-    class="editor"
-    aria-label="Rich text content"
-    tabindex="0">
-  </div>
 </div>

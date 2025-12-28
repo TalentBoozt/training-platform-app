@@ -1,13 +1,13 @@
 import { Component } from '@angular/core';
-import {ResumeStorageService} from '../../services/support/resume-storage.service';
-import {AlertsService} from '../../services/support/alerts.service';
-import {FormsModule} from '@angular/forms';
-import {NgForOf, NgIf} from '@angular/common';
-import {ActivatedRoute} from '@angular/router';
-import {CoursesService} from '../../services/courses.service';
-import {zonedTimeToUtc} from 'date-fns-tz';
+import { ResumeStorageService } from '../../services/support/resume-storage.service';
+import { AlertsService } from '../../services/support/alerts.service';
+import { FormsModule } from '@angular/forms';
+import { NgForOf, NgIf } from '@angular/common';
+import { ActivatedRoute } from '@angular/router';
+import { CoursesService } from '../../services/courses.service';
+import { zonedTimeToUtc } from 'date-fns-tz';
 import * as moment from 'moment-timezone';
-import {TimezoneService} from '../../services/support/timezone.service';
+import { TimezoneService } from '../../services/support/timezone.service';
 
 @Component({
   selector: 'app-update-modules',
@@ -22,6 +22,7 @@ import {TimezoneService} from '../../services/support/timezone.service';
 })
 export class UpdateModulesComponent {
   modules: any[] = [];
+  editMode = false;
   newModule = {
     id: '',
     name: '',
@@ -39,9 +40,9 @@ export class UpdateModulesComponent {
   }
 
   status: any[] = [
-    {name: "Upcoming", value: "upcoming"},
-    {name: "In Progress", value: "inprogress"},
-    {name: "Concluded", value: "concluded"}
+    { name: "Upcoming", value: "upcoming" },
+    { name: "In Progress", value: "inprogress" },
+    { name: "Concluded", value: "concluded" }
   ]
 
   isFreeCheck = false
@@ -51,18 +52,18 @@ export class UpdateModulesComponent {
   timezones: string[] = moment.tz.names();
 
   constructor(private resumeStorage: ResumeStorageService,
-              private courseService: CoursesService,
-              private route: ActivatedRoute,
-              private timezoneService: TimezoneService,
-              private alertService: AlertsService) {}
+    private courseService: CoursesService,
+    private route: ActivatedRoute,
+    private timezoneService: TimezoneService,
+    private alertService: AlertsService) { }
 
   ngOnInit(): void {
     this.courseId = this.route.snapshot.paramMap.get('courseId')
     this.getCourse(this.courseId);
   }
 
-  getCourse(courseId: any){
-    if (courseId){
+  getCourse(courseId: any) {
+    if (courseId) {
       this.courseService.getCourseById(courseId).subscribe(response => {
         this.modules = response.modules
       })
@@ -79,8 +80,8 @@ export class UpdateModulesComponent {
       this.newModule.installmentId &&
       this.newModule.date &&
       this.newModule.start &&
-      this.newModule.end){
-      if (this.newModule.meetingLink &&!this.isValidUrl(this.newModule.meetingLink)){
+      this.newModule.end) {
+      if (this.newModule.meetingLink && !this.isValidUrl(this.newModule.meetingLink)) {
         this.alertService.errorMessage('Please enter a valid url', 'Error');
         return;
       }
@@ -91,11 +92,11 @@ export class UpdateModulesComponent {
   }
 
   removeModule(index: number, module: any): void {
-    if (index && module){
-      if (confirm('Delete module permanently?')){
+    if (index && module) {
+      if (confirm('Delete module permanently?')) {
         this.courseService.deleteModule(this.courseId, module.id).subscribe(response => {
           this.modules.splice(index, 1);
-          this. alertService.successMessage('Module deleted successfully!', 'Success')
+          this.alertService.successMessage('Module deleted successfully!', 'Success')
         }, error => this.alertService.errorMessage('Failed to delete Module', 'Error'))
       }
     }
@@ -123,6 +124,7 @@ export class UpdateModulesComponent {
   }
 
   resetForm(): void {
+    this.editMode = false;
     this.newModule = {
       id: '',
       name: '',
@@ -150,7 +152,8 @@ export class UpdateModulesComponent {
   }
 
   editModule(module: any) {
-    if (module){
+    this.editMode = true;
+    if (module) {
       this.newModule = {
         id: module.id,
         name: module.name,

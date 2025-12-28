@@ -1,0 +1,58 @@
+<div class="course-wizard-shell h-100 d-flex flex-column">
+    <!-- Header -->
+    <header class="wizard-header border-bottom px-4 py-3 d-flex justify-content-between align-items-center shadow-sm">
+        <div class="d-flex align-items-center gap-3">
+            <div class="course-icon bg-primary-subtle rounded-circle p-2 text-primary">
+                <i class="fas fa-graduation-cap"></i>
+            </div>
+            <div class="d-flex flex-column">
+                <h5 class="mb-0 fw-bold text-dark">
+                    {{ (course().title | truncate: 30) || 'Untitled Course' }}
+                </h5>
+                <span class="small">{{ course().subtitle || 'No subtitle' }}</span>
+            </div>
+        </div>
+        <div class="d-flex align-items-center gap-3">
+            <button class="btn btn-outline-secondary btn-sm" (click)="exit()">
+                <i class="fas fa-times me-1"></i> Exit
+            </button>
+            <button class="btn btn-primary btn-sm" (click)="saveDraft()" [disabled]="saving">
+                <span *ngIf="saving" class="spinner-border spinner-border-sm me-1"></span>
+                {{ saving ? 'Saving...' : 'Save Draft' }}
+            </button>
+        </div>
+    </header>
+
+    <!-- Progress Bar -->
+    <div class="progress" style="height: 4px;">
+        <div class="progress-bar bg-primary transition-all" role="progressbar" [style.width.%]="getProgress()"></div>
+    </div>
+
+    <!-- Content -->
+    <div class="wizard-content flex-grow-1 overflow-hidden d-flex">
+        <!-- Sidebar -->
+        <aside class="wizard-sidebar border-end d-none d-lg-block">
+            <nav class="nav flex-column p-3 gap-2">
+                <a *ngFor="let step of steps"
+                    class="nav-link rounded-3 px-3 py-2 d-flex align-items-center gap-3 transition-all"
+                    [routerLink]="[step.path]" routerLinkActive="active shadow-sm fw-bold"
+                    [class.text-not-active]="!isActive(step.path)">
+                    <div class="step-indicator rounded-circle border d-flex align-items-center justify-content-center"
+                        [class.border-primary]="isActive(step.path)" [class.bg-primary]="stepCompleted(step)"
+                        [class.text-white]="stepCompleted(step)" style="width: 28px; height: 28px; font-size: 12px;">
+                        <i *ngIf="stepCompleted(step)" class="fas fa-check"></i>
+                        <span *ngIf="!stepCompleted(step)">{{ step.id }}</span>
+                    </div>
+                    {{ step.label }}
+                </a>
+            </nav>
+        </aside>
+
+        <!-- Main Step Content -->
+        <main class="flex-grow-1 overflow-auto">
+            <div class="container-fluid p-0 h-100">
+                <router-outlet></router-outlet>
+            </div>
+        </main>
+    </div>
+</div>

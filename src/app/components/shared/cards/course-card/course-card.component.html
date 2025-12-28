@@ -1,87 +1,86 @@
-<div class="card">
-  <img src="{{course.image || '/assets/images/course-card/placeholder.webp'}}" class="card-img-top" alt="course banner" (click)="navigateToDetails(course.id)">
-  <div class="card-body">
-    <div class="d-flex flex-column gap-2">
-      <div class="d-flex align-items-center gap-2">
-        <div class="card-title" (click)="navigateToDetails(course.id)">{{course.name}}</div>
-        <div class="dropdown">
-          <button class="btn p-0" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
-            <span class="status-tag" [ngClass]="getClassForStatus(course.courseStatus)">{{ getClassForStatus(course.courseStatus) }} <span class="icon">▼</span></span>
-          </button>
+<div class="course-card-root">
+  <div class="card-img-wrapper" (click)="navigateToDetails(course.id)">
+    <img src="{{course.image || '/assets/images/course-card/placeholder.webp'}}" alt="course banner">
 
-          <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-            <li>
-              <a class="dropdown-item d-flex align-items-center" (click)="changeStatus('upcoming', course)">
-                <i class="material-icons">event_available</i> Upcoming
-              </a>
-            </li>
-            <li>
-              <a class="dropdown-item d-flex align-items-center" (click)="changeStatus('ongoing', course)">
-                <i class="material-icons me-2">autorenew</i> Ongoing
-              </a>
-            </li>
-            <li>
-              <a class="dropdown-item d-flex align-items-center" (click)="changeStatus('completed', course)">
-                <i class="material-icons me-2">check_circle</i> Completed
-              </a>
-            </li>
-            <li>
-              <a class="dropdown-item d-flex align-items-center" (click)="changeStatus('cancelled', course)">
-                <i class="material-icons me-2">cancel</i> Cancelled
-              </a>
-            </li>
-          </ul>
+    <div class="badge-container">
+      <div class="dropdown">
+        <button class="status-tag border-0" [ngClass]="getClassForStatus(course.courseStatus)"
+          data-bs-toggle="dropdown">
+          <span class="dot"></span>
+          {{ getClassForStatus(course.courseStatus) }}
+        </button>
+        <ul class="dropdown-menu">
+          <li><a class="dropdown-item" (click)="changeStatus('upcoming', course)"><i class="material-icons">event</i>
+              Upcoming</a></li>
+          <li><a class="dropdown-item" (click)="changeStatus('ongoing', course)"><i
+                class="material-icons">play_circle</i> Ongoing</a></li>
+          <li><a class="dropdown-item" (click)="changeStatus('completed', course)"><i
+                class="material-icons">check_circle</i> Completed</a></li>
+          <li><a class="dropdown-item" (click)="changeStatus('cancelled', course)"><i class="material-icons">cancel</i>
+              Cancelled</a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="card-body">
+    <div class="card-title" (click)="navigateToDetails(course.id)">{{course.name}}</div>
+
+    <div class="meta-info">
+      <div class="d-flex align-items-center justify-content-between mb-1">
+        <div class="platform-chip">
+          <img *ngIf="course.platform === 'online'" src="/assets/images/course-card/online.svg" alt="online">
+          <img *ngIf="course.platform === 'physical'" src="/assets/images/course-card/physical.svg" alt="physical">
+          <img *ngIf="course.platform === 'zoom'" src="/assets/images/course-card/zoom.svg" alt="zoom">
+          <img *ngIf="course.platform === 'team'" src="/assets/images/course-card/ms-teams.svg" alt="teams">
+          <img *ngIf="course.platform === 'meet'" src="/assets/images/course-card/meet.svg" alt="meet">
+          {{course.platform}}
+        </div>
+        <div class="info-item">
+          <i class="material-icons">calendar_today</i>
+          {{course.startDate}}
         </div>
       </div>
 
-      <div class="d-flex flex-column align-items-start gap-2 w-100">
-        <div class="d-flex flex-column align-items-start gap-2 w-100">
-          <div class="platform">
-            <div class="icon-wrapper" *ngIf="course.platform === 'online'">
-              <img src="/assets/images/course-card/online.svg" alt="online">
-            </div>
-            <div class="icon-wrapper" *ngIf="course.platform === 'physical'">
-              <img src="/assets/images/course-card/physical.svg" alt="physical">
-            </div>
-            <div class="icon-wrapper" *ngIf="course.platform === 'zoom'">
-              <img src="/assets/images/course-card/zoom.svg" alt="zoom">
-            </div>
-            <div class="icon-wrapper" *ngIf="course.platform === 'team'">
-              <img src="/assets/images/course-card/ms-teams.svg" alt="teams">
-            </div>
-            <div class="icon-wrapper" *ngIf="course.platform === 'meet'">
-              <img src="/assets/images/course-card/meet.svg" alt="meet">
-            </div>
-            <div class="platform-name">{{course.platform}}</div>
-          </div>
-          <div class="sm-tag">{{course.startDate}}</div>
-        </div>
-        <div class="d-flex align-items-center justify-content-start w-100">
-          <div class="sm-tag">{{course.fromTime +'-'+ course.toTime}}</div>
-        </div>
-        <div class="d-flex align-items-center justify-content-end w-100">
-          <div class="sm-tag"><strong>{{participants.length}} Participants</strong></div>
-        </div>
-        <div class="d-flex align-items-center justify-content-end w-100">
-          <div class="dropdown">
-            <a role="button" data-bs-toggle="dropdown" aria-expanded="false">
-              <i class="material-icons">more_horiz</i>
-            </a>
+      <div class="info-item">
+        <i class="material-icons">schedule</i>
+        {{course.fromTime}} - {{course.toTime}}
+      </div>
+    </div>
 
-            <ul class="dropdown-menu">
-              <li><a class="dropdown-item" routerLink="/preview/{{course.id}}">Preview</a></li>
-              <li><hr class="dropdown-divider"></li>
-              <li><a class="dropdown-item" (click)="navigateToParticipant(course.id)">Participants</a></li>
-              <li><a class="dropdown-item" (click)="navigateToMaterials(course.id)">Manage Materials</a></li>
-              <li><hr class="dropdown-divider"></li>
-              <li><a class="dropdown-item" (click)="editCourse(course)">Edit Course</a></li>
-              <li><a class="dropdown-item" routerLink="/edit-modules/{{course.id}}">Edit Modules</a></li>
-              <li><hr class="dropdown-divider"></li>
-              <li><a class="dropdown-item" (click)="toggleAudience(course.id)">{{course.publicity ? 'Make Private' : 'Make Public'}}</a></li>
-              <li><a class="dropdown-item text-danger" (click)="deleteCourse(course.id)">Delete</a></li>
-            </ul>
-          </div>
+    <div class="card-footer">
+      <div class="participants-count">
+        <strong>{{participants.length}}</strong> Participants
+      </div>
+
+      <div class="dropdown">
+        <div class="more-btn" data-bs-toggle="dropdown">
+          <i class="material-icons">more_vert</i>
         </div>
+        <ul class="dropdown-menu dropdown-menu-end">
+          <li><a class="dropdown-item" routerLink="/preview/{{course.id}}"><i class="material-icons">visibility</i>
+              Preview</a></li>
+          <li><a class="dropdown-item" (click)="navigateToParticipant(course.id)"><i class="material-icons">people</i>
+              Participants</a></li>
+          <li><a class="dropdown-item" (click)="navigateToMaterials(course.id)"><i
+                class="material-icons">folder_open</i> Materials</a></li>
+          <li>
+            <hr class="dropdown-divider">
+          </li>
+          <li><a class="dropdown-item" (click)="editCourse(course)"><i class="material-icons">edit</i> Edit Course</a>
+          </li>
+          <li><a class="dropdown-item" routerLink="/edit-modules/{{course.id}}"><i class="material-icons">layers</i>
+              Edit Modules</a></li>
+          <li>
+            <hr class="dropdown-divider">
+          </li>
+          <li><a class="dropdown-item" (click)="toggleAudience(course.id)">
+              <i class="material-icons">{{course.publicity ? 'vibration' : 'public'}}</i>
+              {{course.publicity ? 'Make Private' : 'Make Public'}}
+            </a></li>
+          <li><a class="dropdown-item text-danger" (click)="deleteCourse(course.id)"><i
+                class="material-icons">delete</i> Delete</a></li>
+        </ul>
       </div>
     </div>
   </div>

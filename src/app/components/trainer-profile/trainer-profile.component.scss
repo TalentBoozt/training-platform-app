@@ -1,112 +1,195 @@
-@use 'sass:color';
+@use '../../shared/styles/utilities';
+
+:host {
+  display: block;
+  min-height: 100vh;
+  @include utilities.mesh-gradient;
+  padding: 2rem 0;
+}
 
 .trainer-profile {
-  background-color: var(--color-surface-300);
-  color: var(--color-text-200);
+  @include utilities.glass-premium;
+  border-radius: 32px;
+  padding: 3rem !important;
+  margin-top: 75px;
+  border: 1px solid hsla(var(--foreground)/ 0.05);
+  @include utilities.animate-fade-in;
 
-  label{
-    color: var(--color-text-300);
-    font-weight: 500;
-  }
+  .cover-photo {
+    height: 240px;
+    border-radius: 24px;
+    overflow: hidden;
+    margin-bottom: 4rem !important;
+    position: relative;
 
-  input, select, textarea{
-    border: 1px solid var(--color-text-500);
-    padding: 8px 15px;
-    border-radius: 12px;
-    background-color: var(--color-surface-200);
-    color: var(--color-text-100);
-    font-size: var(--fs-14);
-
-    &::placeholder{
-      color: var(--color-text-300);
+    img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      filter: brightness(0.9);
     }
 
-    &:active, &:focus{
-      border-color: var(--color-text-500);
-      outline: none;
-      box-shadow: none;
-    }
-  }
-
-  select{
-    option{
-      color: var(--color-text-100);
-      background-color: var(--color-surface-200);
-      border: none;
-      outline: none;
-      padding: 0 5px;
-      cursor: pointer;
+    &::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to bottom, transparent, hsla(var(--background)/ 0.2));
     }
   }
 
-  input[type=file]::file-selector-button {
-    background-color: var(--color-primary-100);
-    color: var(--color-white);
-    transition: all var(--transition-1);
+  .profile-photo {
+    bottom: -50px !important;
+    z-index: 10;
 
-    &:hover{
-      background-color: var(--color-primary-100);
+    img {
+      width: 160px;
+      height: 160px;
+      border: 6px solid hsl(var(--card));
+      box-shadow: utilities.$shadow-premium;
+      @include utilities.transition-base;
+
+      &:hover {
+        transform: scale(1.02);
+      }
     }
   }
 
-  .form-check-input {
-    border: 1px solid var(--color-text-500);
-    width: auto !important;
-  }
+  .profile-header-info {
+    margin-top: 4rem;
+    margin-bottom: 3rem;
 
-  .form-check-input:checked {
-    background-color: var(--color-primary-100);
-    border-color: var(--color-primary-100);
-  }
-
-  .input-group{
-    .input-group-text{
-      background-color: var(--color-surface-200);
-      border: 1px solid var(--color-text-500);
+    h3 {
+      font-size: 2.25rem;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      @include utilities.gradient-text;
+      margin-bottom: 0.5rem;
     }
 
-    input{
-      border-left: none;
-    }
-
-    .btn.btn-outline-secondary{
-      outline: none!important;
-      border: 1px solid var(--color-text-500)!important;
+    .text-muted {
+      font-size: 1.1rem;
+      font-weight: 500;
+      color: hsl(var(--muted-foreground)) !important;
     }
   }
 
-  .text-muted {
-    color: var(--color-text-400) !important;
-  }
-
-  .badge {
+  label.form-label {
+    font-weight: 700;
     font-size: 0.85rem;
-    cursor: pointer;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: hsl(var(--primary));
+    margin-bottom: 0.75rem;
   }
 
-  .tag-input input {
-    width: 100%;
-  }
+  input[type="text"],
+  input[type="url"],
+  textarea,
+  select {
+    @include utilities.input-premium;
+    background: hsla(var(--foreground)/ 0.02);
 
-  .btn-primary {
-    background-color: var(--color-primary-100);
-    border: none;
-
-    &:hover {
-      background-color: var(--color-secondary-100);
+    &:focus {
+      background: hsla(var(--foreground)/ 0.04);
     }
   }
 
-  .bg-surface {
-    background-color: var(--color-surface-200);
+  .tag-input {
+    background: hsla(var(--foreground)/ 0.02);
+    padding: 1rem;
+    border-radius: 16px;
+    border: 1px solid hsla(var(--foreground)/ 0.1);
+
+    .badge {
+      padding: 0.5rem 1rem;
+      border-radius: 100px;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      @include utilities.transition-base;
+
+      &.bg-primary {
+        background: hsla(var(--primary)/ 0.1) !important;
+        color: hsl(var(--primary)) !important;
+        border: 1px solid hsla(var(--primary)/ 0.2);
+      }
+
+      &.bg-secondary {
+        background: hsla(var(--foreground)/ 0.05) !important;
+        color: hsl(var(--foreground)) !important;
+        border: 1px solid hsla(var(--foreground)/ 0.1);
+      }
+
+      i {
+        cursor: pointer;
+        font-size: 0.8rem;
+        opacity: 0.6;
+
+        &:hover {
+          opacity: 1;
+        }
+      }
+    }
   }
 
-  .cover-photo img {
-    max-height: 200px;
-    object-fit: cover;
+  .input-group {
+    gap: 0.5rem;
+
+    .form-select {
+      max-width: 120px;
+      flex: none;
+    }
+
+    input {
+      border-radius: 12px !important;
+    }
   }
 
-  .profile-photo img {
-    object-fit: cover;
+  .form-check {
+    padding: 1.25rem;
+    background: hsla(var(--foreground)/ 0.03);
+    border-radius: 16px;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+
+    .form-check-input {
+      width: 20px;
+      height: 20px;
+      margin: 0;
+      accent-color: hsl(var(--primary));
+      border: 2px solid hsla(var(--foreground)/ 0.2);
+    }
+
+    label {
+      margin: 0;
+      font-weight: 700;
+      color: hsl(var(--foreground));
+    }
+  }
+
+  .btn-save {
+    @include utilities.btn-fill;
+    @include utilities.btn-f-3;
+    padding: 0.75rem 2.5rem;
+    font-weight: 700;
+    border-radius: 14px;
+    @include utilities.shadow-soft;
+  }
+}
+
+@include utilities.respond-to(md) {
+  .trainer-profile {
+    padding: 1.5rem !important;
+
+    .cover-photo {
+      height: 160px;
+    }
+
+    .profile-photo img {
+      width: 120px;
+      height: 120px;
+    }
   }
 }

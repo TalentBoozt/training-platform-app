@@ -1,86 +1,119 @@
-<div class="d-md-flex">
-  <div class="form-card-1 justify-content-start">
-    <h5>Initialize Modules :</h5>
+<div class="form-card-1 animate-fade-in shadow-premium">
+  <div class="section-header">
+    <h5>Syllabus & Course Modules</h5>
+  </div>
 
-    <form (ngSubmit)="addModule()">
-      <div class="row form-wrapper">
-        <div class="col-12">
-          <div class="form-group">
-            <label for="name">Module name *</label>
-            <input type="text" class="form-control" id="name" [(ngModel)]="newModule.name" [ngModelOptions]="{standalone: true}" required>
-          </div>
-        </div>
-        <div class="col-12">
-          <div class="form-group">
-            <label for="description">Module description *</label>
-            <input type="text" class="form-control" id="description" [(ngModel)]="newModule.description" [ngModelOptions]="{standalone: true}" required>
-          </div>
-        </div>
-        <div class="col-12 col-md-4">
-          <div class="form-group">
-            <label for="installment">Installment Plan *</label>
-            <select class="form-control" id="installment" [(ngModel)]="newModule.installmentId" [ngModelOptions]="{standalone: true}" required [disabled]="isFreeCheck || isOnetimePayment">
-              <option *ngIf="!isFreeCheck && !isOnetimePayment" value="free">Free</option>
-              <option *ngIf="isOnetimePayment" value="onetime">Onetime Payment</option>
-              <option *ngFor="let i of installments" [value]="i.id">{{i.name}}</option>
-              <option *ngIf="isFreeCheck" [value]="newModule.installmentId">Free</option>
-            </select>
-          </div>
-        </div>
-        <div class="col-12 col-md-8">
-          <div class="form-group">
-            <label for="mlink">Meeting Link(This can be added later)</label>
-            <input type="text" class="form-control" id="mlink" placeholder="https://zoom.us/join/" [(ngModel)]="newModule.meetingLink" [ngModelOptions]="{standalone: true}">
-          </div>
-        </div>
-        <div class="col-12 col-md-6">
-          <div class="form-group">
-            <label for="timezone">TimeZone *</label>
-            <select [(ngModel)]="trainerTimezone" class="form-control" id="timezone" [ngModelOptions]="{standalone: true}">
-              <option *ngFor="let tz of timezones" [value]="tz">{{ tz }}</option>
-            </select>
-          </div>
-        </div>
-        <div class="col-12 col-md-6">
-          <div class="form-group">
-            <label for="date">Start Date *</label>
-            <input type="date" class="form-control" id="date" [(ngModel)]="newModule.date" [ngModelOptions]="{standalone: true}" required>
-          </div>
-        </div>
-        <div class="col-6 col-md-3">
-          <div class="form-group">
-            <label for="start">Start Time *</label>
-            <input type="time" class="form-control" id="start" [(ngModel)]="newModule.start" [ngModelOptions]="{standalone: true}" required>
-          </div>
-        </div>
-        <div class="col-6 col-md-3">
-          <div class="form-group">
-            <label for="end">End Time *</label>
-            <input type="time" class="form-control" id="end" [(ngModel)]="newModule.end" [ngModelOptions]="{standalone: true}" required>
-          </div>
-        </div>
-        <div class="col-12 col-md-6 col-lg-3">
-          <div class="form-group d-flex align-items-end w-100 h-100">
-            <button id="TP_MD_Add" type="submit" class="btn-fill btn-f-2" translate="no">Add</button>
-          </div>
+  <form (ngSubmit)="addModule()" class="mb-5">
+    <div class="row g-4 form-wrapper">
+      <div class="col-12">
+        <div class="form-group">
+          <label for="name">Module Title *</label>
+          <input type="text" class="form-control" id="name" placeholder="E.g. Introduction to Neural Networks"
+            [(ngModel)]="newModule.name" [ngModelOptions]="{standalone: true}" required>
         </div>
       </div>
-    </form>
 
-    <div class="skill-set w-100" *ngIf="modules.length > 0">
-      <hr>
-      <div class="row my-2" *ngFor="let module of modules; let i = index">
-        <div class="col-6">
-          <p>{{module.name}}</p>
+      <div class="col-12">
+        <div class="form-group">
+          <label for="description">Module Overview / Description *</label>
+          <textarea class="form-control" id="description" rows="2"
+            placeholder="Briefly describe what students will learn in this session..."
+            [(ngModel)]="newModule.description" [ngModelOptions]="{standalone: true}" required></textarea>
         </div>
-        <div class="col-3">
-          <p>{{module.date}}</p>
+      </div>
+
+      <div class="col-12 col-md-4">
+        <div class="form-group">
+          <label for="installment">Associated Payment Plan *</label>
+          <select class="form-control" id="installment" [(ngModel)]="newModule.installmentId"
+            [ngModelOptions]="{standalone: true}" required [disabled]="isFreeCheck || isOnetimePayment">
+            <option *ngIf="!isFreeCheck && !isOnetimePayment" value="free">Free Access</option>
+            <option *ngIf="isOnetimePayment" value="onetime">One-Time Payment Entry</option>
+            <option *ngFor="let i of installments" [value]="i.id">{{i.name}}</option>
+            <option *ngIf="isFreeCheck" [value]="newModule.installmentId">Free</option>
+          </select>
         </div>
-        <div class="col-3">
-          <button id="TP_MD_Delete" type="submit" class="btn-fill btn-f-4" (click)="removeModule(i)"><i class="material-icons" translate="no">delete</i></button>
+      </div>
+
+      <div class="col-12 col-md-8">
+        <div class="form-group">
+          <label for="mlink">Live Session Link <span class="text-muted fw-normal">(Optional)</span></label>
+          <input type="text" class="form-control" id="mlink" placeholder="https://zoom.us/j/..."
+            [(ngModel)]="newModule.meetingLink" [ngModelOptions]="{standalone: true}">
         </div>
+      </div>
+
+      <div class="col-12 col-md-6">
+        <div class="form-group">
+          <label for="timezone">Preferred Timezone *</label>
+          <select [(ngModel)]="trainerTimezone" class="form-control" id="timezone"
+            [ngModelOptions]="{standalone: true}">
+            <option *ngFor="let tz of timezones" [value]="tz">{{ tz }}</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="col-12 col-md-6">
+        <div class="form-group">
+          <label for="date">Session Date *</label>
+          <input type="date" class="form-control" id="date" [(ngModel)]="newModule.date"
+            [ngModelOptions]="{standalone: true}" required>
+        </div>
+      </div>
+
+      <div class="col-6 col-md-3">
+        <div class="form-group">
+          <label for="start">Starts At *</label>
+          <input type="time" class="form-control" id="start" [(ngModel)]="newModule.start"
+            [ngModelOptions]="{standalone: true}" required>
+        </div>
+      </div>
+
+      <div class="col-6 col-md-3">
+        <div class="form-group">
+          <label for="end">Ends At *</label>
+          <input type="time" class="form-control" id="end" [(ngModel)]="newModule.end"
+            [ngModelOptions]="{standalone: true}" required>
+        </div>
+      </div>
+
+      <div class="col-12 col-md-6 d-flex align-items-end mb-4">
+        <button id="TP_MD_Add" type="submit"
+          class="btn-fill btn-f-3 w-100 py-3 d-flex align-items-center justify-content-center gap-2">
+          <i class="material-icons">add_circle_outline</i>
+          <span>Add Module to Syllabus</span>
+        </button>
       </div>
     </div>
+  </form>
 
+  <!-- Module Syllabus View -->
+  <div class="module-list" *ngIf="modules.length > 0">
+    <h6>Course Modules ({{modules.length}})</h6>
+
+    <div class="module-item" *ngFor="let module of modules; let i = index">
+      <div class="module-info">
+        <span class="module-name">{{module.name}}</span>
+        <div class="module-meta">
+          <div class="meta-tag">
+            <i class="material-icons">calendar_today</i>
+            <span>{{module.date | date:'mediumDate'}}</span>
+          </div>
+          <div class="meta-tag">
+            <i class="material-icons">schedule</i>
+            <span>{{module.start}} - {{module.end}}</span>
+          </div>
+          <div class="meta-tag" *ngIf="module.meetingLink">
+            <i class="material-icons">videocam</i>
+            <span>Live Session</span>
+          </div>
+        </div>
+      </div>
+      <div class="module-actions">
+        <button id="TP_MD_Delete" type="button" class="btn-delete" (click)="removeModule(i)" title="Remove Module">
+          <i class="material-icons">delete_outline</i>
+        </button>
+      </div>
+    </div>
   </div>
 </div>

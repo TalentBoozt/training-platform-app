@@ -1,22 +1,23 @@
-import {Component, OnInit} from '@angular/core';
-import {ResumeStorageService} from '../../../services/support/resume-storage.service';
-import {FormsModule} from '@angular/forms';
-import {NgForOf, NgIf} from '@angular/common';
-import {AlertsService} from '../../../services/support/alerts.service';
-import {CoursesService} from '../../../services/courses.service';
+import { Component, OnInit } from '@angular/core';
+import { ResumeStorageService } from '../../../services/support/resume-storage.service';
+import { FormsModule } from '@angular/forms';
+import { DecimalPipe, NgForOf, NgIf } from '@angular/common';
+import { AlertsService } from '../../../services/support/alerts.service';
+import { CoursesService } from '../../../services/courses.service';
 
 @Component({
   selector: 'app-payment-details',
   imports: [
     FormsModule,
     NgIf,
-    NgForOf
+    NgForOf,
+    DecimalPipe
   ],
   templateUrl: './payment-details.component.html',
   styleUrl: './payment-details.component.scss',
   standalone: true
 })
-export class PaymentDetailsComponent implements OnInit{
+export class PaymentDetailsComponent implements OnInit {
   paymentMethod: string = 'card';
 
   bankInstallments: any[] = [];
@@ -50,7 +51,7 @@ export class PaymentDetailsComponent implements OnInit{
 
   courseName: string = '';
 
-  constructor(private resumeStorage: ResumeStorageService, private alertService: AlertsService, private courseService: CoursesService) {}
+  constructor(private resumeStorage: ResumeStorageService, private alertService: AlertsService, private courseService: CoursesService) { }
 
   ngOnInit(): void {
     const savedData = this.resumeStorage.getData();
@@ -84,7 +85,7 @@ export class PaymentDetailsComponent implements OnInit{
   }
 
   addInstallment(): void {
-    if (this.paymentMethod == 'card'){
+    if (this.paymentMethod == 'card') {
       const { name, currency, price, discount } = this.newCardInstallment;
       const productPrice = price - (price * discount / 100);
       if (name && currency && price) {
@@ -106,9 +107,9 @@ export class PaymentDetailsComponent implements OnInit{
       } else {
         this.alertService.errorMessage('Fill all required fields!', 'Error')
       }
-    } else if (this.paymentMethod == 'bank'){
-      const {bank, accountNb, branch, holder, name, currency, price} = this.newBankInstallment;
-      if (bank && accountNb && branch && holder && name && price && currency){
+    } else if (this.paymentMethod == 'bank') {
+      const { bank, accountNb, branch, holder, name, currency, price } = this.newBankInstallment;
+      if (bank && accountNb && branch && holder && name && price && currency) {
         this.newBankInstallment.id = this.generateRandomId();
         this.newBankInstallment.discountedPrice = (price - (price * this.newBankInstallment.discount / 100)).toFixed(2);
         this.bankInstallments.push({ ...this.newBankInstallment });
@@ -123,10 +124,10 @@ export class PaymentDetailsComponent implements OnInit{
   }
 
   removeInstallment(index: number): void {
-    if (this.paymentMethod == 'card'){
+    if (this.paymentMethod == 'card') {
       this.cardInstallments.splice(index, 1);
       this.saveData();
-    } else if (this.paymentMethod == 'bank'){
+    } else if (this.paymentMethod == 'bank') {
       this.bankInstallments.splice(index, 1);
       this.saveData();
     } else {
@@ -135,9 +136,9 @@ export class PaymentDetailsComponent implements OnInit{
   }
 
   saveData(): void {
-    if (this.paymentMethod == 'card'){
+    if (this.paymentMethod == 'card') {
       this.resumeStorage.saveData('installment', this.cardInstallments);
-    } else if (this.paymentMethod == 'bank'){
+    } else if (this.paymentMethod == 'bank') {
       this.resumeStorage.saveData('installment', this.bankInstallments);
     } else {
       return;
@@ -145,7 +146,7 @@ export class PaymentDetailsComponent implements OnInit{
   }
 
   resetForm(): void {
-    if (this.paymentMethod == 'card'){
+    if (this.paymentMethod == 'card') {
       this.newCardInstallment = {
         id: '',
         name: '',
@@ -156,7 +157,7 @@ export class PaymentDetailsComponent implements OnInit{
         productId: '',
         priceId: ''
       }
-    } else if (this.paymentMethod == 'bank'){
+    } else if (this.paymentMethod == 'bank') {
       this.newBankInstallment = {
         id: '',
         bank: '',

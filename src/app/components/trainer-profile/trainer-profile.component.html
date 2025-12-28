@@ -1,115 +1,123 @@
-<div class="trainer-profile container my-4 p-4 rounded shadow-sm bg-surface">
-  <div class="cover-photo position-relative mb-4">
-    <img [src]="profile?.coverImage || 'assets/images/shared/default-cover-1200x200.png'" class="img-fluid w-100 rounded" alt="cover">
-    <div class="profile-photo position-absolute bottom-0 start-50 translate-middle">
-      <img [src]="profile?.image || 'https://avatar.iran.liara.run/username?username=' + username" class="rounded-circle border border-3 border-white" width="150" height="150" alt="avatar">
+<div class="trainer-profile container">
+  <div class="cover-photo">
+    <img [src]="profile?.coverImage || 'assets/images/shared/default-cover-1200x200.png'" alt="cover">
+    <div class="profile-photo position-absolute start-50 translate-middle-x">
+      <img [src]="profile?.image || 'https://avatar.iran.liara.run/username?username=' + username"
+        class="rounded-circle" alt="avatar">
     </div>
   </div>
 
-  <div class="text-center mt-5">
+  <div class="profile-header-info text-center">
     <h3>{{ username || profile?.firstname + ' ' + profile?.lastname || 'N/A' }}</h3>
     <p class="text-muted">{{ profile?.headline }}</p>
   </div>
 
   <form *ngIf="profileForm" [formGroup]="profileForm" (ngSubmit)="onSave()">
-    <div class="row g-3">
+    <div class="row g-4">
       <!-- Headline -->
       <div class="col-md-12">
         <label class="form-label">Headline</label>
-        <input type="text" formControlName="headline" class="form-control" maxlength="100">
-        <small class="text-muted">{{ getCharCount('headline') }}/100 characters</small>
+        <input type="text" formControlName="headline" maxlength="100"
+          placeholder="e.g. Senior Software Architect & Lead Instructor">
+        <div class="d-flex justify-content-end">
+          <small class="text-muted">{{ getCharCount('headline') }}/100 characters</small>
+        </div>
       </div>
 
       <!-- Bio -->
       <div class="col-md-12">
-        <label class="form-label">Bio</label>
-        <textarea formControlName="bio" class="form-control" rows="4" maxlength="1000"></textarea>
-        <small class="text-muted">{{ getCharCount('bio') }}/1000 characters</small>
+        <label class="form-label">Professional Bio</label>
+        <textarea formControlName="bio" rows="5" maxlength="1000"
+          placeholder="Tell students about your journey and expertise..."></textarea>
+        <div class="d-flex justify-content-end">
+          <small class="text-muted">{{ getCharCount('bio') }}/1000 characters</small>
+        </div>
       </div>
 
       <!-- Specialties -->
       <div class="col-md-6">
-        <label class="form-label">Specialties</label>
+        <label class="form-label">Key Specialties</label>
         <div class="tag-input">
-          <div class="d-flex flex-wrap gap-2 mb-2">
-            <span *ngFor="let s of specialties.controls; let i = index"
-                  class="badge bg-primary">
-              {{ s.value }} <i class="fa fa-times ms-2" (click)="removeTag(specialties, i)"></i>
+          <div class="d-flex flex-wrap gap-2 mb-3" *ngIf="specialties.length > 0">
+            <span *ngFor="let s of specialties.controls; let i = index" class="badge bg-primary">
+              {{ s.value }} <i class="material-icons" (click)="removeTag(specialties, i)">close</i>
             </span>
           </div>
-          <input type="text" class="form-control" placeholder="Press Enter or comma to add"
-                 (keydown)="addTag(specialties, $event)">
+          <input type="text" placeholder="Type and press Enter to add..." (keydown)="addTag(specialties, $event)">
         </div>
       </div>
 
       <!-- Languages -->
       <div class="col-md-6">
-        <label class="form-label">Languages</label>
+        <label class="form-label">Languages Spoken</label>
         <div class="tag-input">
-          <div class="d-flex flex-wrap gap-2 mb-2">
-            <span *ngFor="let l of languages.controls; let i = index"
-                  class="badge bg-secondary">
-              {{ l.value }} <i class="fa fa-times ms-2" (click)="removeTag(languages, i)"></i>
+          <div class="d-flex flex-wrap gap-2 mb-3" *ngIf="languages.length > 0">
+            <span *ngFor="let l of languages.controls; let i = index" class="badge bg-secondary">
+              {{ l.value }} <i class="material-icons" (click)="removeTag(languages, i)">close</i>
             </span>
           </div>
-          <input type="text" class="form-control" placeholder="Press Enter or comma to add"
-                 (keydown)="addTag(languages, $event)">
+          <input type="text" placeholder="English, Spanish, etc..." (keydown)="addTag(languages, $event)">
         </div>
       </div>
 
       <!-- Hourly Rate -->
       <div class="col-md-6">
-        <label class="form-label">Rate</label>
+        <label class="form-label">Pricing / Rate</label>
         <div class="input-group">
-          <input type="text" formControlName="hourlyRateAmount" class="form-control" placeholder="Amount">
+          <input type="text" formControlName="hourlyRateAmount" placeholder="0.00">
           <select class="form-select" formControlName="hourlyRateCurrency">
             <option *ngFor="let c of currencies" [value]="c">{{ c }}</option>
           </select>
           <select class="form-select" formControlName="hourlyRateUnit">
-            <option *ngFor="let u of rateUnits" [value]="u">per {{ u }}</option>
+            <option *ngFor="let u of rateUnits" [value]="u">/ {{ u }}</option>
           </select>
         </div>
         <div *ngIf="profileForm.get('hourlyRateAmount')?.invalid && profileForm.get('hourlyRateAmount')?.touched"
-             class="text-danger small mt-1">Invalid amount</div>
+          class="text-danger small mt-2">Please enter a valid amount</div>
       </div>
 
       <!-- Availability -->
       <div class="col-md-6">
-        <label class="form-label">Availability</label>
-        <input type="text" formControlName="availability" class="form-control" maxlength="150">
-        <small class="text-muted">{{ getCharCount('availability') }}/150 characters</small>
+        <label class="form-label">Availability Note</label>
+        <input type="text" formControlName="availability" maxlength="150" placeholder="e.g. Weekdays after 6PM GMT">
+        <div class="d-flex justify-content-end">
+          <small class="text-muted">{{ getCharCount('availability') }}/150 characters</small>
+        </div>
       </div>
 
       <!-- URLs -->
       <div class="col-md-4">
-        <label class="form-label">Website</label>
-        <input type="url" formControlName="website" class="form-control">
+        <label class="form-label">Personal Website</label>
+        <input type="url" formControlName="website" placeholder="https://yourportfolio.com">
         <div *ngIf="profileForm.get('website')?.invalid && profileForm.get('website')?.touched"
-             class="text-danger small mt-1">Invalid URL</div>
+          class="text-danger small mt-2">Invalid URL format</div>
       </div>
       <div class="col-md-4">
-        <label class="form-label">LinkedIn</label>
-        <input type="url" formControlName="linkedIn" class="form-control">
+        <label class="form-label">LinkedIn Profile</label>
+        <input type="url" formControlName="linkedIn" placeholder="https://linkedin.com/in/username">
         <div *ngIf="profileForm.get('linkedIn')?.invalid && profileForm.get('linkedIn')?.touched"
-             class="text-danger small mt-1">Invalid URL</div>
+          class="text-danger small mt-2">Invalid URL format</div>
       </div>
       <div class="col-md-4">
-        <label class="form-label">YouTube</label>
-        <input type="url" formControlName="youtube" class="form-control">
+        <label class="form-label">YouTube Channel</label>
+        <input type="url" formControlName="youtube" placeholder="https://youtube.com/@channel">
         <div *ngIf="profileForm.get('youtube')?.invalid && profileForm.get('youtube')?.touched"
-             class="text-danger small mt-1">Invalid URL</div>
+          class="text-danger small mt-2">Invalid URL format</div>
       </div>
 
       <!-- Public profile -->
-      <div class="col-12 form-check mt-3">
-        <input type="checkbox" formControlName="isPublicProfile" class="form-check-input" id="publicCheck">
-        <label class="form-check-label" for="publicCheck">&nbsp;Publicly visible profile</label>
+      <div class="col-12 mt-2">
+        <div class="form-check">
+          <input type="checkbox" formControlName="isPublicProfile" class="form-check-input" id="publicCheck">
+          <label class="form-check-label" for="publicCheck">Publicly visible profile</label>
+        </div>
       </div>
 
       <!-- Submit -->
-      <div class="text-end mt-4">
-        <button type="submit" class="btn btn-primary px-4" [disabled]="profileForm.invalid">
-          <i class="fa fa-save me-2"></i>Save
+      <div class="col-12 text-end mt-5">
+        <button type="submit" class="btn-save" [disabled]="profileForm.invalid">
+          <i class="material-icons mb-0 me-2" style="font-size: 20px">save</i>
+          Save Profile Changes
         </button>
       </div>
     </div>

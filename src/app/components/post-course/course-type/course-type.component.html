@@ -1,9 +1,27 @@
 <div class="container">
   <div class="course-type-wrapper">
-    <h2>What option mostly describe your course type?</h2>
-    <div class="d-md-flex align-items-center justify-content-center gap-2 w-100">
-      <div class="type-btn mb-2 mb-md-0" routerLink="/post-live"><span class="live-dot"></span>Live Course</div>
-      <div class="type-btn" routerLink="/post-rec">Recorded Course</div>
+    <h2>Select Your Course Format</h2>
+
+    <div class="type-grid">
+      <a routerLink="/post-live" class="modern-type-card animate-slide-in">
+        <div class="live-indicator">
+          <span class="dot"></span>
+          <span>Live Now</span>
+        </div>
+        <div class="icon-box">
+          <i class="material-icons">sensors</i>
+        </div>
+        <h3>Live Interactive Course</h3>
+        <p>Real-time sessions with students, group discussions, and immediate feedback.</p>
+      </a>
+
+      <a routerLink="/post-rec" class="modern-type-card recorded animate-slide-in" style="animation-delay: 0.1s">
+        <div class="icon-box">
+          <i class="material-icons">videocam</i>
+        </div>
+        <h3>Pre-recorded Course</h3>
+        <p>Self-paced learning with high-quality video modules and downloadable materials.</p>
+      </a>
     </div>
   </div>
 </div>

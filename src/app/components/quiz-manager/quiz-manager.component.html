@@ -1,16 +1,11 @@
-<div class="container">
-  <div *ngIf="modules.length" class="pt-4">
-    <div *ngFor="let m of modules" class="mb-5 border p-3 rounded shadow">
+<div class="container py-4">
+  <div *ngIf="modules.length">
+    <div *ngFor="let m of modules; let i = index" class="module-wrapper" [style.animation-delay]="i * 0.1 + 's'">
       <h4>{{ m.name }}</h4>
       <p>{{ m.description }}</p>
 
-      <app-quizzes
-        [courseId]="courseId"
-        [moduleId]="m.id"
-        [editMaterial]="editQuizzesMap[m.id]"
-        [clearQuestions]="clearQuestions"
-        (quizUpdated)="onQuizUpdate($event)"
-        (quizCreated)="onQuizSubmit($event)">
+      <app-quizzes [courseId]="courseId" [moduleId]="m.id" [editMaterial]="editQuizzesMap[m.id]"
+        [clearQuestions]="clearQuestions" (quizUpdated)="onQuizUpdate($event)" (quizCreated)="onQuizSubmit($event)">
       </app-quizzes>
     </div>
   </div>

@@ -1,0 +1,39 @@
+@use '../../shared/styles/utilities';
+
+:host {
+    display: block;
+    padding: 2rem 0;
+    margin-top: 75px;
+}
+
+.module-wrapper {
+    @include utilities.glass-premium;
+    padding: 3rem;
+    border-radius: 32px;
+    border: 1px solid hsla(var(--foreground) / 0.05);
+    margin-bottom: 4rem;
+    @include utilities.animate-fade-in;
+
+    h4 {
+        font-size: 1.75rem;
+        font-weight: 800;
+        letter-spacing: -0.02em;
+        @include utilities.gradient-text;
+        margin-bottom: 1rem;
+    }
+
+    p {
+        color: hsl(var(--muted-foreground));
+        font-size: 1.1rem;
+        font-weight: 500;
+        line-height: 1.6;
+        margin-bottom: 2.5rem;
+        max-width: 800px;
+    }
+}
+
+@include utilities.respond-to(md) {
+    .module-wrapper {
+        padding: 1.5rem;
+    }
+}

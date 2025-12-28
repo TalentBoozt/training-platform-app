@@ -1,110 +1,100 @@
 <div class="d-md-flex">
-  <div class="form-card-1 modules" *ngIf="modules.length > 0">
-    <h5>Modules List :</h5>
+  <div class="modules" *ngIf="modules.length > 0">
+    <h5>Modules List</h5>
     <div class="d-flex flex-column align-items-start justify-content-start w-100 h-100">
       <div class="module" *ngFor="let module of modules; let i = index">
         <div class="module-name" (click)="editModule(module)">
           {{module.name}}
         </div>
         <div class="module-action">
-          <div class="vr"></div>
-          <button class="btn-fill btn-f-4" (click)="removeModule(i, module)"><i class="material-icons" translate="no">delete</i></button>
+          <button class="btn-fill btn-f-4" (click)="removeModule(i, module)" title="Delete Module">
+            <i class="material-icons" translate="no">delete</i>
+          </button>
         </div>
       </div>
     </div>
   </div>
-  <div class="form-card-1 justify-content-start">
-    <div class="d-flex align-items-center justify-content-between w-100">
-      <h5>Update Modules :</h5>
-      <button id="TP_UM_AddModule" type="submit" class="btn-fill btn-f-2" translate="no" (click)="addModule()">Update</button>
+
+  <div class="form-card-1">
+    <div class="header-actions">
+      <h5>{{ editMode ? 'Modify Module' : 'Create New Module' }}</h5>
+      <button id="TP_UM_AddModule" type="submit" class="btn-update" translate="no" (click)="addModule()">
+        {{ editMode ? 'Save Changes' : 'Update List' }}
+      </button>
     </div>
 
     <form>
-      <div class="row form-wrapper">
+      <div class="row">
         <div class="col-12 col-md-6">
           <div class="form-group">
-            <label for="mid">Module ID *</label>
-            <input type="text" class="form-control" id="mid" [(ngModel)]="newModule.id" [ngModelOptions]="{standalone: true}" required disabled>
+            <label for="mid">Module ID</label>
+            <input type="text" id="mid" [(ngModel)]="newModule.id" [ngModelOptions]="{standalone: true}" required
+              disabled>
           </div>
         </div>
         <div class="col-12 col-md-6">
           <div class="form-group">
-            <label for="mStatus">Module status *</label>
-            <select class="form-control" id="mStatus" [(ngModel)]="newModule.status" [ngModelOptions]="{standalone: true}" required>
+            <label for="mStatus">Current Status</label>
+            <select id="mStatus" [(ngModel)]="newModule.status" [ngModelOptions]="{standalone: true}" required>
               <option *ngFor="let s of status" [value]="s.value">{{s.name}}</option>
             </select>
           </div>
         </div>
         <div class="col-12">
           <div class="form-group">
-            <label for="name">Module name *</label>
-            <input type="text" class="form-control" id="name" [(ngModel)]="newModule.name" [ngModelOptions]="{standalone: true}" required>
+            <label for="name">Module Title</label>
+            <input type="text" id="name" [(ngModel)]="newModule.name" [ngModelOptions]="{standalone: true}" required
+              placeholder="e.g. Introduction to Design Thinking">
           </div>
         </div>
         <div class="col-12">
           <div class="form-group">
-            <label for="description">Module description *</label>
-            <input type="text" class="form-control" id="description" [(ngModel)]="newModule.description" [ngModelOptions]="{standalone: true}" required>
+            <label for="description">Detailed Description</label>
+            <input type="text" id="description" [(ngModel)]="newModule.description"
+              [ngModelOptions]="{standalone: true}" required placeholder="Key learning outcomes for this session...">
           </div>
         </div>
         <div class="col-12 col-md-4">
           <div class="form-group">
-            <label for="installment">Installment Plan *</label>
-            <input type="text" class="form-control" id="installment" [(ngModel)]="newModule.installmentId" [ngModelOptions]="{standalone: true}" disabled>
+            <label for="installment">Associated Installment</label>
+            <input type="text" id="installment" [(ngModel)]="newModule.installmentId"
+              [ngModelOptions]="{standalone: true}" disabled>
           </div>
         </div>
         <div class="col-12 col-md-8">
           <div class="form-group">
-            <label for="mlink">Meeting Link(allowed to update later)</label>
-            <input type="text" class="form-control" id="mlink" placeholder="https://zoom.us/join/" [(ngModel)]="newModule.meetingLink" [ngModelOptions]="{standalone: true}">
+            <label for="mlink">Live Session Link</label>
+            <input type="text" id="mlink" placeholder="https://zoom.us/j/..." [(ngModel)]="newModule.meetingLink"
+              [ngModelOptions]="{standalone: true}">
           </div>
         </div>
         <div class="col-12 col-md-3">
           <div class="form-group">
-            <label for="timezone">TimeZone *</label>
-            <select [(ngModel)]="newModule.trainerTimezone" class="form-control" id="timezone" [ngModelOptions]="{standalone: true}">
+            <label for="timezone">Region / Timezone</label>
+            <select [(ngModel)]="newModule.trainerTimezone" id="timezone" [ngModelOptions]="{standalone: true}">
               <option *ngFor="let tz of timezones" [value]="tz">{{ tz }}</option>
             </select>
           </div>
         </div>
         <div class="col-12 col-md-3">
           <div class="form-group">
-            <label for="date">Start Date *</label>
-            <input type="date" class="form-control" id="date" [(ngModel)]="newModule.date" [ngModelOptions]="{standalone: true}" required>
+            <label for="date">Scheduled Date</label>
+            <input type="date" id="date" [(ngModel)]="newModule.date" [ngModelOptions]="{standalone: true}" required>
           </div>
         </div>
         <div class="col-6 col-md-3">
           <div class="form-group">
-            <label for="start">Start Time *</label>
-            <input type="time" class="form-control" id="start" [(ngModel)]="newModule.start" [ngModelOptions]="{standalone: true}" required>
+            <label for="start">Start Time</label>
+            <input type="time" id="start" [(ngModel)]="newModule.start" [ngModelOptions]="{standalone: true}" required>
           </div>
         </div>
         <div class="col-6 col-md-3">
           <div class="form-group">
-            <label for="end">End Time *</label>
-            <input type="time" class="form-control" id="end" [(ngModel)]="newModule.end" [ngModelOptions]="{standalone: true}" required>
+            <label for="end">End Time</label>
+            <input type="time" id="end" [(ngModel)]="newModule.end" [ngModelOptions]="{standalone: true}" required>
           </div>
         </div>
       </div>
     </form>
-
-<!--    <div class="skill-set w-100" *ngIf="modules.length > 0">-->
-<!--      <hr>-->
-<!--      <div class="row my-2" *ngFor="let module of modules; let i = index">-->
-<!--        <div class="col-6">-->
-<!--          <p>{{module.name}}</p>-->
-<!--        </div>-->
-<!--        <div class="col-3">-->
-<!--          <p>{{module.date}}</p>-->
-<!--        </div>-->
-<!--        <div class="col-3">-->
-<!--          <div class="d-flex align-items-center gap-2">-->
-<!--            <button class="btn-fill btn-f-5" (click)="editModule(module)"><i class="material-icons" translate="no">edit</i></button>-->
-<!--            <button class="btn-fill btn-f-4" (click)="removeModule(i, module)"><i class="material-icons" translate="no">delete</i></button>-->
-<!--          </div>-->
-<!--        </div>-->
-<!--      </div>-->
-<!--    </div>-->
-
   </div>
 </div>

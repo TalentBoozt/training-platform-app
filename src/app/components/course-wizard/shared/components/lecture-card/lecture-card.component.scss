@@ -1,0 +1,57 @@
+@use '../../../../../shared/styles/utilities';
+
+.lecture-card {
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    border-color: hsla(var(--foreground) / 0.05) !important;
+    background: hsla(var(--card) / 0.4); // Glass
+    backdrop-filter: blur(8px);
+
+    &:hover {
+        background: hsla(var(--card) / 0.8);
+        box-shadow: 0 8px 24px hsla(var(--black) / 0.05) !important;
+        transform: translateY(-2px);
+        border-color: hsla(var(--primary) / 0.2) !important;
+
+        .icon-circle {
+            background: hsla(var(--primary) / 0.1) !important;
+            color: hsl(var(--primary)) !important;
+            transform: scale(1.1);
+        }
+    }
+}
+
+.icon-circle {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: hsla(var(--background) / 0.8);
+    transition: all 0.3s ease;
+    color: hsl(var(--muted-foreground));
+}
+
+.text-dark {
+    font-weight: 600;
+    color: hsl(var(--foreground)) !important;
+}
+
+.text-muted {
+    color: hsl(var(--muted-foreground)) !important;
+}
+
+.accordion-button:not(.collapsed) {
+    background-color: hsla(var(--primary) / 0.05);
+    color: hsl(var(--primary));
+    box-shadow: none;
+
+    &::after {
+        filter: invert(0.5); // Adjust for theme if needed, or use custom icon
+    }
+}
+
+.accordion-button:focus {
+    box-shadow: none;
+    border-color: hsla(var(--primary) / 0.2);
+}

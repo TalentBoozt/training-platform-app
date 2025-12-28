@@ -1,175 +1,129 @@
-<div class="container">
-  <div class="row py-4">
-    <div class="col-6 col-lg-3">
-      <div class="card-1">
-        <div class="title">
-          <div class="img-wrapper">
-            <img src="/assets/images/dashboard/icons/chronometer-time.svg" alt="img" loading="lazy">
-          </div>
-          Training Hours
+<div class="container animate-after-header">
+  <!-- Stats Section -->
+  <div class="stats-grid py-4">
+    <div class="card-1 animate-fade-in" style="animation-delay: 0.1s">
+      <div class="title">
+        <div class="img-wrapper">
+          <img src="/assets/images/dashboard/icons/chronometer-time.svg" alt="time">
         </div>
-        <div class="value">
-          {{overview.hours | number:'2.0-2'}} H
-        </div>
-        <app-card-full-loader *ngIf="o_loading"></app-card-full-loader>
+        Training Hours
       </div>
+      <div class="value">{{overview.hours | number:'1.0-1'}} H</div>
+      <app-card-full-loader *ngIf="o_loading"></app-card-full-loader>
     </div>
-    <div class="col-6 col-lg-3">
-      <div class="card-1">
-        <div class="title">
-          <div class="img-wrapper">
-            <img src="/assets/images/dashboard/icons/books.svg" alt="img" loading="lazy">
-          </div>
-          Courses in Progress
+
+    <div class="card-1 animate-fade-in" style="animation-delay: 0.2s">
+      <div class="title">
+        <div class="img-wrapper">
+          <img src="/assets/images/dashboard/icons/books.svg" alt="courses">
         </div>
-        <div class="value">
-          {{overview.inProgress}}
-        </div>
-        <app-card-full-loader *ngIf="o_loading"></app-card-full-loader>
+        Courses In Progress
       </div>
+      <div class="value">{{overview.inProgress}}</div>
+      <app-card-full-loader *ngIf="o_loading"></app-card-full-loader>
     </div>
-    <div class="col-6 col-lg-3">
-      <div class="card-1">
-        <div class="title">
-          <div class="img-wrapper">
-            <img src="/assets/images/dashboard/icons/summary-check.svg" alt="img" loading="lazy">
-          </div>
-          Courses Completed
+
+    <div class="card-1 animate-fade-in" style="animation-delay: 0.3s">
+      <div class="title">
+        <div class="img-wrapper">
+          <img src="/assets/images/dashboard/icons/summary-check.svg" alt="completed">
         </div>
-        <div class="value">
-          {{overview.completed}}
-        </div>
-        <app-card-full-loader *ngIf="o_loading"></app-card-full-loader>
+        Completed
       </div>
+      <div class="value">{{overview.completed}}</div>
+      <app-card-full-loader *ngIf="o_loading"></app-card-full-loader>
     </div>
-    <div class="col-6 col-lg-3">
-      <div class="card-1">
-        <div class="title">
-          <div class="img-wrapper">
-            <img src="/assets/images/dashboard/icons/participants.svg" alt="img" loading="lazy">
-          </div>
-          Total Participants
+
+    <div class="card-1 animate-fade-in" style="animation-delay: 0.4s">
+      <div class="title">
+        <div class="img-wrapper">
+          <img src="/assets/images/dashboard/icons/participants.svg" alt="participants">
         </div>
-        <div class="value">
-          {{overview.participants}}
-        </div>
-        <app-card-full-loader *ngIf="o_loading"></app-card-full-loader>
+        Total Participants
       </div>
+      <div class="value">{{overview.participants}}</div>
+      <app-card-full-loader *ngIf="o_loading"></app-card-full-loader>
     </div>
   </div>
 
   <div class="row">
-    <div class="col-12 col-md-8 col-lg-9">
-      <ul class="nav nav-tabs">
-        <li class="nav-item" *ngFor="let course of courses">
-          <a class="nav-link"
-             [class.active]="selectedCategory === course.category"
-             (click)="selectCategory(course.category)"
-             href="javascript:void(0)">
-            {{ course.name }}
-          </a>
-        </li>
-      </ul>
+    <!-- Main Content Area -->
+    <div class="col-12 col-xl-9 col-lg-8">
+      <div class="d-flex align-items-center mb-3">
+        <ul class="nav nav-tabs">
+          <li class="nav-item" *ngFor="let course of courses">
+            <a class="nav-link" [class.active]="selectedCategory === course.category"
+              (click)="selectCategory(course.category)" href="javascript:void(0)">
+              {{ course.name }}
+            </a>
+          </li>
+        </ul>
+      </div>
 
-      <div class="container">
-
-        <!-- Course Cards -->
-        <div class="row py-3 w-100" *ngIf="!loading">
-          <div class="col-12 col-md-6 col-lg-4" *ngFor="let course of filteredCourses">
-            <app-course-card
-              [course]="course"
-              (delete)="deleteCourse($event)"
-              (edit)="editCourse($event)"
-              (openMaterials)="openMaterials($event)"
-              (audience)="toggleAudience($event)"
-            ></app-course-card>
+      <!-- Course Cards Container -->
+      <div class="course-list-container">
+        <div class="row py-3 g-4" *ngIf="!loading">
+          <div class="col-12 col-md-6 col-lg-6 col-xl-4 animate-fade-in"
+            *ngFor="let course of filteredCourses; let i = index" [style.animation-delay]="i * 0.1 + 's'">
+            <app-course-card [course]="course" (delete)="deleteCourse($event)" (edit)="editCourse($event)"
+              (openMaterials)="openMaterials($event)" (audience)="toggleAudience($event)"></app-course-card>
           </div>
         </div>
 
-        <div class="w-100" *ngIf="loading">
-          <div class="row py-3 w-100">
-            <div class="col-12 col-md-6 col-lg-4 mb-2" *ngFor="let i of [1, 2, 3]">
-              <app-card1x2-loader></app-card1x2-loader>
-            </div>
+        <div class="row py-3 g-4" *ngIf="loading">
+          <div class="col-12 col-md-6 col-lg-6 col-xl-4" *ngFor="let i of [1, 2, 3]">
+            <app-card1x2-loader></app-card1x2-loader>
           </div>
         </div>
 
-        <div class="result-not-found" *ngIf="filteredCourses.length === 0 && !loading">
-          <div class="img-wrapper">
-            <img src="/assets/images/decorations/polar-bear.svg" alt="not found" loading="lazy">
+        <div class="result-not-found py-5 animate-fade-in" *ngIf="filteredCourses.length === 0 && !loading">
+          <div class="img-wrapper mb-3">
+            <img src="/assets/images/decorations/polar-bear.svg" alt="not found">
           </div>
-          <p>No Results Available</p>
+          <p class="h5 text-muted">No courses found in this category.</p>
         </div>
       </div>
     </div>
-    <div class="col-12 col-md-4 col-lg-3">
-      <div class="upcoming-trainings">
-        <div class="d-flex align-items-center justify-content-between w-100">
-          <h4>Upcoming Trainings</h4>
-<!--          <div class="dropdown">-->
-<!--            <a role="button" data-bs-toggle="dropdown" aria-expanded="false">-->
-<!--              <i class="material-icons">more_horiz</i>-->
-<!--            </a>-->
 
-<!--            <ul class="dropdown-menu">-->
-<!--              <li><a class="dropdown-item" href="#">Preview</a></li>-->
-<!--              <li><hr class="dropdown-divider"></li>-->
-<!--              <li><a class="dropdown-item" href="#">Participants</a></li>-->
-<!--              <li><a class="dropdown-item" href="#">Edit Course</a></li>-->
-<!--              <li><a class="dropdown-item" href="#">Edit Modules</a></li>-->
-<!--              <li><hr class="dropdown-divider"></li>-->
-<!--              <li><a class="dropdown-item text-danger" href="#">Delete</a></li>-->
-<!--            </ul>-->
-<!--          </div>-->
-        </div>
+    <!-- Sidebar Area -->
+    <div class="col-12 col-xl-3 col-lg-4">
+      <div class="upcoming-trainings mb-4 animate-slide-in">
+        <h4>Upcoming Trainings</h4>
         <div class="upcoming-trainings-wrapper">
-          <div class="d-flex align-items-center justify-content-start gap-2 w-100 course" *ngFor="let course of filteredUpcomingCourses">
+          <div class="d-flex align-items-center gap-3 w-100 course" *ngFor="let course of filteredUpcomingCourses">
             <div class="icon-wrapper">
-              <img src="/assets/images/dashboard/icons/course.svg" alt="course" loading="lazy">
+              <img src="/assets/images/dashboard/icons/course.svg" alt="course icon">
             </div>
-            <div class="d-flex flex-column align-items-start w-100">
-              <div class="title">{{course.name}}</div>
+            <div class="flex-grow-1 overflow-hidden">
+              <div class="title text-truncate">{{course.name}}</div>
               <div class="date">{{course.startDate}}</div>
             </div>
             <div class="arrow-icon">
-              <i class="material-icons">arrow_forward_ios</i>
+              <i class="material-icons">chevron_right</i>
             </div>
-
-            <app-card-full-loader *ngIf="u_loading"></app-card-full-loader>
           </div>
 
-          <div class="result-not-found" *ngIf="filteredUpcomingCourses.length === 0 && !u_loading">
-            <div class="img-wrapper">
-              <img src="/assets/images/decorations/polar-bear.svg" alt="not found" loading="lazy">
-            </div>
-            <p>No Upcoming Trainings Available</p>
+          <div class="not-found-small py-4 text-center" *ngIf="filteredUpcomingCourses.length === 0 && !u_loading">
+            <p class="small text-muted m-0">No upcoming trainings scheduled.</p>
           </div>
         </div>
+        <app-card-full-loader *ngIf="u_loading"></app-card-full-loader>
       </div>
 
-      <div class="upcoming-trainings mt-4">
-        <div class="d-flex align-items-center justify-content-between w-100">
-          <h4>Quick Links</h4>
-        </div>
+      <div class="upcoming-trainings animate-slide-in" style="animation-delay: 0.1s">
+        <h4>Quick Access</h4>
         <div class="upcoming-trainings-wrapper">
-          <div class="d-flex align-items-center justify-content-start gap-2 w-100 course" *ngFor="let link of quickLinks" [routerLink]="link.link">
+          <div class="d-flex align-items-center gap-3 w-100 course" *ngFor="let link of quickLinks"
+            [routerLink]="link.link">
             <div class="icon-wrapper">
               <i class="material-icons">{{link.icon}}</i>
             </div>
-            <div class="d-flex flex-column align-items-start w-100">
+            <div class="flex-grow-1">
               <div class="title">{{link.title}}</div>
-<!--              <div class="date">{{course.startDate}}</div>-->
             </div>
             <div class="arrow-icon">
-              <i class="material-icons">arrow_forward_ios</i>
+              <i class="material-icons">chevron_right</i>
             </div>
-          </div>
-
-          <div class="result-not-found" *ngIf="quickLinks.length === 0">
-            <div class="img-wrapper">
-              <img src="/assets/images/decorations/polar-bear.svg" alt="not found" loading="lazy">
-            </div>
-            <p>Quick Links Not Available</p>
           </div>
         </div>
       </div>

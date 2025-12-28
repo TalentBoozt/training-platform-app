@@ -1,192 +1,197 @@
-<div class="form-card-1">
+<div class="form-card-1 animate-fade-in">
   <form class="w-100">
 
-    <div class="d-flex align-items-center justify-content-between gap-2">
-      <h5>Relevant Details :</h5>
-      <div class="form-group">
-        <button id="TP_RD_Save" type="submit" class="btn-fill btn-f-2" (click)="saveData()">Save</button>
-      </div>
+    <div class="section-header">
+      <h5>Relevant Details</h5>
+      <button id="TP_RD_Save" type="submit" class="btn-fill btn-f-3" (click)="saveData()">Save Changes</button>
     </div>
 
-    <div class="row form-wrapper">
+    <div class="row g-4 form-wrapper">
+      <!-- Skills Section -->
       <div class="col-12">
-        <div class="form-group">
-          <div class="skills-container">
-            <label for="skills">Skills <span>(separate with commas)</span></label>
-
-            <div class="tags-input">
-    <span class="tag" *ngFor="let skill of relevantDetails.skills">
-      {{ skill }}
-      <span class="remove-tag" (click)="removeSkill(skill)">×</span>
-    </span>
-
-              <input type="text"
-                     id="skills"
-                     [(ngModel)]="inputValue"
-                     [ngModelOptions]="{standalone: true}"
-                     (keydown)="addSkill($event)"
-                     placeholder="Add a skill..." />
-            </div>
+        <div class="form-group skills-container">
+          <label for="skills">Key Skills Covered <span>(press enter to add)</span></label>
+          <div class="tags-input">
+            <span class="tag" *ngFor="let skill of relevantDetails.skills">
+              {{ skill }}
+              <span class="remove-tag" (click)="removeSkill(skill)">×</span>
+            </span>
+            <input type="text" id="skills" [(ngModel)]="inputValue" [ngModelOptions]="{standalone: true}"
+              (keydown)="addSkill($event)" placeholder="E.g. Advanced SQL, Optimization..." />
           </div>
         </div>
       </div>
+
+      <!-- Timezone and Date -->
       <div class="col-12 col-md-6">
         <div class="form-group">
-          <label for="timezone">TimeZone *</label>
-          <select [(ngModel)]="trainerTimezone" class="form-control" id="timezone" [ngModelOptions]="{standalone: true}">
+          <label for="timezone">Preferred Timezone *</label>
+          <select [(ngModel)]="trainerTimezone" class="form-control" id="timezone"
+            [ngModelOptions]="{standalone: true}">
             <option *ngFor="let tz of timezones" [value]="tz">{{ tz }}</option>
           </select>
         </div>
       </div>
+
       <div class="col-12 col-md-6">
         <div class="form-group">
-          <label for="startDate">Start Date *</label>
-          <input type="date" class="form-control" id="startDate" placeholder="2020-01-01" [(ngModel)]="relevantDetails.startDate" [ngModelOptions]="{standalone: true}" required>
+          <label for="startDate">Course Start Date *</label>
+          <input type="date" class="form-control" id="startDate" [(ngModel)]="relevantDetails.startDate"
+            [ngModelOptions]="{standalone: true}" required>
         </div>
       </div>
-      <div class="col-6 col-md-3">
-        <div class="form-group">
-          <label for="startTime">Start Time *</label>
-          <input type="time" class="form-control" id="startTime" placeholder="20.00PM" [(ngModel)]="relevantDetails.startTime" required [ngModelOptions]="{standalone: true}">
-        </div>
-      </div>
-      <div class="col-6 col-md-3">
-        <div class="form-group">
-          <label for="endTime">End Time *</label>
-          <input type="time" class="form-control" id="endTime" placeholder="22.00PM" [(ngModel)]="relevantDetails.endTime" required [ngModelOptions]="{standalone: true}">
-        </div>
-      </div>
-      <div class="col-12 col-md-9">
-        <div class="form-group">
-          <label for="banner">Upload Cover Image</label>
-          <input type="file" class="form-control" id="banner" (change)="onFileChange($event)" accept="image/*">
-          <span class="error-msg">We recommend to check sample banner before uploading</span>
-        </div>
-      </div>
-      <div class="col-6 col-md-3">
-        <div class="form-group">
-          <label for="sample">
-            <span class="d-md-none">Check sample Image</span>
-          </label>
-          <button type="submit" id="sample" class="btn-fill btn-f-1" (click)="downloadSampleBanner()">Sample</button>
-        </div>
-      </div>
-      <!-- Hidden trigger -->
-      <button #triggerModal type="button" class="d-none" data-bs-toggle="modal" data-bs-target="#imageCropperModal"></button>
 
-      <!-- Modal -->
-      <div class="modal fade" id="imageCropperModal" tabindex="-1" aria-labelledby="cropperLabel" aria-hidden="true">
-        <div class="modal-dialog modal-md modal-dialog-centered">
-          <div class="modal-content">
-            <div class="modal-header">
-              <h5 class="modal-title" id="cropperLabel">Crop Image</h5>
-              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" (click)="cancelCrop()"></button>
-            </div>
-            <div class="modal-body text-center">
-              <image-cropper
-                [imageChangedEvent]="imageChangedEvent"
-                [maintainAspectRatio]="true"
-                [aspectRatio]="16 / 9"
-                [resizeToWidth]="1280"
-                format="png"
-                (imageCropped)="imageCropped($event)">
-              </image-cropper>
-            </div>
-            <div class="modal-footer">
-              <button #cancelCropBtn type="button" class="btn btn-secondary" data-bs-dismiss="modal" (click)="cancelCrop()">Cancel</button>
-              <button class="btn btn-primary" (click)="uploadCroppedImage()" [disabled]="loading">{{loading ? 'Uploading...' : 'Upload'}}</button>
-            </div>
-          </div>
+      <!-- Time Range -->
+      <div class="col-6 col-md-3">
+        <div class="form-group">
+          <label for="startTime">Daily Start *</label>
+          <input type="time" class="form-control" id="startTime" [(ngModel)]="relevantDetails.startTime" required
+            [ngModelOptions]="{standalone: true}">
         </div>
       </div>
+
+      <div class="col-6 col-md-3">
+        <div class="form-group">
+          <label for="endTime">Daily End *</label>
+          <input type="time" class="form-control" id="endTime" [(ngModel)]="relevantDetails.endTime" required
+            [ngModelOptions]="{standalone: true}">
+        </div>
+      </div>
+
+      <!-- Banner Upload -->
+      <div class="col-12 col-md-6">
+        <div class="form-group">
+          <label for="banner">Cover Image Banner</label>
+          <div class="d-flex gap-2">
+            <input type="file" class="form-control" id="banner" (change)="onFileChange($event)" accept="image/*">
+            <button type="button" class="btn-outline btn-o-1 px-4" (click)="downloadSampleBanner()">Preview
+              Sample</button>
+          </div>
+          <span class="error-msg">Recommended: 1280x720px (16:9 ratio) for best display.</span>
+        </div>
+      </div>
+
+      <!-- Free/Paid Toggle -->
       <div class="col-12">
-        <div class="d-sm-flex align-items-center justify-content-between">
-          <div class="form-check">
-            <input class="form-check-input me-2" type="checkbox" id="freeCheck" [(ngModel)]="relevantDetails.freeCheck" [ngModelOptions]="{standalone: true}" (change)="onFreeCheckChange()">
-            <label class="form-check-label" for="freeCheck">Initialize as Free</label>
-          </div>
+        <div class="form-check animate-pulse-subtle">
+          <input class="form-check-input" type="checkbox" id="freeCheck" [(ngModel)]="relevantDetails.freeCheck"
+            [ngModelOptions]="{standalone: true}" (change)="onFreeCheckChange()">
+          <label class="form-check-label" for="freeCheck">Mark this course as completely free</label>
         </div>
       </div>
 
+      <!-- Pricing Logic -->
       <div class="col-6 col-md-3">
         <div class="form-group">
           <label for="currency">Currency *</label>
-          <select class="form-control" id="currency" [(ngModel)]="selectedCurrency" [ngModelOptions]="{standalone: true}" required [disabled]="relevantDetails.freeCheck">
-            <option value="$">USD</option>
-            <option value="Rs">LKR</option>
-            <option value="₹">INR</option>
-            <option value="€">EUR</option>
+          <select class="form-control" id="currency" [(ngModel)]="selectedCurrency"
+            [ngModelOptions]="{standalone: true}" required [disabled]="relevantDetails.freeCheck">
+            <option value="$">USD - United States Dollar</option>
+            <option value="Rs">LKR - Sri Lankan Rupee</option>
+            <option value="₹">INR - Indian Rupee</option>
+            <option value="€">EUR - Euro</option>
           </select>
         </div>
       </div>
 
       <div class="col-6 col-md-3">
         <div class="form-group">
-          <label for="price">Price *</label>
-          <input type="text" class="form-control" id="price" placeholder="10.00" [(ngModel)]="selectedPrice" [ngModelOptions]="{standalone: true}" required [disabled]="relevantDetails.freeCheck">
+          <label for="price">Price Amount *</label>
+          <input type="text" class="form-control" id="price" placeholder="0.00" [(ngModel)]="selectedPrice"
+            [ngModelOptions]="{standalone: true}" required [disabled]="relevantDetails.freeCheck">
         </div>
       </div>
-      <div class="col-6 col-md-3 col-lg-6" [ngClass]="relevantDetails.mediaType === 'physical' ? 'col-xl-3' : ''">
+
+      <!-- Delivery and Category -->
+      <div class="col-12 col-md-6" [ngClass]="{'col-lg-3': relevantDetails.mediaType === 'physical'}">
         <div class="form-group">
-          <label for="mediaType">Delivery Type *</label>
-          <select class="form-control" id="mediaType" [(ngModel)]="relevantDetails.mediaType" [ngModelOptions]="{standalone: true}" required>
-            <option value="zoom">Zoom</option>
+          <label for="mediaType">Delivery Method *</label>
+          <select class="form-control" id="mediaType" [(ngModel)]="relevantDetails.mediaType"
+            [ngModelOptions]="{standalone: true}" required>
+            <option value="zoom">Zoom Video Call</option>
             <option value="meet">Google Meet</option>
             <option value="team">Microsoft Teams</option>
-            <option value="online">Other Online Plat.</option>
-            <option value="physical">Physical</option>
+            <option value="online">Other Online Platform</option>
+            <option value="physical">Physical Location</option>
           </select>
         </div>
       </div>
-      <div class="col-12 col-md-3 col-lg-12 col-xl-3" *ngIf="relevantDetails.mediaType === 'physical'">
+
+      <div class="col-12" [ngClass]="{'col-lg-3': relevantDetails.mediaType === 'physical'}"
+        *ngIf="relevantDetails.mediaType === 'physical'">
         <div class="form-group">
-          <label for="location">Location url</label>
-          <input type="text" class="form-control" id="location" placeholder="https://maps.google.com" [(ngModel)]="relevantDetails.location" [ngModelOptions]="{standalone: true}" [disabled]="relevantDetails.mediaType != 'physical'">
+          <label for="location">Maps Location URL</label>
+          <input type="text" class="form-control" id="location" placeholder="https://maps.google.com/..."
+            [(ngModel)]="relevantDetails.location" [ngModelOptions]="{standalone: true}">
         </div>
       </div>
 
       <div class="col-12 col-md-6">
         <div class="form-group">
-          <label for="category">Category</label>
-          <div class="input-group dropup-center dropup">
-            <input
-              type="text"
-              class="form-control"
-              id="category"
-              [(ngModel)]="relevantDetails.category"
-              [ngModelOptions]="{standalone: true}"
-              (input)="filterCategories()"
-              placeholder="Select or Add Category"
+          <label for="category">Course Category</label>
+          <div class="input-group dropup-center dropup position-relative">
+            <input type="text" class="form-control" id="category" [(ngModel)]="relevantDetails.category"
+              [ngModelOptions]="{standalone: true}" (input)="filterCategories()" placeholder="Search or add category..."
               autocomplete="off" />
 
-            <div *ngIf="filteredCategories.length > 0 && relevantDetails.category" class="dropdown-menu show" style="max-height: 100px; overflow-y: auto;">
-              <button *ngFor="let category of filteredCategories"
-                      class="dropdown-item"
-                      (click)="selectCategory(category)">
+            <div *ngIf="filteredCategories.length > 0 && relevantDetails.category" class="dropdown-menu show w-100"
+              style="max-height: 200px; overflow-y: auto;">
+              <button *ngFor="let category of filteredCategories" class="dropdown-item"
+                (click)="selectCategory(category)">
                 {{ category }}
               </button>
 
               <button *ngIf="!filteredCategories.includes(relevantDetails.category) && relevantDetails.category"
-                      class="dropdown-item"
-                      style="color: var(--color-text-400)"
-                      (click)="addCategory()">
-                Add "{{ relevantDetails.category }}"
+                class="dropdown-item text-primary fw-bold" (click)="addCategory()">
+                + Create New: "{{ relevantDetails.category }}"
               </button>
             </div>
           </div>
         </div>
       </div>
+
       <div class="col-12 col-md-6">
         <div class="form-group">
-          <label for="status">Course Status *</label>
-          <select class="form-control" id="status" [(ngModel)]="relevantDetails.courseStatus" [ngModelOptions]="{standalone: true}" required>
-            <option value="upcoming">Upcoming</option>
-            <option value="ongoing">Ongoing</option>
-            <option value="completed">Completed</option>
-            <option value="cancelled">Cancelled</option>
+          <label for="status">Publication Status *</label>
+          <select class="form-control" id="status" [(ngModel)]="relevantDetails.courseStatus"
+            [ngModelOptions]="{standalone: true}" required>
+            <option value="upcoming">🚀 Upcoming</option>
+            <option value="ongoing">🔥 Ongoing</option>
+            <option value="completed">✅ Completed</option>
+            <option value="cancelled">❌ Cancelled</option>
           </select>
         </div>
       </div>
     </div>
   </form>
+
+  <!-- Modal and Hidden trigger -->
+  <button #triggerModal type="button" class="d-none" data-bs-toggle="modal"
+    data-bs-target="#imageCropperModal"></button>
+
+  <div class="modal fade" id="imageCropperModal" tabindex="-1" aria-labelledby="cropperLabel" aria-hidden="true"
+    data-bs-backdrop="static">
+    <div class="modal-dialog modal-md modal-dialog-centered">
+      <div class="modal-content shadow-premium">
+        <div class="modal-header">
+          <h5 class="modal-title" id="cropperLabel">Adjust Cover Image</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"
+            (click)="cancelCrop()"></button>
+        </div>
+        <div class="modal-body">
+          <image-cropper [imageChangedEvent]="imageChangedEvent" [maintainAspectRatio]="true" [aspectRatio]="16 / 9"
+            [resizeToWidth]="1280" format="png" (imageCropped)="imageCropped($event)">
+          </image-cropper>
+        </div>
+        <div class="modal-footer">
+          <button #cancelCropBtn type="button" class="btn btn-outline-secondary rounded-pill px-4"
+            data-bs-dismiss="modal" (click)="cancelCrop()">Cancel</button>
+          <button class="btn btn-primary rounded-pill px-4" (click)="uploadCroppedImage()" [disabled]="loading">
+            <span *ngIf="!loading">Apply & Upload</span>
+            <span *ngIf="loading">Processing...</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>

@@ -1,12 +1,12 @@
-import {Component, OnInit} from '@angular/core';
-import {ActivatedRoute, Router} from '@angular/router';
-import {DomSanitizer, SafeHtml} from '@angular/platform-browser';
-import {NgForOf, NgIf} from '@angular/common';
-import {ResumeStorageService} from '../../../services/support/resume-storage.service';
-import {CoursesService} from '../../../services/courses.service';
-import {AlertsService} from '../../../services/support/alerts.service';
-import {AuthService} from '../../../services/support/auth.service';
-import {WindowService} from '../../../services/common/window.service';
+import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
+import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
+import { NgForOf, NgIf } from '@angular/common';
+import { ResumeStorageService } from '../../../services/support/resume-storage.service';
+import { CoursesService } from '../../../services/courses.service';
+import { AlertsService } from '../../../services/support/alerts.service';
+import { AuthService } from '../../../services/support/auth.service';
+import { WindowService } from '../../../services/common/window.service';
 
 @Component({
   selector: 'app-preview-post',
@@ -18,11 +18,13 @@ import {WindowService} from '../../../services/common/window.service';
   styleUrl: './preview-post.component.scss',
   standalone: true
 })
-export class PreviewPostComponent implements OnInit{
+export class PreviewPostComponent implements OnInit {
   selectedCourse: any[] = [];
   isNotFound: boolean = false;
   companyId: string = '';
   isUpdateId: any;
+  selectedCurrency: string = '$';
+  selectedPrice: string = '0.00';
 
   constructor(
     private router: Router,
@@ -45,8 +47,10 @@ export class PreviewPostComponent implements OnInit{
 
   getCourseDetails() {
     const savedData = this.resumeStorage.getData();
-    if (savedData && Object.keys(savedData).length > 0){
+    if (savedData && Object.keys(savedData).length > 0) {
       this.isNotFound = false;
+      this.selectedCurrency = savedData.relevantDetails.currency || '$';
+      this.selectedPrice = savedData.relevantDetails.price || '0.00';
       const course = {
         name: savedData.basicDetails.name,
         overview: savedData.basicDetails.overview,
@@ -71,7 +75,7 @@ export class PreviewPostComponent implements OnInit{
 
   addCourse() {
     const savedData = this.resumeStorage.getData();
-    if (savedData && Object.keys(savedData).length > 0){
+    if (savedData && Object.keys(savedData).length > 0) {
       let course = this.returnCourse(savedData);
 
       if (this.isUpdateId) {
@@ -98,7 +102,7 @@ export class PreviewPostComponent implements OnInit{
 
   updateWithNewBatch() {
     const savedData = this.resumeStorage.getData();
-    if (savedData && Object.keys(savedData).length > 0){
+    if (savedData && Object.keys(savedData).length > 0) {
       let course = this.returnCourse(savedData);
       if (this.isUpdateId) {
         this.courseService.updateWithNewBatch(this.isUpdateId, course).subscribe(() => {

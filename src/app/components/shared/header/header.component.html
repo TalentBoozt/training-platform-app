@@ -1,105 +1,106 @@
-<div class="nav-bar sticky-top">
+<div class="nav-bar sticky-top animate-fade-in" [class.scrolled]="isScrolled">
   <div class="container d-flex align-items-center justify-content-between">
     <div class="logo-wrapper" routerLink="/"></div>
-    <div class="menu">
-      <li *ngIf="authState.isLoggedIn$ | async" class="nav-item d-block d-lg-none ms-2 dropdown">
-        <div class="profile-wrapper" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-          <img [src]="(authState.employee$ | async)?.employee?.image || './assets/images/shared/default_emp_dp.svg'"
-               alt="profile" width="40" height="40">
-        </div>
 
-        <ul class="dropdown-menu dropdown-menu-end">
-          <li><a class="dropdown-item" [href]="'https://talentboozt.com/candidate-profile?id=' + (authState.employee$ | async)?.employee?.id" target="_blank">
-          <i class="material-icons">perm_identity</i>
-            Access Main Profile</a></li>
-          <li>
-            <hr class="dropdown-divider">
-          </li>
-          <li><a class="dropdown-item" routerLink="/locked"><i class="material-icons">lock</i> Lock
-            Screen</a></li>
-          <li><span class="dropdown-item" (click)="logout()"><i
-            class="material-icons">logout</i> Logout</span>
-          </li>
-        </ul>
-      </li>
-      <li *ngIf="(authState.isLoggedIn$ | async) === false" class="d-block d-lg-none nav-item" (click)="collapseNavbar()">
-        <div class="d-flex align-items-center justify-content-end gap-2">
-          <div class="btn-outline btn-o-1" (click)="login('trainer', 'login')" [class.active]="isActive('/login')">Login</div>
-          <div class="btn-fill btn-f-1" (click)="login('trainer', 'register')" [class.active]="isActive('/register')">Sign Up</div>
-        </div>
-      </li>
-      <li class="nav-item d-block d-lg-none ms-2">
-        <button class="theme-btn" (click)="toggleTheme()" title="Theme">
+    <div class="nav-content d-flex align-items-center gap-4">
+      <!-- Desktop Navigation -->
+      <ul class="nav-links d-none d-lg-flex align-items-center gap-2">
+        <li><a routerLink="/dashboard" routerLinkActive="active">Dashboard</a></li>
+        <li><a routerLink="/courses" routerLinkActive="active">My Courses</a></li>
+        <li><a routerLink="/post-course" routerLinkActive="active">Post a Course</a></li>
+      </ul>
+
+      <!-- Search Bar -->
+      <div class="s-bar d-none d-md-flex">
+        <i class="material-icons">search</i>
+        <input type="text" placeholder="Search courses..." (keyup)="handleSearch($event.target)" />
+      </div>
+
+      <!-- Action Items -->
+      <div class="action-items d-flex align-items-center gap-3">
+        <!-- Theme Toggle -->
+        <button class="theme-btn" (click)="toggleTheme()" title="Toggle Theme">
           <i class="material-icons">{{themeService.isDarkMode()?'light_mode':'dark_mode'}}</i>
         </button>
-      </li>
-      <nav class="navbar navbar-expand-lg bg-body-tertiary">
-        <div class="container-fluid" style="justify-content: flex-end!important;">
-          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
-                  aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-          </button>
-          <div class="collapse navbar-collapse" id="navbarNav" #navbarNav
-               style="justify-content: flex-end!important;">
-            <ul class="navbar-nav">
-              <li class="nav-item" (click)="collapseNavbar()">
-                <a class="nav-link" routerLink="/dashboard" [class.active]="isActive('/dashboard')">Dashboard</a>
-              </li>
-              <li class="nav-item" (click)="collapseNavbar()">
-                <a class="nav-link" routerLink="/courses" [class.active]="isActive('/courses')">My Courses</a>
-              </li>
-              <li class="nav-item" (click)="collapseNavbar()">
-                <a class="nav-link" routerLink="/post-course" [class.active]="isActive('/post-course')">Post a Course</a>
-              </li>
-              <li class="nav-item">
-                <div class="d-flex align-items-center justify-content-end w-100 h-100 s-bar">
-                  <input type="text" placeholder="Search..." (keyup)="handleSearch($event.target)"/>
-                  <i class="material-icons">search</i>
-                </div>
-              </li>
-              <li class="d-none d-lg-block nav-item">
-                <button class="theme-btn" (click)="toggleTheme()" title="Theme">
-                  <i class="material-icons">{{themeService.isDarkMode()?'light_mode':'dark_mode'}}</i>
-                </button>
-              </li>
-              <li *ngIf="(authState.isLoggedIn$ | async) === false" class="d-none d-lg-block nav-item" (click)="collapseNavbar()">
-                <div class="d-flex align-items-center justify-content-end gap-2">
-                  <div class="btn-outline btn-o-1" (click)="login('trainer', 'login')" [class.active]="isActive('/login')">Login</div>
-                  <div class="btn-fill btn-f-1" (click)="login('trainer', 'register')" [class.active]="isActive('/register')">Sign Up</div>
-                </div>
-              </li>
-              <li *ngIf="authState.isLoggedIn$ | async" class="nav-item d-none d-lg-block ms-2 dropdown">
-                <div class="profile-wrapper" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                  <img [src]="(authState.employee$ | async)?.employee?.image || './assets/images/shared/default_emp_dp.svg'"
-                       alt="profile" width="40" height="40">
-                </div>
 
-                <ul class="dropdown-menu dropdown-menu-end">
-                  <li><a class="dropdown-item" [href]="'https://talentboozt.com/candidate-profile?id=' + (authState.employee$ | async)?.employee?.id" target="_blank">
-                  <i class="material-icons">perm_identity</i>
-                    Access Main Profile</a></li>
-                  <li><a class="dropdown-item" routerLink="/my-profile"><i class="material-icons">settings</i> Edit Profile</a></li>
-                  <li>
-                    <hr class="dropdown-divider">
-                  </li>
-                  <li><a class="dropdown-item" routerLink="/locked"><i class="material-icons">lock</i> Lock
-                    Screen</a></li>
-                  <li><span class="dropdown-item" (click)="logout()"><i
-                    class="material-icons">logout</i> Logout</span>
-                  </li>
-                </ul>
-              </li>
-            </ul>
-          </div>
+        <!-- Auth Buttons (Logged Out) -->
+        <div *ngIf="(authState.isLoggedIn$ | async) === false" class="auth-buttons d-none d-md-flex gap-2">
+          <button class="btn-outline btn-o-1" (click)="login('trainer', 'login')">Login</button>
+          <button class="btn-fill btn-f-1" (click)="login('trainer', 'register')">Sign Up</button>
         </div>
-      </nav>
+
+        <!-- User Profile (Logged In) -->
+        <div *ngIf="authState.isLoggedIn$ | async" class="profile-dropdown dropdown">
+          <div class="profile-wrapper" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+            <img [src]="(authState.employee$ | async)?.employee?.image || './assets/images/shared/default_emp_dp.svg'"
+              alt="profile">
+          </div>
+
+          <ul class="dropdown-menu dropdown-menu-end glass-premium animate-fade-in">
+            <li class="dropdown-header d-lg-none">
+              <span class="user-name">{{ (authState.employee$ | async)?.employee?.firstname }} {{ (authState.employee$ |
+                async)?.employee?.lastname }}</span>
+            </li>
+            <li>
+              <a class="dropdown-item"
+                [href]="'https://talentboozt.com/candidate-profile?id=' + (authState.employee$ | async)?.employee?.id"
+                target="_blank">
+                <i class="material-icons">perm_identity</i>
+                <span>Access Main Profile</span>
+              </a>
+            </li>
+            <li>
+              <a class="dropdown-item" routerLink="/my-profile">
+                <i class="material-icons">settings</i>
+                <span>Edit Profile</span>
+              </a>
+            </li>
+            <li>
+              <hr class="dropdown-divider">
+            </li>
+            <li>
+              <a class="dropdown-item" routerLink="/locked">
+                <i class="material-icons">lock</i>
+                <span>Lock Screen</span>
+              </a>
+            </li>
+            <li>
+              <button class="dropdown-item text-danger" (click)="logout()">
+                <i class="material-icons">logout</i>
+                <span>Logout</span>
+              </button>
+            </li>
+          </ul>
+        </div>
+
+        <!-- Mobile Menu Toggle -->
+        <button class="menu-toggle d-lg-none" type="button" (click)="toggleMobileMenu()">
+          <i class="material-icons">menu</i>
+        </button>
+      </div>
     </div>
   </div>
 
-  <div class="search-results-wrapper" *ngIf="openSearchResults">
-    <div class="search-result" *ngFor="let r of filterSearchResults()">
-      <a (click)="navigateToSearchResult(r.id)" >{{r.name}}</a>
+  <!-- Mobile Menu Content -->
+  <div class="mobile-menu glass-premium animate-slide-in" *ngIf="isMobileMenuOpen">
+    <div class="mobile-nav-links">
+      <a routerLink="/dashboard" (click)="toggleMobileMenu()">Dashboard</a>
+      <a routerLink="/courses" (click)="toggleMobileMenu()">My Courses</a>
+      <a routerLink="/post-course" (click)="toggleMobileMenu()">Post a Course</a>
+      <hr class="divider">
+      <div class="mobile-s-bar">
+        <i class="material-icons">search</i>
+        <input type="text" placeholder="Search..." (keyup)="handleSearch($event.target)" />
+      </div>
     </div>
-    <div class="not-found" *ngIf="filterSearchResults().length <= 0">No results found. :(</div>
+  </div>
+
+  <!-- Search Results Dropdown -->
+  <div class="search-results-wrapper" *ngIf="openSearchResults">
+    <div class="search-result" *ngFor="let r of filterSearchResults(); let i = index"
+      [style.animation-delay]="i * 0.05 + 's'">
+      <a (click)="navigateToSearchResult(r.id)">{{r.name}}</a>
+    </div>
+    <div class="not-found" *ngIf="filterSearchResults().length <= 0">No results found.</div>
   </div>
 </div>

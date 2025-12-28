@@ -1,0 +1,157 @@
+<div class="wizard-step preview-step container-fluid mt-4 pb-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-10 col-xl-9">
+            <!-- PUBLISH HEADER -->
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <div>
+                    <h2><i class="fas fa-rocket me-2 text-primary"></i>Preview & Publish</h2>
+                    <p>Review your course details below. This is how it will appear to students.</p>
+                </div>
+                <button (click)="publish()" [disabled]="snapshot.published ?? false"
+                    class="btn btn-lg btn-success px-5 py-2 fw-bold shadow-sm"
+                    [class.btn-secondary]="snapshot.published">
+                    <i class="fas" [class.fa-upload]="!snapshot.published" [class.fa-check]="snapshot.published"></i>
+                    {{ snapshot.published ? 'Published' : 'Publish Now' }}
+                </button>
+            </div>
+
+            <!-- PREVIEW CARD -->
+            <div class="card border-0 shadow-lg overflow-hidden rounded-4 preview-card">
+                <!-- Hero Section -->
+                <div class="p-4 border-bottom">
+                    <course-banner [imageUrl]="'/assets/images/shared/default-cover-600x400.webp'" />
+
+                    <div class="row mt-4">
+                        <div class="col-md-8">
+                            <h1 class="fw-bold mb-2">{{ snapshot.title || 'Untitled Course' }}</h1>
+                            <h5 class="mb-4">{{ snapshot.subtitle || 'No subtitle provided' }}</h5>
+
+                            <div class="d-flex align-items-center gap-4 mb-4">
+                                <instructor-card [name]="snapshot.lecturer || '--'"
+                                    [bio]="snapshot.lecturerNameTag || '--'" />
+                                <div class="vr"></div>
+                                <rating-stars [rating]="4.5" [total]="342" />
+                            </div>
+                        </div>
+                        <div class="col-md-4 text-md-end">
+                            <div class="d-inline-block text-start">
+                                <div class="d-flex align-items-center gap-2 mb-2">
+                                    <div *ngIf="!snapshot.discountedPrice || snapshot.discountedPrice === 0">
+                                        <span class="badge px-3 py-2 fs-5 rounded-pill"
+                                            [ngClass]="snapshot.price === 0 ? 'bg-success' : 'bg-primary'">
+                                            {{ snapshot.price === 0 ? 'Free Course' : ('$' + snapshot.price) }}
+                                        </span>
+                                    </div>
+                                    <div *ngIf="snapshot.discountedPrice && snapshot.discountedPrice > 0">
+                                        <span class="badge px-3 py-2 fs-5 rounded-pill bg-primary">{{ '$' +
+                                            snapshot.discountedPrice }}</span>
+                                        <span class="text-decoration-line-through ms-2">{{ '$' +
+                                            snapshot.price }}</span>
+                                    </div>
+                                </div>
+                                <div *ngIf="snapshot.published" class="mt-2 text-end">
+                                    <span class="badge bg-success-subtle text-success border border-success-subtle"><i
+                                            class="fas fa-check-circle me-1"></i> RECORDED</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row g-0">
+                    <div class="col-lg-8 border-end">
+                        <div class="p-4">
+                            <!-- Description -->
+                            <h5 class="fw-bold mb-3">About This Course</h5>
+                            <div class="mb-5" style="white-space: pre-wrap;">
+                                {{ snapshot.description || 'No description provided.' }}
+                            </div>
+
+                            <!-- Curriculum -->
+                            <h5 class="fw-bold mb-3">Curriculum</h5>
+                            <div class="accordion custom-accordion" id="modulesAccordion">
+                                <div *ngFor="let module of snapshot.modules; let mi = index"
+                                    class="accordion-item border-0 mb-3 rounded-3 shadow-net">
+                                    <h2 class="accordion-header" id="moduleHeading{{mi}}">
+                                        <button class="accordion-button collapsed rounded-3 fw-bold" type="button"
+                                            data-bs-toggle="collapse" [attr.data-bs-target]="'#moduleCollapse' + mi"
+                                            aria-expanded="false" [attr.aria-controls]="'moduleCollapse' + mi">
+                                            <div class="d-flex w-100 justify-content-between align-items-center me-3">
+                                                <span><i class="fas fa-folder me-2"></i> Module {{mi + 1}}:
+                                                    {{ module.title }}</span>
+                                                <div class="d-flex gap-2">
+                                                    <span *ngIf="module.freePreview" class="badge bg-warning">Free
+                                                        Preview</span>
+                                                    <span class="badge bg-secondary text-white">{{
+                                                        module.lectures.length }}
+                                                        lectures</span>
+                                                </div>
+                                            </div>
+                                        </button>
+                                    </h2>
+                                    <div [id]="'moduleCollapse' + mi" class="accordion-collapse collapse"
+                                        [attr.aria-labelledby]="'moduleHeading' + mi">
+                                        <div class="accordion-body pt-0">
+                                            <div class="pt-3">
+                                                <lecture-card *ngFor="let lec of module.lectures"
+                                                    [lecture]="lec"></lecture-card>
+                                                <div *ngIf="(!module.lectures || module.lectures.length === 0)"
+                                                    class="text-center py-3 fst-italic">
+                                                    No lectures in this module.
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div *ngIf="(!snapshot.modules || snapshot.modules.length === 0)"
+                                    class="text-center py-5 border rounded-3">
+                                    <i class="fas fa-layer-group fa-3x mb-3 opacity-50"></i>
+                                    <p>No modules added yet.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-4">
+                        <div class="p-4 sticky-top" style="top: 20px; z-index: 1;">
+                            <h6 class="fw-bold text-uppercase mb-3 small">Course Preview</h6>
+
+                            <div *ngIf="firstLectureWithVideoUrl() as lecture; else noVideo"
+                                class="card border-0 shadow-sm mb-4">
+                                <div class="card-body p-2">
+                                    <video-preview [src]="lecture.videoUrl"
+                                        class="w-100 rounded overflow-hidden"></video-preview>
+                                    <p class="mt-2 mb-0 small text-center fw-bold">{{ lecture.title }}</p>
+                                </div>
+                            </div>
+                            <ng-template #noVideo>
+                                <div class="card border-0 shadow-sm mb-4">
+                                    <div class="card-body text-center py-5">
+                                        <i class="fas fa-video-slash fa-2x mb-2"></i>
+                                        <p class="mb-0 small">No preview video available</p>
+                                    </div>
+                                </div>
+                            </ng-template>
+
+                            <h6 class="fw-bold text-uppercase mb-3 small">Course Features</h6>
+                            <ul class="list-unstyled mb-0">
+                                <li class="mb-2 d-flex align-items-center"><i
+                                        class="fas fa-infinity me-2 text-primary w-25px text-center"></i> Full Lifetime
+                                    Access</li>
+                                <li class="mb-2 d-flex align-items-center"><i
+                                        class="fas fa-mobile-alt me-2 text-primary w-25px text-center"></i> Access on
+                                    Mobile and User</li>
+
+                                <li class="mb-2 d-flex align-items-center" *ngIf="snapshot.certificate">
+                                    <i class="fas fa-certificate me-2 text-primary w-25px text-center"></i> Certificate
+                                    of Completion
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

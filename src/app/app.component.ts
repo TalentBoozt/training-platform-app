@@ -1,6 +1,7 @@
 import {AfterViewInit, Component, OnDestroy, OnInit} from '@angular/core';
 import {ActivatedRoute, RouterOutlet} from '@angular/router';
 import {HeaderComponent} from './components/shared/header/header.component';
+import {FooterComponent} from './components/shared/footer/footer.component';
 import {AuthService} from './services/support/auth.service';
 import {LockScreenComponent} from './components/authenticating/lock-screen/lock-screen.component';
 import {LoginComponent} from './components/authenticating/login/login.component';
@@ -16,7 +17,7 @@ import {EmployeeAuthStateService} from './services/cacheStates/employee-auth-sta
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet, HeaderComponent, NgIf, NgClass],
+  imports: [RouterOutlet, HeaderComponent, FooterComponent, NgIf, NgClass],
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss',
   standalone: true

@@ -1,0 +1,98 @@
+<div class="step-container animate-fade-in">
+    <h2><i class="fas fa-info-circle me-2"></i>Basic Details</h2>
+    <form [formGroup]="form" class="mt-4 wizard-form">
+        <!-- Title -->
+        <div class="form-group mb-3">
+            <label for="title" class="form-label">Title</label>
+            <div class="input-wrapper">
+                <span class="input-icon"><i class="fas fa-heading"></i></span>
+                <input id="title" type="text" class="form-control" formControlName="title"
+                    [ngClass]="{'is-invalid': form.controls.title.invalid && form.get('title')?.touched}"
+                    placeholder="e.g. Advanced Angular Masterclass" />
+            </div>
+            <div class="invalid-feedback" *ngIf="form.controls.title.invalid && form.get('title')?.touched">
+                Title is required
+            </div>
+        </div>
+
+        <!-- Subtitle -->
+        <div class="form-group mb-3">
+            <label for="subtitle" class="form-label">Subtitle</label>
+            <div class="input-wrapper">
+                <span class="input-icon"><i class="fas fa-subscript"></i></span>
+                <input id="subtitle" type="text" class="form-control" formControlName="subtitle"
+                    placeholder="A short, catchy tagline for your course" />
+            </div>
+        </div>
+
+        <div class="row w-100 g-3">
+            <div class="col-12 col-md-6 col-lg-4">
+                <!-- Lecturer -->
+                <div class="form-group mb-3">
+                    <label for="lecturer" class="form-label">Lecturer</label>
+                    <div class="input-wrapper">
+                        <span class="input-icon"><i class="fa-solid fa-user-tie"></i></span>
+                        <input id="lecturer" type="text" class="form-control" formControlName="lecturer"
+                            [ngClass]="{'is-invalid': form.controls.lecturer.invalid && form.get('lecturer')?.touched}"
+                            placeholder="Full Name" />
+                    </div>
+                    <div class="invalid-feedback"
+                        *ngIf="form.controls.lecturer.invalid && form.get('lecturer')?.touched">
+                        Lecturer is required
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-12 col-md-6 col-lg-4">
+                <!-- Lecturer Name Tag -->
+                <div class="form-group mb-3">
+                    <label for="lecturerNameTag" class="form-label">Title / Role</label>
+                    <div class="input-wrapper">
+                        <span class="input-icon"><i class="fa-solid fa-tag"></i></span>
+                        <input id="lecturerNameTag" type="text" class="form-control" formControlName="lecturerNameTag"
+                            placeholder="e.g. Senior Developer" />
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-12 col-lg-4">
+                <!-- Lecturer Email -->
+                <div class="form-group mb-3">
+                    <label for="lecturerEmail" class="form-label">Lecturer Email</label>
+                    <div class="input-wrapper">
+                        <span class="input-icon"><i class="fa-regular fa-envelope"></i></span>
+                        <input id="lecturerEmail" type="email" class="form-control" formControlName="lecturerEmail"
+                            placeholder="name@example.com"
+                            [ngClass]="{'is-invalid': form.controls.lecturerEmail.invalid && form.get('lecturerEmail')?.touched}" />
+                    </div>
+                    <div class="invalid-feedback"
+                        *ngIf="form.controls.lecturerEmail.invalid && form.get('lecturerEmail')?.touched">
+                        Valid email is required
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Description -->
+        <div class="form-group mb-3">
+            <label for="description" class="form-label">Description</label>
+            <div class="input-wrapper textarea-wrapper">
+                <span class="input-icon"><i class="fas fa-align-left"></i></span>
+                <textarea id="description" class="form-control" rows="5" formControlName="description"
+                    placeholder="Describe what students will learn..."
+                    [ngClass]="{'is-invalid': form.controls.description.invalid && form.get('description')?.touched}"></textarea>
+            </div>
+            <div class="invalid-feedback" *ngIf="form.controls.description.invalid && form.get('description')?.touched">
+                Description is required
+            </div>
+        </div>
+
+        <!-- Save Button -->
+        <div class="mt-4 d-flex justify-content-end">
+            <button class="save-btn" (click)="save()" [disabled]="form.invalid" [class.disabled]="form.invalid">
+                <i class="fas fa-save me-2"></i>
+                Save Details
+            </button>
+        </div>
+    </form>
+</div>

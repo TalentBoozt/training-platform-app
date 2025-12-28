@@ -1,99 +1,113 @@
-<div class="form-card-1">
+<div class="form-card-1 animate-fade-in">
   <form (ngSubmit)="saveData()" class="w-100">
 
-    <div class="d-flex align-items-center justify-content-between gap-2">
-      <h5>Basic Details :</h5>
-      <div class="form-group">
-        <button id="TP_BD_Save" type="submit" class="btn-fill btn-f-2">Save</button>
-      </div>
+    <div class="section-header">
+      <h5>Basic Details</h5>
+      <button id="TP_BD_Save" type="submit" class="btn-fill btn-f-3">Save Changes</button>
     </div>
 
-    <div class="row form-wrapper">
+    <div class="row g-4 form-wrapper">
       <div class="col-12">
         <div class="form-group">
           <label for="name">Course Title *</label>
-          <input type="text" class="form-control" id="name" placeholder="SQL Programming - Complete Introduction" [(ngModel)]="basicDetails.name" required [ngModelOptions]="{standalone: true}">
+          <input type="text" class="form-control" id="name" placeholder="E.g. SQL Programming - Complete Introduction"
+            [(ngModel)]="basicDetails.name" required [ngModelOptions]="{standalone: true}">
         </div>
       </div>
+
       <div class="col-12">
         <div class="form-group">
-          <label for="overview">Course Overview(summary) *</label>
-          <textarea class="form-control" id="overview" rows="5" placeholder="Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor" [(ngModel)]="basicDetails.overview" [ngModelOptions]="{standalone: true}"></textarea>
+          <label for="overview">Course Overview *</label>
+          <textarea class="form-control" id="overview" rows="4"
+            placeholder="Briefly describe what this course covers..." [(ngModel)]="basicDetails.overview"
+            [ngModelOptions]="{standalone: true}"></textarea>
         </div>
       </div>
-      <div class="col-12">
-        <div class="form-group">
-          <label for="lecturer">Lecturers *</label>
-          <input type="text" class="form-control" id="lecturer" placeholder="John Doe" [(ngModel)]="basicDetails.lecturer" required [ngModelOptions]="{standalone: true}">
-        </div>
-      </div>
+
       <div class="col-12 col-md-6">
         <div class="form-group">
-          <label for="language">Language *</label>
-          <input type="text" class="form-control" id="language" placeholder="English" [(ngModel)]="basicDetails.language" required [ngModelOptions]="{standalone: true}">
+          <label for="lecturer">Lead Lecturer *</label>
+          <input type="text" class="form-control" id="lecturer" placeholder="E.g. John Doe"
+            [(ngModel)]="basicDetails.lecturer" required [ngModelOptions]="{standalone: true}">
         </div>
       </div>
+
       <div class="col-12 col-md-6">
+        <div class="form-group">
+          <label for="email">Contact Email *</label>
+          <input type="email" class="form-control" id="email" placeholder="instructor@example.com"
+            [(ngModel)]="basicDetails.email" required [ngModelOptions]="{standalone: true}">
+        </div>
+      </div>
+
+      <div class="col-12 col-md-4">
+        <div class="form-group">
+          <label for="language">Course Language *</label>
+          <input type="text" class="form-control" id="language" placeholder="English"
+            [(ngModel)]="basicDetails.language" required [ngModelOptions]="{standalone: true}">
+        </div>
+      </div>
+
+      <div class="col-12 col-md-4">
         <div class="form-group">
           <label for="level">Target Level *</label>
-          <select class="form-control" id="level" [(ngModel)]="basicDetails.level" [ngModelOptions]="{standalone: true}" required>
+          <select class="form-control" id="level" [(ngModel)]="basicDetails.level" [ngModelOptions]="{standalone: true}"
+            required>
             <option value="Beginner">Beginner</option>
             <option value="Intermediate">Intermediate</option>
             <option value="Advanced">Advanced</option>
           </select>
         </div>
       </div>
+
+      <div class="col-12 col-md-4">
+        <div class="form-group">
+          <label for="duration">Expected Duration *</label>
+          <input type="text" class="form-control" id="duration" placeholder="E.g. 3 months"
+            [(ngModel)]="basicDetails.duration" [ngModelOptions]="{standalone: true}">
+        </div>
+      </div>
+
+      <div class="col-12">
+        <div class="form-check animate-pulse-subtle">
+          <input class="form-check-input" type="checkbox" id="certCheck" [(ngModel)]="basicDetails.certificate"
+            [ngModelOptions]="{standalone: true}">
+          <label class="form-check-label" for="certCheck">Include Completion Certificate</label>
+        </div>
+      </div>
+
       <div class="col-12 col-md-6">
         <div class="form-group">
-          <label for="duration">Duration *</label>
-          <input type="text" class="form-control" id="duration" placeholder="3 months" [(ngModel)]="basicDetails.duration" [ngModelOptions]="{standalone: true}">
+          <label>Preferred Payment Method *</label>
+          <div class="payment-options">
+            <div class="form-check">
+              <input class="form-check-input" type="radio" name="paymentMethod" id="cardPayment"
+                [(ngModel)]="basicDetails.paymentMethod" value="card" [ngModelOptions]="{standalone: true}">
+              <label class="form-check-label" for="cardPayment">Card Payments</label>
+            </div>
+            <div class="form-check">
+              <input class="form-check-input" type="radio" name="paymentMethod" id="bankTransfer"
+                [(ngModel)]="basicDetails.paymentMethod" value="bank" [ngModelOptions]="{standalone: true}">
+              <label class="form-check-label" for="bankTransfer">Bank Transfers</label>
+            </div>
+          </div>
         </div>
       </div>
+
       <div class="col-12 col-md-6">
         <div class="form-group">
-          <label for="email">Contact Email *</label>
-          <input type="text" class="form-control" id="email" placeholder="mDd0i@example.com" [(ngModel)]="basicDetails.email" required [ngModelOptions]="{standalone: true}">
-        </div>
-      </div>
-      <div class="col-12">
-        <div class="d-sm-flex align-items-center justify-content-between">
-          <div class="form-check">
-            <input class="form-check-input me-2" type="checkbox" id="certCheck" [(ngModel)]="basicDetails.certificate" [ngModelOptions]="{standalone: true}">
-            <label class="form-check-label" for="certCheck">Certificate Available</label>
-          </div>
-        </div>
-      </div>
-      <div class="col-12">
-        <div class="form-group">
-          <label>Payment Method (For free courses choose any) *</label>
-          <div class="form-check">
-            <input class="form-check-input" type="radio" name="paymentMethod" id="cardPayment" [(ngModel)]="basicDetails.paymentMethod" value="card" [ngModelOptions]="{standalone: true}">
-            <label class="form-check-label" for="cardPayment">
-              Card Payments
-            </label>
-          </div>
-          <div class="form-check">
-            <input class="form-check-input" type="radio" name="paymentMethod" id="bankTransfer" [(ngModel)]="basicDetails.paymentMethod" value="bank" [ngModelOptions]="{standalone: true}">
-            <label class="form-check-label" for="bankTransfer">
-              Bank Transfers
-            </label>
-          </div>
-        </div>
-      </div>
-      <div class="col-12">
-        <div class="form-group">
-          <label>Payment Type *</label>
-          <div class="form-check">
-            <input class="form-check-input" type="radio" name="paymentType" id="installment" [(ngModel)]="basicDetails.paymentType" value="installment" [ngModelOptions]="{standalone: true}">
-            <label class="form-check-label" for="installment">
-              Installments
-            </label>
-          </div>
-          <div class="form-check">
-            <input class="form-check-input" type="radio" name="paymentType" id="onetime" [(ngModel)]="basicDetails.paymentType" value="onetime" [ngModelOptions]="{standalone: true}">
-            <label class="form-check-label" for="onetime">
-              One Time Payment
-            </label>
+          <label>Payment Structure *</label>
+          <div class="payment-options">
+            <div class="form-check">
+              <input class="form-check-input" type="radio" name="paymentType" id="installment"
+                [(ngModel)]="basicDetails.paymentType" value="installment" [ngModelOptions]="{standalone: true}">
+              <label class="form-check-label" for="installment">Installments</label>
+            </div>
+            <div class="form-check">
+              <input class="form-check-input" type="radio" name="paymentType" id="onetime"
+                [(ngModel)]="basicDetails.paymentType" value="onetime" [ngModelOptions]="{standalone: true}">
+              <label class="form-check-label" for="onetime">One-Time</label>
+            </div>
           </div>
         </div>
       </div>

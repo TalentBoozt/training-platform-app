@@ -1,177 +1,212 @@
+@use '../../shared/styles/utilities';
+
 :host {
   display: block;
-  padding: var(--padding-4);
-  background-color: var(--color-surface-200);
-  color: var(--color-text-100);
-  font-size: var(--fs-14);
+  padding: 2rem 0;
+  @include utilities.mesh-gradient;
+  min-height: calc(100vh - 75px);
+  margin-top: 75px;
 }
 
-// Nav tabs
+.container {
+  max-width: 1400px;
+}
+
 .nav-tabs {
-  border-bottom: 2px solid var(--color-primary-100);
+  border: none;
+  background: hsla(var(--foreground)/ 0.05);
+  padding: 0.5rem;
+  border-radius: 20px;
+  display: inline-flex;
+  gap: 0.5rem;
+  margin-bottom: 3rem !important;
+
+  .nav-item {
+    border: none;
+  }
 
   .nav-link {
-    font-weight: var(--fw-500);
-    font-size: var(--fs-14);
-    color: var(--color-text-500);
-    padding: var(--padding-2) var(--padding-4);
     border: none;
-    border-bottom: 3px solid transparent;
-    transition: var(--transition-1);
-    background-color: transparent;
+    border-radius: 14px;
+    padding: 0.75rem 1.5rem;
+    font-weight: 700;
+    font-size: 0.95rem;
+    color: hsl(var(--muted-foreground));
+    @include utilities.transition-base;
+    background: transparent;
 
     &:hover {
-      color: var(--color-primary-100);
-      background-color: var(--color-surface-100);
+      color: hsl(var(--foreground));
+      background: hsla(var(--foreground)/ 0.05);
     }
 
     &.active {
-      color: var(--color-primary-100);
-      border-bottom: 3px solid var(--color-primary-100);
-      background-color: var(--color-surface-100);
+      background: hsl(var(--background));
+      color: hsl(var(--primary));
+      @include utilities.shadow-soft;
     }
   }
 }
 
-// Module Section
 .module-section {
-  margin-bottom: var(--margin-6);
+  margin-bottom: 4rem;
+  @include utilities.animate-fade-in;
 
   h5 {
-    font-size: var(--fs-18);
-    margin-bottom: var(--margin-3);
-    color: var(--color-text-200);
-  }
-}
+    font-size: 1.5rem;
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    color: hsl(var(--foreground));
+    margin-bottom: 2rem;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
 
-// Cards container
-.card-list {
-  display: flex;
-  flex-wrap: wrap;
-  gap: var(--margin-3);
-}
-
-// Material / Quiz / Recording Card
-.card {
-  min-width: 250px;
-  background-color: var(--color-surface-300);
-  border-radius: var(--br-10);
-  box-shadow: var(--box-shadow-1);
-  transition: var(--transition-1);
-
-  &:hover {
-    box-shadow: var(--box-shadow-2);
-  }
-
-  .card-body {
-    padding: var(--padding-3);
-
-    h6 {
-      font-size: var(--fs-16);
-      margin-bottom: var(--margin-2);
-      color: var(--color-text-300);
-    }
-
-    .btn {
-      margin-right: var(--margin-2);
-      font-size: var(--fs-12);
-      padding: var(--padding-0-2) var(--padding-2);
-
-      &.btn-outline-secondary {
-        border-color: var(--color-text-500);
-        color: var(--color-text-500);
-
-        &:hover {
-          background-color: var(--color-text-500);
-          color: var(--color-white);
-        }
-      }
-
-      &.btn-outline-danger {
-        border-color: var(--color-danger-100);
-        color: var(--color-danger-100);
-
-        &:hover {
-          background-color: var(--color-danger-100);
-          color: var(--color-white);
-        }
-      }
+    &::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: linear-gradient(to right, hsla(var(--foreground)/ 0.1), transparent);
     }
   }
 }
 
-// Add Button Only
-.add-only {
-  .btn {
-    font-size: var(--fs-14);
-    font-weight: var(--fw-500);
-    padding: var(--padding-2) var(--padding-4);
-    background-color: var(--color-primary-100);
-    color: var(--color-white);
-    border-radius: var(--br-5);
-    border: none;
-    transition: var(--transition-1);
-
-    &:hover {
-      background-color: var(--color-secondary-100);
-    }
-  }
+.material-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 1.5rem;
 }
 
 .material-item {
-  border-radius: var(--br-10);
-  background-color: var(--color-surface-300);
-  box-shadow: var(--box-shadow-1);
-  margin-bottom: var(--margin-3);
-  transition: var(--transition-1);
+  @include utilities.glass;
+  border: 1px solid hsla(var(--foreground)/ 0.05);
+  border-radius: 20px;
+  padding: 1.5rem;
+  @include utilities.transition-base;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
 
   &:hover {
-    box-shadow: var(--box-shadow-2);
+    background: hsla(var(--foreground)/ 0.03);
+    border-color: hsla(var(--primary)/ 0.2);
+    transform: translateY(-5px);
+    @include utilities.shadow-soft;
   }
 
-  .icon img {
-    width: 20px;
-    height: 20px;
-    object-fit: contain;
-  }
+  .icon {
+    width: 48px;
+    height: 48px;
+    border-radius: 14px;
+    background: hsla(var(--foreground)/ 0.05);
+    @include utilities.flex-center;
+    margin-bottom: 1.25rem;
 
-  .material-name {
-    color: var(--color-primary-100);
-    text-decoration: none;
-    font-size: var(--fs-16);
-    font-weight: var(--fw-500);
-
-    &:hover {
-      text-decoration: underline;
+    img {
+      width: 24px;
+      height: 24px;
+      object-fit: contain;
     }
   }
 
-  .dropdown-menu {
-    font-size: var(--fs-14);
+  .material-name {
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: hsl(var(--foreground));
+    text-decoration: none;
+    margin-bottom: 0.5rem;
+    display: block;
+    @include utilities.transition-base;
+
+    &:hover {
+      color: hsl(var(--primary));
+    }
   }
 
   .text-muted {
-    color: var(--color-text-300) !important;
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: hsl(var(--muted-foreground)) !important;
     display: flex;
     align-items: center;
-    gap: 5px;
+    gap: 0.5rem;
+    flex-wrap: wrap;
 
-    .views{
+    span {
       display: flex;
       align-items: center;
-      gap: 5px;
+      gap: 0.25rem;
 
-      i{
-        font-size: var(--fs-14);
+      i {
+        font-size: 1rem;
       }
     }
   }
 
   .actions {
+    margin-top: 1.5rem;
+    padding-top: 1rem;
+    border-top: 1px solid hsla(var(--foreground)/ 0.05);
+  }
+}
+
+.quiz-card {
+  @include utilities.glass;
+  border-radius: 20px;
+  padding: 1.5rem;
+  border: 1px solid hsla(var(--foreground)/ 0.05);
+  @include utilities.transition-base;
+
+  &:hover {
+    border-color: hsla(var(--primary)/ 0.2);
+    transform: translateY(-5px);
+  }
+
+  h5 {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: hsl(var(--foreground));
+    margin-bottom: 1rem;
+  }
+}
+
+.add-btn {
+  width: 60px;
+  height: 60px;
+  border-radius: 20px;
+  @include utilities.glass;
+  border: 2px dashed hsla(var(--primary)/ 0.3);
+  color: hsl(var(--primary));
+  font-size: 2rem;
+  @include utilities.flex-center;
+  @include utilities.transition-base;
+  cursor: pointer;
+
+  &:hover {
+    background: hsla(var(--primary)/ 0.1);
+    border-style: solid;
+    transform: scale(1.05);
+  }
+}
+
+.add-btn-large {
+  @include utilities.btn-outline-premium;
+  width: 100%;
+  padding: 1.5rem;
+  border-radius: 20px;
+  border-style: dashed;
+  font-weight: 700;
+  font-size: 1.1rem;
+}
+
+@include utilities.respond-to(md) {
+  .nav-tabs {
     width: 100%;
-    button {
-      font-size: var(--fs-12);
-      padding: var(--padding-0-2) var(--padding-2);
+    overflow-x: auto;
+    white-space: nowrap;
+
+    .nav-link {
+      padding: 0.6rem 1rem;
     }
   }
 }

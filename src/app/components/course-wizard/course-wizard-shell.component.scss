@@ -1,0 +1,156 @@
+@use '../../shared/styles/utilities';
+
+.course-wizard-shell {
+    height: 100%;
+    color: hsl(var(--foreground));
+    background: linear-gradient(135deg, hsla(var(--primary)/ 0.1), hsla(var(--secondary)/ 0.1));
+    font-family: 'Poppins', sans-serif;
+    display: flex;
+    flex-direction: column;
+    margin-top: calc(75px + 1rem);
+}
+
+.wizard-header {
+    background: hsla(var(--background) / 0.8);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border-bottom: 1px solid hsla(var(--foreground) / 0.05);
+    padding: 1rem 2rem;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+
+    h5 {
+        font-family: 'Merriweather', serif;
+        font-weight: 700;
+        letter-spacing: -0.01em;
+        @include utilities.gradient-text;
+    }
+
+    .course-icon {
+        width: 48px;
+        height: 48px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 16px;
+        background: linear-gradient(135deg, hsla(var(--primary)/ 0.1), hsla(var(--secondary)/ 0.1));
+        color: hsl(var(--primary));
+        font-size: 1.25rem;
+        box-shadow: 0 4px 12px hsla(var(--primary) / 0.1);
+
+        i {
+            @include utilities.gradient-text;
+        }
+    }
+}
+
+.wizard-sidebar {
+    width: 280px;
+    background: hsla(var(--background) / 0.4);
+    backdrop-filter: blur(12px);
+    border-right: 1px solid hsla(var(--foreground) / 0.05);
+
+    .nav-link {
+        color: hsl(var(--muted-foreground));
+        font-weight: 500;
+        cursor: pointer;
+        padding: 0.85rem 1rem;
+        border-radius: 12px;
+        margin-bottom: 0.5rem;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        border: 1px solid transparent;
+
+        &:hover {
+            background: hsla(var(--foreground) / 0.03);
+            color: hsl(var(--foreground));
+            transform: translateX(4px);
+        }
+
+        &.active {
+            background: linear-gradient(90deg, hsla(var(--primary) / 0.1), transparent);
+            border-left: 3px solid hsl(var(--primary));
+            border-radius: 4px 12px 12px 4px; // Sharp left corner
+            color: hsl(var(--primary));
+            font-weight: 600;
+
+            .step-indicator {
+                background: linear-gradient(135deg, hsl(var(--primary)), hsl(var(--secondary)));
+                color: hsl(var(--primary-foreground));
+                border-color: transparent !important;
+                box-shadow: 0 4px 10px hsla(var(--primary) / 0.3);
+            }
+        }
+
+        .step-indicator {
+            width: 32px;
+            height: 32px;
+            border-radius: 10px; // Squircle
+            border: 2px solid hsla(var(--muted-foreground) / 0.3);
+            font-size: 0.85rem;
+            font-weight: 700;
+            transition: all 0.3s ease;
+            color: hsl(var(--muted-foreground));
+            background: hsla(var(--card));
+        }
+    }
+}
+
+.wizard-content {
+    background: hsla(var(--background) / 0.05);
+}
+
+.progress {
+    height: 4px;
+    background: hsla(var(--foreground) / 0.05);
+    border-radius: 0;
+
+    .progress-bar {
+        background: linear-gradient(90deg, hsl(var(--primary)), hsl(var(--secondary)));
+        box-shadow: 0 0 10px hsla(var(--primary) / 0.5);
+    }
+}
+
+// Button overrides for premium feel
+.btn-primary {
+    background: linear-gradient(135deg, hsl(var(--primary)), hsl(var(--secondary)));
+    color: hsl(var(--primary-foreground));
+    border: none;
+    font-weight: 600;
+    letter-spacing: 0.02em;
+    padding: 0.5rem 1.25rem;
+    box-shadow: 0 4px 15px hsla(var(--primary) / 0.3);
+    border-radius: 10px;
+    transition: all 0.3s ease;
+
+    &:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 20px hsla(var(--primary) / 0.4);
+        filter: brightness(1.1);
+    }
+
+    &:disabled {
+        background: hsl(var(--muted));
+        box-shadow: none;
+        transform: none;
+        filter: none;
+    }
+}
+
+.btn-outline-secondary {
+    background: transparent;
+    border: 1px solid hsla(var(--foreground) / 0.2);
+    color: hsl(var(--muted-foreground));
+    border-radius: 10px;
+    font-weight: 500;
+
+    &:hover {
+        background: hsla(var(--foreground) / 0.05);
+        color: hsl(var(--foreground));
+        border-color: hsl(var(--foreground));
+    }
+}
+
+.text-not-active {
+    color: hsl(var(--muted-foreground));
+}

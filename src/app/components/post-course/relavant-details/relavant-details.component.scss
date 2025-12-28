@@ -1,71 +1,239 @@
-.skills-container {
-  display: flex;
-  flex-direction: column;
-  gap: 5px;
+@use '../../../shared/styles/utilities';
 
-  span {
-    font-size: 12px;
-    color: #777;
+.form-card-1 {
+  @include utilities.glass-premium;
+  padding: 2.5rem;
+  border-radius: 24px;
+  border: 1px solid hsla(var(--foreground)/ 0.05);
+
+  .section-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 2.5rem;
+    padding-bottom: 1.25rem;
+    border-bottom: 1px solid hsla(var(--foreground)/ 0.05);
+
+    h5 {
+      font-size: 1.5rem;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      @include utilities.gradient-text;
+      margin: 0;
+    }
+  }
+
+  .form-control {
+    @include utilities.input-premium;
+  }
+
+  select.form-control {
+    @include utilities.select-premium;
+  }
+
+  .form-group {
+    @include utilities.form-group-premium;
+
+    label {
+      font-weight: 700;
+      font-size: 0.85rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: hsl(var(--muted-foreground));
+      margin-bottom: 0.75rem;
+
+      span {
+        font-size: 0.75rem;
+        color: hsl(var(--muted-foreground));
+        font-weight: 500;
+        opacity: 0.7;
+      }
+    }
+  }
+
+  .form-check {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 1.25rem;
+    background: hsla(var(--foreground)/ 0.03);
+    border-radius: 18px;
+    border: 1px solid hsla(var(--foreground)/ 0.05);
+    @include utilities.transition-base;
+    cursor: pointer;
+
+    &:hover {
+      background: hsla(var(--primary)/ 0.05);
+      border-color: hsla(var(--primary)/ 0.2);
+    }
+
+    .form-check-input {
+      margin: 0;
+      width: 1.3rem;
+      height: 1.3rem;
+      cursor: pointer;
+      @include utilities.transition-base;
+    }
+
+    .form-check-label {
+      font-weight: 700;
+      font-size: 1rem;
+      color: hsl(var(--foreground));
+      cursor: pointer;
+    }
   }
 }
 
 .tags-input {
+  @include utilities.input-premium;
   display: flex;
   align-items: center;
   flex-wrap: wrap;
-  gap: 5px;
-  border-radius: 5px;
-  border: 1px solid var(--color-text-500);
-  padding: 8px 15px;
-  width: 100%;
-  background-color: var(--color-surface-200);
-  color: var(--color-text-100);
-  font-size: var(--fs-14);
-
-  &::placeholder{
-    color: var(--color-text-300);
-  }
-
-  &:active, &:focus{
-    border-color: var(--color-text-500);
-    outline: none;
-    box-shadow: none;
-  }
+  gap: 0.75rem;
+  min-height: 56px;
+  padding: 0.6rem 1.25rem;
+  border-radius: 16px;
 
   .tag {
-    background: #2a2d35;
-    color: #fff;
-    padding: 4px 8px;
-    border-radius: 3px;
+    background: linear-gradient(135deg, hsla(var(--primary)/ 0.1), hsla(var(--secondary)/ 0.1));
+    color: hsl(var(--primary));
+    padding: 0.4rem 1rem;
+    border-radius: 12px;
     display: flex;
     align-items: center;
-    font-size: 13px;
+    font-size: 0.85rem;
+    font-weight: 700;
+    border: 1px solid hsla(var(--primary)/ 0.15);
+    @include utilities.animate-fade-in;
+    @include utilities.transition-base;
+
+    &:hover {
+      transform: scale(1.05);
+      border-color: hsla(var(--primary)/ 0.3);
+    }
 
     .remove-tag {
-      margin-left: 5px;
+      margin-left: 0.75rem;
       cursor: pointer;
-      color: #ff4d4d;
-      font-weight: bold;
+      font-size: 1.25rem;
+      line-height: 1;
+      opacity: 0.6;
+      @include utilities.transition-base;
+
+      &:hover {
+        opacity: 1;
+        color: #ff4d4d;
+      }
     }
   }
 
   input {
     flex-grow: 1;
-    border: none;
-    background: transparent;
-    color: var(--color-text-100);
-    font-size: 14px;
-    padding: 4px;
-    outline: none;
+    border: none !important;
+    background: transparent !important;
+    color: hsl(var(--foreground));
+    font-size: 0.95rem;
+    font-weight: 500;
+    padding: 0.4rem 0;
+    outline: none !important;
+    box-shadow: none !important;
 
     &::placeholder {
-      color: var(--color-text-300);
+      color: hsl(var(--muted-foreground));
+      opacity: 0.5;
+    }
+  }
+}
+
+.error-msg {
+  display: block;
+  font-size: 0.8rem;
+  color: hsl(var(--muted-foreground));
+  margin-top: 0.75rem;
+  font-weight: 600;
+  opacity: 0.8;
+}
+
+// Modal Styling
+.modal-content {
+  @include utilities.glass-premium;
+  border: 1px solid hsla(var(--foreground)/ 0.1);
+  border-radius: 28px;
+  overflow: hidden;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
+
+  .modal-header {
+    border-bottom: 1px solid hsla(var(--foreground)/ 0.05);
+    padding: 1.75rem 2rem;
+
+    .modal-title {
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      @include utilities.gradient-text;
+    }
+
+    .btn-close {
+      filter: invert(var(--is-dark, 0));
+      opacity: 0.5;
+      @include utilities.transition-base;
+
+      &:hover {
+        opacity: 1;
+      }
+    }
+  }
+
+  .modal-body {
+    padding: 2.5rem;
+  }
+
+  .modal-footer {
+    border-top: 1px solid hsla(var(--foreground)/ 0.05);
+    padding: 1.5rem 2rem;
+    gap: 1rem;
+
+    .btn {
+      padding: 0.75rem 2.5rem;
+      font-weight: 700;
+      border-radius: 14px;
+      @include utilities.transition-base;
     }
   }
 }
 
 image-cropper {
-  max-width: 100%;
-  margin-top: 15px;
-  border: 1px dashed #ccc;
+  border-radius: 20px;
+  overflow: hidden;
+  border: 2px dashed hsla(var(--foreground)/ 0.1);
+  background: hsla(var(--foreground)/ 0.02);
+}
+
+.dropdown-menu {
+  @include utilities.glass-premium;
+  border: 1px solid hsla(var(--foreground)/ 0.1);
+  border-radius: 18px;
+  padding: 0.6rem;
+  margin-top: 0.5rem;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+
+  .dropdown-item {
+    border-radius: 12px;
+    padding: 0.75rem 1.25rem;
+    color: hsl(var(--foreground));
+    font-weight: 600;
+    font-size: 0.9rem;
+    @include utilities.transition-base;
+
+    &:hover {
+      background: hsla(var(--primary)/ 0.1);
+      color: hsl(var(--primary)) !important;
+      transform: translateX(5px);
+    }
+  }
+}
+
+@include utilities.respond-to(md) {
+  .form-card-1 {
+    padding: 1.5rem;
+  }
 }

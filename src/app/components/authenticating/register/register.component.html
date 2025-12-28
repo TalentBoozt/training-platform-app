@@ -1,84 +1,71 @@
 <div class="shared-background">
-  <div class="overlay"></div>
-
   <div class="content-holder">
     <div class="main-content-wrapper">
       <div class="img-card-1">
         <img src="/assets/images/login/register.webp" alt="register image">
       </div>
       <div class="form-card-1">
-        <div class="logo" [ngStyle]="{'background-image': themeService.isDarkMode() ? 'url(./assets/images/logo/top-w.webp)' : 'url(./assets/images/logo/top-b.webp)'}">
+        <div class="logo"
+          [ngStyle]="{'background-image': themeService.isDarkMode() ? 'url(/assets/images/logo/g-l-w.avif)' : 'url(/assets/images/logo/g-l-b.avif)'}">
         </div>
-        <h5 class="title">Create an account</h5>
+        <h5 class="title">Create Account</h5>
 
         <form [formGroup]="registerForm">
           <div class="row form-wrapper">
             <div class="col-12">
-              <label for="name">Name:</label>
-              <input type="text" placeholder="John" id="name" formControlName="name">
-              <div class="error-msg">{{errorMsg}}</div>
+              <label for="name">Full Name</label>
+              <input type="text" placeholder="e.g. John Doe" id="name" formControlName="name">
+              <div class="error-msg" *ngIf="registerForm.get('name')?.touched && registerForm.get('name')?.invalid">Name
+                is required</div>
             </div>
 
             <div class="col-12">
-              <label for="email">Email:</label>
-              <input type="email" placeholder="example@example.com" id="email" formControlName="email">
-              <div class="error-msg">{{errorMsg}}</div>
+              <label for="email">Email Address</label>
+              <input type="email" placeholder="name@company.com" id="email" formControlName="email">
+              <div class="error-msg" *ngIf="registerForm.get('email')?.touched && registerForm.get('email')?.invalid">
+                Invalid email address</div>
             </div>
 
             <div class="col-12">
-              <label for="password">Password:</label>
-              <div class="input-group w-100 d-flex">
-                <input type="password" placeholder="Password:" id="password" formControlName="password" aria-label="Password:" aria-describedby="button-addon" style="flex:1">
-                <button class="btn btn-outline-secondary" type="button" id="button-addon" (click)="togglePasswordVisibility()"><i [ngClass]="isp1open? 'fa fa-eye-slash':'fa fa-eye'" aria-hidden="true"></i></button>
+              <label for="password">Choose Password</label>
+              <div class="input-group">
+                <input [type]="isp1open ? 'text' : 'password'" placeholder="At least 8 characters" id="password"
+                  formControlName="password">
+                <button class="btn btn-outline-secondary" type="button" (click)="togglePasswordVisibility()">
+                  <i [ngClass]="isp1open? 'fa fa-eye-slash':'fa fa-eye'"></i>
+                </button>
               </div>
-              <div class="error-msg">{{errorMsg}}</div>
+              <div class="error-msg"
+                *ngIf="registerForm.get('password')?.touched && registerForm.get('password')?.invalid">Password is too
+                weak</div>
             </div>
 
             <div class="col-12">
-              <div class="d-sm-flex align-items-center justify-content-between">
-                <div class="form-check">
-                  <input class="form-check-input me-2" type="checkbox" formControlName="termsCheck" id="termsCheck">
-                  <label class="form-check-label" for="termsCheck">
-                    I accept <a href="https://talentboozt.com/terms-and-conditions">Terms and Conditions</a>
-                  </label>
-                  <div class="error-msg">{{termsErrorMsg}}</div>
-                </div>
+              <div class="form-check">
+                <input class="form-check-input" type="checkbox" formControlName="termsCheck" id="termsCheck">
+                <label class="form-check-label" for="termsCheck">
+                  I agree to the <a href="https://talentboozt.com/terms-and-conditions" target="_blank">Terms &
+                    Conditions</a>
+                </label>
               </div>
+              <div class="error-msg"
+                *ngIf="registerForm.get('termsCheck')?.touched && registerForm.get('termsCheck')?.invalid">You must
+                accept the terms</div>
             </div>
 
             <div class="col-12">
-              <button id="TP_LI_RegUser" type="button"  class="btn-fill btn-f-3 w-100" (click)="registerUser()">Sign Up</button>
+              <button id="TP_LI_RegUser" type="button" class="btn-fill btn-f-3" (click)="registerUser()">
+                Create Free Account
+              </button>
             </div>
 
-<!--            <div class="d-flex align-items-center justify-content-center">-->
-<!--              <hr>-->
-<!--              <p class="mx-1 my-0" style="white-space: nowrap">or sign up with</p>-->
-<!--              <hr>-->
-<!--            </div>-->
-
-<!--            <div class="col-12">-->
-<!--              <div class="d-flex align-items-center justify-content-around w-100">-->
-<!--                <div class="s-login-btn" (click)="loginWithGoogle()">-->
-<!--                  <img src="https://img.icons8.com/color/48/google-logo.png" alt="google-logo">-->
-<!--                </div>-->
-<!--                <div class="s-login-btn" (click)="loginWithGithub()">-->
-<!--                  <img src="https://img.icons8.com/ios-glyphs/60/github.png" alt="github">-->
-<!--                </div>-->
-<!--                <div class="s-login-btn" (click)="loginWithLinkedin()">-->
-<!--                  <img src="https://img.icons8.com/color/48/linkedin.png" alt="linkedin">-->
-<!--                </div>-->
-<!--                <div class="s-login-btn" (click)="loginWithFacebook()">-->
-<!--                  <img src="https://img.icons8.com/color/48/facebook-new.png" alt="facebook-new">-->
-<!--                </div>-->
-<!--              </div>-->
-<!--            </div>-->
-
             <div class="col-12">
-              <p class="navigation-text text-center">Already have an account ? <a routerLink="/login">Sign In</a></p>
+              <p class="navigation-text text-center">
+                Already have an account? <a routerLink="/login">Sign In instead</a>
+              </p>
             </div>
           </div>
         </form>
-
       </div>
     </div>
   </div>
