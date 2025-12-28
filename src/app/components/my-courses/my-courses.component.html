@@ -1,28 +1,27 @@
-<div class="container">
-  <div class="row py-3 w-100">
-    <div class="col-12 col-md-4 col-lg-3" *ngFor="let course of courses">
-      <app-course-card
-        [course]="course"
-        (delete)="deleteCourse($event)"
-        (edit)="editCourse($event)"
-        (openMaterials)="navigateToMaterials($event)"
-        (audience)="toggleAudience($event)"
-      ></app-course-card>
+<div class="container py-4">
+  <div class="my-courses-header">
+    <h2>My Courses</h2>
+    <p>Manage and track your published training sessions.</p>
+  </div>
+
+  <div class="course-grid" *ngIf="!loading">
+    <div class="animate-fade-in" *ngFor="let course of courses; let i = index" [style.animation-delay]="i * 0.1 + 's'">
+      <app-course-card [course]="course" (delete)="deleteCourse($event)" (edit)="editCourse($event)"
+        (openMaterials)="navigateToMaterials($event)" (audience)="toggleAudience($event)"></app-course-card>
     </div>
   </div>
 
-  <div class="w-100" *ngIf="loading">
-    <div class="row py-3 w-100">
-      <div class="col-12 col-md-4 col-lg-3 mb-2" *ngFor="let i of [1, 2, 3, 4]">
-        <app-card1x2-loader></app-card1x2-loader>
-      </div>
+  <div class="row g-4" *ngIf="loading">
+    <div class="col-12 col-md-4 col-lg-3" *ngFor="let i of [1, 2, 3, 4]">
+      <app-card1x2-loader></app-card1x2-loader>
     </div>
   </div>
 
   <div class="result-not-found" *ngIf="courses.length === 0 && !loading">
     <div class="img-wrapper">
-      <img src="/assets/images/decorations/polar-bear.svg" alt="not found" loading="lazy">
+      <img src="/assets/images/decorations/polar-bear.svg" alt="not found">
     </div>
-    <p>No Results Available</p>
+    <p>Success starts here. Manage your course catalog and track student engagement.</p>
+    <button class="btn-fill btn-f-3 mt-4" routerLink="/post-course">Create Your First Course</button>
   </div>
 </div>

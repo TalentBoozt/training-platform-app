@@ -1,148 +1,153 @@
 <div class="container">
   <ul class="nav nav-tabs my-3">
     <li class="nav-item">
-      <button class="nav-link" [class.active]="activeTab === 'materials'" (click)="activeTab = 'materials'">Learning Materials</button>
+      <button class="nav-link" [class.active]="activeTab === 'materials'" (click)="activeTab = 'materials'">Learning
+        Materials</button>
     </li>
     <li class="nav-item">
       <button class="nav-link" [class.active]="activeTab === 'quizzes'" (click)="activeTab = 'quizzes'">Quizzes</button>
     </li>
     <li class="nav-item">
-      <button class="nav-link" [class.active]="activeTab === 'recordings'" (click)="activeTab = 'recordings'">Recordings</button>
+      <button class="nav-link" [class.active]="activeTab === 'recordings'"
+        (click)="activeTab = 'recordings'">Recordings</button>
     </li>
   </ul>
 
   <!-- Loop over modules -->
-  <div *ngFor="let module of modules" class="mb-4">
+  <div *ngFor="let module of modules" class="module-section">
     <h5>{{ module.name }}</h5>
+
     <div *ngIf="activeTab === 'materials'">
       <ng-container *ngIf="getMaterialsByType('all', module.id)?.length > 0; else addOnly">
-        <div class="d-flex flex-wrap gap-3">
-          <div class="material-item card p-3" *ngFor="let material of getMaterialsByType('all', module.id)">
-            <div class="d-flex gap-3 align-items-start">
-              <!-- Icon -->
+        <div class="material-grid">
+          <div class="material-item" *ngFor="let material of getMaterialsByType('all', module.id)">
+            <div class="d-flex flex-column h-100">
               <div class="icon">
                 <img [src]="getMaterialIcon(material.url)" alt="material icon" />
               </div>
 
-              <!-- Details -->
               <div class="flex-grow-1">
-                <div class="d-flex align-items-center gap-2">
+                <div class="d-flex align-items-center justify-content-between gap-2 mb-2">
                   <a [href]="material.url" target="_blank" class="material-name">{{ material.name }}</a>
 
                   <!-- Visibility dropdown -->
                   <div class="dropdown">
-                    <button class="btn btn-sm btn-outline-primary p-1" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
-                      <i class="material-icons p-0 m-0" style="font-size: 16px">{{ getIconForVisibility(material.visibility) }}</i>
-                      <span>&triangledown;</span>
+                    <button class="btn-outline btn-o-1 py-1 px-2 d-flex align-items-center gap-1" type="button"
+                      data-bs-toggle="dropdown">
+                      <i class="material-icons" style="font-size: 18px">{{ getIconForVisibility(material.visibility)
+                        }}</i>
+                      <i class="material-icons" style="font-size: 14px">expand_more</i>
                     </button>
-                    <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                      <li>
-                        <a class="dropdown-item d-flex align-items-center" (click)="changeVisibility('public', material, 'material')">
-                          <i class="material-icons me-2">public</i> Public
-                        </a>
-                      </li>
-                      <li>
-                        <a class="dropdown-item d-flex align-items-center" (click)="changeVisibility('participant', material, 'material')">
-                          <i class="material-icons me-2">people</i> Participants
-                        </a>
-                      </li>
-                      <li>
-                        <a class="dropdown-item d-flex align-items-center" (click)="changeVisibility('only-me', material, 'material')">
-                          <i class="material-icons me-2">lock</i> Only Me
-                        </a>
-                      </li>
+                    <ul class="dropdown-menu glass-premium">
+                      <li><a class="dropdown-item" (click)="changeVisibility('public', material, 'material')"><i
+                            class="material-icons">public</i> Public</a></li>
+                      <li><a class="dropdown-item" (click)="changeVisibility('participant', material, 'material')"><i
+                            class="material-icons">people</i> Participants</a></li>
+                      <li><a class="dropdown-item" (click)="changeVisibility('only-me', material, 'material')"><i
+                            class="material-icons">lock</i> Only Me</a></li>
                     </ul>
                   </div>
                 </div>
 
                 <div class="text-muted small">
-                  <span class="type">{{ material.type }}</span> |
-                  <span class="category">{{ material.category }}</span> |
-                  <span class="views"><i class="material-icons">remove_red_eye</i> {{ material.viewCount || 0 }}</span>
+                  <span class="type">{{ material.type }}</span>
+                  <span class="separator">•</span>
+                  <span class="category">{{ material.category }}</span>
+                  <span class="separator">•</span>
+                  <span class="views"><i class="material-icons">visibility</i> {{ material.viewCount || 0 }}</span>
                 </div>
               </div>
-            </div>
 
-            <!-- Actions -->
-            <div class="actions d-flex gap-2 mt-2 align-items-center justify-content-end">
-              <button class="btn btn-sm btn-outline-secondary" (click)="onEdit(module.id, material.id, 'material')">Edit</button>
-              <button class="btn btn-sm btn-outline-danger" (click)="onDelete(material, 'material')">Delete</button>
+              <div class="actions d-flex gap-2">
+                <button class="btn-outline btn-o-1 py-1 flex-grow-1"
+                  (click)="onEdit(module.id, material.id, 'material')">Edit</button>
+                <button class="btn-outline btn-o-1 py-1 text-danger"
+                  (click)="onDelete(material, 'material')">Delete</button>
+              </div>
             </div>
           </div>
 
-          <button class="btn btn-sm btn-primary" (click)="onAdd(module.id, 'material')">+</button>
+          <div class="add-btn" (click)="onAdd(module.id, 'material')">
+            <i class="material-icons">add</i>
+          </div>
         </div>
       </ng-container>
       <ng-template #addOnly>
-        <button class="btn btn-sm btn-primary" (click)="onAdd(module.id, 'material')">Add Material</button>
+        <button class="add-btn-large" (click)="onAdd(module.id, 'material')">
+          <i class="material-icons me-2">upload_file</i> Add Your First Material
+        </button>
       </ng-template>
     </div>
 
     <div *ngIf="activeTab === 'quizzes'">
       <ng-container *ngIf="getQuizzesByModule(module.id)?.length > 0; else addQuizOnly">
-        <div class="d-flex flex-wrap gap-3">
-          <div class="card" *ngFor="let quiz of getQuizzesByModule(module.id)">
-            <div class="card-body">
-              <div class="d-flex align-items-center gap-2 justify-content-between w-100 mb-1">
-                <h5>{{ quiz.title }}</h5>
-                <!-- Visibility dropdown -->
-                <div class="dropdown">
-                  <button class="btn btn-sm btn-outline-primary p-1" type="button" id="dropdownMenuButtonQuiz" data-bs-toggle="dropdown" aria-expanded="false">
-                    <i class="material-icons p-0 m-0" style="font-size: 16px">{{ getIconForVisibility(quiz.visibility) }}</i>
-                    <span>&triangledown;</span>
-                  </button>
-                  <ul class="dropdown-menu" aria-labelledby="dropdownMenuButtonQuiz">
-                    <li>
-                      <a class="dropdown-item d-flex align-items-center" (click)="changeVisibility('public', quiz, 'quiz')">
-                        <i class="material-icons me-2">public</i> Public
-                      </a>
-                    </li>
-                    <li>
-                      <a class="dropdown-item d-flex align-items-center" (click)="changeVisibility('participant', quiz, 'quiz')">
-                        <i class="material-icons me-2">people</i> Participants
-                      </a>
-                    </li>
-                    <li>
-                      <a class="dropdown-item d-flex align-items-center" (click)="changeVisibility('only-me', quiz, 'quiz')">
-                        <i class="material-icons me-2">lock</i> Only Me
-                      </a>
-                    </li>
-                  </ul>
-                </div>
+        <div class="material-grid">
+          <div class="quiz-card" *ngFor="let quiz of getQuizzesByModule(module.id)">
+            <div class="d-flex align-items-center justify-content-between mb-3">
+              <h5 class="m-0">{{ quiz.title }}</h5>
+              <div class="dropdown">
+                <button class="btn-outline btn-o-1 py-1 px-2 d-flex align-items-center gap-1" type="button"
+                  data-bs-toggle="dropdown">
+                  <i class="material-icons" style="font-size: 18px">{{ getIconForVisibility(quiz.visibility) }}</i>
+                  <i class="material-icons" style="font-size: 14px">expand_more</i>
+                </button>
+                <ul class="dropdown-menu glass-premium">
+                  <li><a class="dropdown-item" (click)="changeVisibility('public', quiz, 'quiz')"><i
+                        class="material-icons">public</i> Public</a></li>
+                  <li><a class="dropdown-item" (click)="changeVisibility('participant', quiz, 'quiz')"><i
+                        class="material-icons">people</i> Participants</a></li>
+                  <li><a class="dropdown-item" (click)="changeVisibility('only-me', quiz, 'quiz')"><i
+                        class="material-icons">lock</i> Only Me</a></li>
+                </ul>
               </div>
-              <div class="d-flex gap-2 align-items-center justify-content-start mb-1">
-                <button class="btn btn-sm btn-outline-primary w-100" (click)="onView(quiz.id, 'quiz')">View</button>
-                <button class="btn btn-sm btn-outline-success w-100" (click)="onCopyUrl(quiz.id, 'quiz')">Share</button>
-              </div>
-              <div class="d-flex gap-2 align-items-center justify-content-start">
-                <button class="btn btn-sm btn-outline-secondary w-100" (click)="onEdit(module.id, quiz.id, 'quiz')">Edit</button>
-                <button class="btn btn-sm btn-outline-danger w-100" (click)="onDelete(quiz, 'quiz')">Delete</button>
-              </div>
+            </div>
+
+            <div class="d-grid gap-2 mb-3">
+              <button class="btn-fill btn-f-1 py-2" (click)="onView(quiz.id, 'quiz')">View Quiz</button>
+              <button class="btn-outline btn-o-1 py-2" (click)="onCopyUrl(quiz.id, 'quiz')">Share Link</button>
+            </div>
+
+            <div class="d-flex gap-2">
+              <button class="btn-outline btn-o-1 py-1 flex-grow-1"
+                (click)="onEdit(module.id, quiz.id, 'quiz')">Edit</button>
+              <button class="btn-outline btn-o-1 py-1 text-danger" (click)="onDelete(quiz, 'quiz')">Delete</button>
             </div>
           </div>
 
-          <button class="btn btn-sm btn-primary" (click)="onAdd(module.id, 'quiz')">+</button>
+          <div class="add-btn" (click)="onAdd(module.id, 'quiz')">
+            <i class="material-icons">add</i>
+          </div>
         </div>
       </ng-container>
       <ng-template #addQuizOnly>
-        <button class="btn btn-sm btn-primary" (click)="onAdd(module.id, 'quiz')">Add Quiz</button>
+        <button class="add-btn-large" (click)="onAdd(module.id, 'quiz')">
+          <i class="material-icons me-2">quiz</i> Create Your First Quiz
+        </button>
       </ng-template>
     </div>
 
     <div *ngIf="activeTab === 'recordings'">
       <ng-container *ngIf="getMaterialsByType('recording', module.id)?.length > 0; else addRecordingOnly">
-        <div class="d-flex flex-wrap gap-3">
-          <div class="card" *ngFor="let rec of getMaterialsByType('recording', module.id)">
-            <div class="card-body">
-              <h6>{{ rec.name }}</h6>
-              <button class="btn btn-sm btn-outline-secondary">Edit</button>
-              <button class="btn btn-sm btn-outline-danger">Delete</button>
+        <div class="material-grid">
+          <div class="quiz-card" *ngFor="let rec of getMaterialsByType('recording', module.id)">
+            <div class="icon mb-3">
+              <i class="material-icons" style="font-size: 32px; color: hsl(var(--primary))">videocam</i>
             </div>
+            <h6 class="mb-3 fw-bold">{{ rec.name }}</h6>
+            <div class="d-flex gap-2">
+              <button class="btn-outline btn-o-1 py-1 flex-grow-1">Edit</button>
+              <button class="btn-outline btn-o-1 py-1 text-danger">Delete</button>
+            </div>
+          </div>
+          <div class="add-btn">
+            <i class="material-icons">add</i>
           </div>
         </div>
       </ng-container>
       <ng-template #addRecordingOnly>
-        <button class="btn btn-sm btn-primary">Add Recording</button>
+        <button class="add-btn-large">
+          <i class="material-icons me-2">video_call</i> Add Your First Recording
+        </button>
       </ng-template>
     </div>
   </div>

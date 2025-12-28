@@ -1,0 +1,504 @@
+/* Modern Style Utilities & Animations */
+@use "sass:map";
+@use "sass:meta";
+
+/* Breakpoints (Duplicated from styles.scss for local use in mixin) */
+$screen-sm: 577px;
+$screen-md: 769px;
+$screen-lg: 993px;
+$screen-xl: 1201px;
+$screen-xxl: 1401px;
+
+/* Media Query Mixin – updated to avoid deprecated interpolation behavior */
+@mixin respond-to($breakpoint) {
+    @if $breakpoint ==sm {
+        @media (max-width: #{$screen-sm}) {
+            @content;
+        }
+    }
+
+    @else if $breakpoint ==md {
+        @media (max-width: #{$screen-md}) {
+            @content;
+        }
+    }
+
+    @else if $breakpoint ==lg {
+        @media (max-width: #{$screen-lg}) {
+            @content;
+        }
+    }
+
+    @else if $breakpoint ==xl {
+        @media (max-width: #{$screen-xl}) {
+            @content;
+        }
+    }
+
+    @else if $breakpoint ==xxl {
+        @media (max-width: #{$screen-xxl}) {
+            @content;
+        }
+    }
+}
+
+/* Glassmorphism */
+@mixin glass {
+    background: rgba(255, 255, 255, 0.05);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+
+    .theme-dark & {
+        background: rgba(15, 23, 42, 0.3);
+        border-color: rgba(255, 255, 255, 0.05);
+    }
+}
+
+.glass {
+    @include glass;
+}
+
+@mixin glass-premium {
+    background: hsla(var(--background), 0.4);
+    backdrop-filter: blur(16px) saturate(180%);
+    -webkit-backdrop-filter: blur(16px) saturate(180%);
+    border: 1px solid hsla(var(--foreground), 0.1);
+    box-shadow: 0 8px 32px 0 hsla(0, 0%, 0%, 0.1);
+
+    .theme-dark & {
+        background: hsla(222.2, 84%, 4.9%, 0.5);
+        border-color: hsla(var(--foreground), 0.05);
+    }
+}
+
+@mixin mesh-gradient {
+    background-color: hsl(var(--background));
+    background-image:
+        radial-gradient(at 0% 0%, hsla(var(--primary), 0.15) 0, transparent 50%),
+        radial-gradient(at 50% 0%, hsla(var(--secondary), 0.15) 0, transparent 50%),
+        radial-gradient(at 100% 0%, hsla(var(--primary), 0.15) 0, transparent 50%);
+}
+
+/* Shadows & Elevations */
+@mixin shadow-soft {
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+}
+
+.shadow-soft {
+    @include shadow-soft;
+}
+
+@mixin shadow-premium {
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05),
+        0 0 0 1px hsl(var(--primary), 5%); // fixed: interpolated custom property + opacity as %
+}
+
+.shadow-premium {
+    @include shadow-premium;
+}
+
+$shadow-premium: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05),
+    0 0 0 1px hsl(var(--primary), 5%);
+
+/* Smooth Transitions */
+@mixin transition-slow {
+    transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.transition-slow {
+    @include transition-slow;
+}
+
+@mixin transition-base {
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.transition-base {
+    @include transition-base;
+}
+
+@mixin transition-fast {
+    transition: all 0.15s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.transition-fast {
+    @include transition-fast;
+}
+
+/* Animation Keyframes */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes slideInRight {
+    from {
+        transform: translateX(20px);
+        opacity: 0;
+    }
+
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+@keyframes pulse-subtle {
+
+    0%,
+    100% {
+        transform: scale(1);
+    }
+
+    50% {
+        transform: scale(1.02);
+    }
+}
+
+@mixin animate-fade-in {
+    animation: fadeIn 0.6s ease-out forwards;
+}
+
+.animate-fade-in {
+    @include animate-fade-in;
+}
+
+@mixin animate-slide-in {
+    animation: slideInRight 0.5s ease-out forwards;
+}
+
+.animate-slide-in {
+    @include animate-slide-in;
+}
+
+@mixin animate-pulse-subtle {
+    animation: pulse-subtle 3s infinite ease-in-out;
+}
+
+.animate-pulse-subtle {
+    @include animate-pulse-subtle;
+}
+
+@mixin animate-after-header {
+    @include animate-fade-in;
+    animation-delay: 0.2s;
+}
+
+.animate-after-header {
+    @include animate-after-header;
+}
+
+/* Button Utilities (Mixins for cross-component use) */
+@mixin btn-base {
+    white-space: nowrap;
+    font-size: var(--fs-16);
+    font-weight: var(--fw-500);
+    padding: var(--padding-1) var(--padding-6);
+    border-radius: var(--br-5);
+    cursor: pointer;
+    border: 2px solid transparent;
+    outline: none;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    @include transition-base;
+
+    @include respond-to(xl) {
+        padding: var(--padding-1) var(--padding-3);
+    }
+
+    @include respond-to(lg) {
+        font-size: var(--fs-14);
+    }
+
+    @include respond-to(md) {
+        font-weight: var(--fw-400);
+    }
+}
+
+@mixin btn-fill {
+    @include btn-base;
+}
+
+@mixin btn-outline {
+    background-color: transparent;
+    @include btn-base;
+}
+
+@mixin btn-outline-premium {
+    border-color: hsl(var(--primary));
+    color: hsl(var(--primary));
+    @include btn-outline;
+}
+
+@mixin btn-f-1 {
+    & {
+        color: var(--color-primary-100);
+        background-color: var(--color-white);
+    }
+
+    &:hover {
+        background-color: var(--color-primary-100);
+        border-color: var(--color-white);
+        color: var(--color-white);
+    }
+}
+
+@mixin btn-f-2 {
+    & {
+        color: var(--color-white);
+        background-color: var(--color-secondary-100);
+    }
+
+    &:hover {
+        background-color: var(--color-white);
+        border-color: var(--color-secondary-100);
+        color: var(--color-secondary-100);
+    }
+}
+
+@mixin btn-f-3 {
+    & {
+        color: var(--color-white);
+        background-color: var(--color-primary-100);
+    }
+
+    &:hover {
+        background-color: var(--color-white);
+        border-color: var(--color-primary-100);
+        color: var(--color-primary-100);
+    }
+}
+
+@mixin btn-f-4 {
+    & {
+        color: var(--color-white);
+        background-color: var(--color-danger-200);
+    }
+
+    &:hover {
+        background-color: var(--color-danger-100);
+    }
+}
+
+@mixin btn-f-5 {
+    & {
+        color: var(--color-white);
+        background-color: var(--color-secondary-100);
+    }
+
+    &:hover {
+        background-color: var(--color-primary-100);
+    }
+}
+
+.btn-fill {
+    @include btn-fill;
+}
+
+.btn-outline {
+    @include btn-outline;
+}
+
+/* Premium Form Controls */
+@mixin input-premium {
+    background: hsl(var(--background), 50%);
+    border: 1px solid hsl(var(--border), 50%);
+    border-radius: 12px;
+    padding: 0.75rem 1rem;
+    color: hsl(var(--foreground));
+    width: 100%;
+    @include transition-base;
+
+    &:focus {
+        border-color: hsl(var(--primary));
+        box-shadow: 0 0 0 4px hsl(var(--primary), 10%);
+        outline: none;
+    }
+
+    &::placeholder {
+        color: hsl(var(--muted-foreground));
+    }
+
+    &[type="file"] {
+        padding: 0.5rem;
+        cursor: pointer;
+
+        &::file-selector-button {
+            font-size: 0.8rem;
+            padding: 0.4rem 1rem;
+            margin-right: 1rem;
+            border-radius: 8px;
+            font-size: 0.8rem;
+            @include btn-fill;
+            @include btn-f-3;
+        }
+    }
+}
+
+@mixin checkbox-premium {
+    appearance: none;
+    width: 20px;
+    height: 20px;
+    border: 2px solid hsla(var(--foreground), 0.2);
+    border-radius: 6px;
+    background: hsla(var(--foreground), 0.03);
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    vertical-align: middle;
+    @include transition-base;
+
+    &:checked {
+        background: hsl(var(--primary));
+        border-color: hsl(var(--primary));
+
+        &::after {
+            content: '\e5ca';
+            font-family: 'Material Icons';
+            color: white;
+            font-size: 16px;
+        }
+    }
+
+    &:hover {
+        border-color: hsl(var(--primary), 50%);
+    }
+}
+
+.checkbox-premium {
+    @include checkbox-premium;
+}
+
+
+.input-premium {
+    @include input-premium;
+}
+
+@mixin select-premium {
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='currentColor'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'%3E%3C/path%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 1rem center;
+    background-size: 1.5em;
+    padding-right: 2.5rem;
+    @include input-premium;
+}
+
+.select-premium {
+    @include select-premium;
+}
+
+@mixin form-group-premium {
+    margin-bottom: 1.5rem;
+    position: relative;
+
+    label {
+        display: block;
+        font-size: 0.875rem;
+        font-weight: 600;
+        margin-bottom: 0.5rem;
+        color: hsl(var(--foreground));
+        @include transition-base;
+    }
+
+    &:focus-within label {
+        color: hsl(var(--primary));
+    }
+}
+
+/* Flex & Grid Layout Utilities */
+@mixin flex-center {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.flex-center {
+    @include flex-center;
+}
+
+@mixin flex-between {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.flex-between {
+    @include flex-between;
+}
+
+@mixin grid-auto-fit {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 1.5rem;
+}
+
+.grid-auto-fit {
+    @include grid-auto-fit;
+}
+
+/* Hover Effects */
+@mixin hover-lift {
+    will-change: transform;
+
+    &:hover {
+        transform: translateY(-5px);
+    }
+}
+
+.hover-lift {
+    @include hover-lift;
+}
+
+@mixin hover-glow {
+    &:hover {
+        box-shadow: 0 0 20px hsl(var(--primary), 30%);
+    }
+}
+
+.hover-glow {
+    @include hover-glow;
+}
+
+/* Typography Enhancements */
+@mixin text-balance {
+    text-wrap: balance;
+}
+
+.text-balance {
+    @include text-balance;
+}
+
+@mixin gradient-text {
+    background: linear-gradient(135deg, hsl(var(--primary)), hsl(var(--secondary)), #60a5fa);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.gradient-text {
+    @include gradient-text;
+}
+
+@mixin card-modern {
+    border-radius: var(--radius);
+    padding: 1.5rem;
+    @include glass-premium;
+    @include transition-base;
+
+    &:hover {
+        transform: translateY(-5px);
+        border-color: hsla(var(--primary), 0.3);
+        @include shadow-premium;
+    }
+}

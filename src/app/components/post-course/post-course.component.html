@@ -1,65 +1,81 @@
-<div class="container" style="position: relative;">
-  <div class="back-btn" routerLink="/dashboard">
-    <i class="material-icons">arrow_back</i>Back to Dashboard
+<div class="container py-5">
+  <div class="wizard-header mb-5">
+    <div class="back-link animate-fade-in" routerLink="/dashboard">
+      <i class="material-icons">arrow_back</i>
+      <span>Exit to Dashboard</span>
+    </div>
+
+    <!-- Modern Step Indicator -->
+    <div class="premium-stepper shadow-soft animate-fade-in">
+      <div class="step-pill" *ngFor="let step of steps; let i = index" [class.active]="currentStep === i"
+        [class.completed]="currentStep > i" (click)="currentStep = i">
+        <span class="step-num">{{i + 1}}</span>
+        <span class="step-label d-none d-xl-inline">{{step}}</span>
+      </div>
+    </div>
+
+    <div class="stepper-actions animate-fade-in">
+      <button class="nav-btn prev" (click)="prevStep()" [disabled]="currentStep === 0">
+        <i class="material-icons">chevron_left</i>
+      </button>
+      <button class="nav-btn next" (click)="nextStep()" [disabled]="currentStep === steps.length - 1">
+        <i class="material-icons">chevron_right</i>
+      </button>
+    </div>
   </div>
 
-  <div class="d-lg-flex align-items-start justify-content-center w-100 gap-2">
-
-    <div class="w-100 cmp-wrapper">
-      <div class="stepper">
-        <button class="d-none d-sm-block" (click)="prevStep()" [disabled]="currentStep === 0">Previous</button>
-        <button class="d-block d-sm-none" (click)="prevStep()" [disabled]="currentStep === 0">&lt;</button>
-        <span>Step {{ currentStep + 1 }} of {{ steps.length }}</span>
-        <button class="d-none d-sm-block" (click)="nextStep()" [disabled]="currentStep === steps.length - 1">Next</button>
-        <button class="d-block d-sm-none" (click)="nextStep()" [disabled]="currentStep === steps.length - 1">&gt;</button>
-      </div>
-
-      <div [ngSwitch]="currentStep">
-        <app-basic-details *ngSwitchCase="0"></app-basic-details>
-        <app-course-details *ngSwitchCase="1"></app-course-details>
-        <app-relavant-details *ngSwitchCase="2"></app-relavant-details>
-        <app-payment-details *ngSwitchCase="3"></app-payment-details>
-        <app-module-details *ngSwitchCase="4"></app-module-details>
-        <app-preview-post *ngSwitchCase="5"></app-preview-post>
+  <div class="row g-5 align-items-start">
+    <div class="col-12 col-lg-8 col-xl-9">
+      <div class="cmp-container">
+        <div [ngSwitch]="currentStep" class="wizard-content">
+          <app-basic-details *ngSwitchCase="0" class="step-frame"></app-basic-details>
+          <app-course-details *ngSwitchCase="1" class="step-frame"></app-course-details>
+          <app-relavant-details *ngSwitchCase="2" class="step-frame"></app-relavant-details>
+          <app-payment-details *ngSwitchCase="3" class="step-frame"></app-payment-details>
+          <app-module-details *ngSwitchCase="4" class="step-frame"></app-module-details>
+          <app-preview-post *ngSwitchCase="5" class="step-frame"></app-preview-post>
+        </div>
       </div>
     </div>
 
-    <div *ngIf="currentStep != 5" style="margin: max(50px, 5vw) auto; width: 100%; max-width: 400px;">
-      <div class="form-card-2">
-        <div class="pro-title">
-          <h5>Copy from existing Course:</h5>
-          <div class="pro-tag" *ngIf="false">pro</div>
-        </div>
-        <div class="d-flex align-items-center justify-content-end w-100 h-100 s-bar">
-          <input type="text" placeholder="Search..."/>
-          <i class="material-icons">search</i>
-        </div>
-
-        <div class="search-results-wrapper" *ngIf="false">
-          <div class="not-found">Not Found :(</div>
-        </div>
-      </div>
-
-      <div class="form-card-2">
-        <div class="pro-title">
-          <h5>Copy from drafts:</h5>
-          <div class="pro-tag" *ngIf="false">pro</div>
-        </div>
-        <div class="d-flex align-items-center justify-content-end w-100 h-100 drafts-wrapper">
-          <div class="d-flex align-items-center justify-content-between w-100 draft" *ngIf="draft">
-            <div class="draft-name"><i class="material-icons">auto_awesome</i> Auto Saved</div>
-            <i class="material-icons clear" (click)="clearDraft()">delete</i>
+    <!-- Right Sidebar -->
+    <aside class="col-12 col-lg-4 col-xl-3" *ngIf="currentStep != 5">
+      <div class="sidebar-sticky">
+        <!-- AI/PRO Utility Card -->
+        <div class="utility-card glass animate-slide-in">
+          <div class="card-header">
+            <h6>Clone Existing Course</h6>
+            <span class="pro-badge">PRO</span>
           </div>
-          <div class="draft-not-found" *ngIf="!draft">
-            <i class="material-icons">drafts</i>
-            <div class="d-flex align-items-center justify-content-center">
-              <p>No Drafts Found</p>
+          <div class="search-input-premium">
+            <i class="material-icons">search</i>
+            <input type="text" placeholder="Search templates..." />
+          </div>
+        </div>
+
+        <!-- Drafts Management Card -->
+        <div class="utility-card glass animate-slide-in" style="animation-delay: 0.1s">
+          <div class="card-header">
+            <h6>Active Drafts</h6>
+          </div>
+          <div class="draft-status" *ngIf="draft">
+            <div class="draft-info">
+              <i class="material-icons text-primary">auto_awesome</i>
+              <div class="details">
+                <span>Recent Auto-Save</span>
+                <small>Few moments ago</small>
+              </div>
             </div>
+            <button class="btn-icon-delete" (click)="clearDraft()" title="Delete Draft">
+              <i class="material-icons">delete_outline</i>
+            </button>
+          </div>
+          <div class="draft-empty" *ngIf="!draft">
+            <i class="material-icons">history</i>
+            <p>No draft history available</p>
           </div>
         </div>
-
       </div>
-    </div>
-
+    </aside>
   </div>
 </div>

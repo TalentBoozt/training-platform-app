@@ -1,37 +1,40 @@
 <div class="shared-background">
-  <div class="overlay"></div>
-
   <div class="content-holder">
     <div class="main-content-wrapper">
       <div class="img-card-1">
         <img src="/assets/images/login/login.webp" alt="login image">
       </div>
       <div class="form-card-1">
-        <div class="logo" [ngStyle]="{'background-image': themeService.isDarkMode() ? 'url(/assets/images/logo/top-w.webp)' : 'url(/assets/images/logo/top-b.webp)'}">
+        <div class="logo"
+          [ngStyle]="{'background-image': themeService.isDarkMode() ? 'url(/assets/images/logo/g-l-w.avif)' : 'url(/assets/images/logo/g-l-b.avif)'}">
         </div>
-        <h5 class="title">Sign in to your account</h5>
+        <h5 class="title">Sign In</h5>
 
         <form [formGroup]="loginForm">
           <div class="row form-wrapper">
             <div class="col-12">
-              <label for="email">Email:</label>
-              <input type="email" placeholder="example@example.com" id="email" formControlName="email" autocomplete="section-blue login email">
+              <label for="email">Email Address</label>
+              <input type="email" placeholder="name@company.com" id="email" formControlName="email"
+                autocomplete="username">
             </div>
 
             <div class="col-12">
-              <label for="password">Password:</label>
-              <div class="input-group w-100 d-flex">
-                <input type="password" placeholder="Password:" id="password" formControlName="password" aria-label="Password:" aria-describedby="button-addon" style="flex:1" autocomplete="section-blue login password">
-                <button class="btn btn-outline-secondary" type="button" id="button-addon" (click)="togglePasswordVisibility()"><i [ngClass]="isp1open? 'fa fa-eye-slash':'fa fa-eye'" aria-hidden="true"></i></button>
+              <label for="password">Password</label>
+              <div class="input-group">
+                <input [type]="isp1open ? 'text' : 'password'" placeholder="Enter your password" id="password"
+                  formControlName="password" autocomplete="current-password">
+                <button class="btn btn-outline-secondary" type="button" (click)="togglePasswordVisibility()">
+                  <i [ngClass]="isp1open? 'fa fa-eye-slash':'fa fa-eye'"></i>
+                </button>
               </div>
             </div>
 
             <div class="col-12">
-              <div class="d-sm-flex align-items-center justify-content-between">
+              <div class="d-flex align-items-center justify-content-between">
                 <div class="form-check">
-                  <input class="form-check-input me-2" type="checkbox" value="" id="flexCheckDefault" formControlName="remember" style="width: auto">
+                  <input class="form-check-input" type="checkbox" id="flexCheckDefault" formControlName="remember">
                   <label class="form-check-label" for="flexCheckDefault">
-                    Trust this device
+                    Stay signed in
                   </label>
                 </div>
 
@@ -40,34 +43,16 @@
             </div>
 
             <div class="col-12">
-              <button id="TP_LI_LogIn" type="button" class="btn-fill btn-f-3 w-100" (click)="loginUser()" [disabled]="disabled">Sign In</button>
+              <button id="TP_LI_LogIn" type="button" class="btn-fill btn-f-3" (click)="loginUser()"
+                [disabled]="disabled">
+                Sign In to Platform
+              </button>
             </div>
 
-<!--            <div class="d-flex align-items-center justify-content-center">-->
-<!--              <hr>-->
-<!--              <p class="mx-1 my-0" style="white-space: nowrap">or sign in with</p>-->
-<!--              <hr>-->
-<!--            </div>-->
-
-<!--            <div class="col-12">-->
-<!--              <div class="d-flex align-items-center justify-content-around w-100">-->
-<!--                <div class="s-login-btn" (click)="loginWithGoogle()">-->
-<!--                  <img src="https://img.icons8.com/color/48/google-logo.png" alt="google-logo">-->
-<!--                </div>-->
-<!--                <div class="s-login-btn" (click)="loginWithGithub()">-->
-<!--                  <img src="https://img.icons8.com/ios-glyphs/60/github.png" alt="github">-->
-<!--                </div>-->
-<!--                <div class="s-login-btn" (click)="loginWithLinkedin()">-->
-<!--                  <img src="https://img.icons8.com/color/48/linkedin.png" alt="linkedin">-->
-<!--                </div>-->
-<!--                <div class="s-login-btn" (click)="loginWithFacebook()">-->
-<!--                  <img src="https://img.icons8.com/color/48/facebook-new.png" alt="facebook-new">-->
-<!--                </div>-->
-<!--              </div>-->
-<!--            </div>-->
-
             <div class="col-12">
-              <p class="navigation-text text-center">Don't have an account? <a routerLink="/register">Sign Up</a></p>
+              <p class="navigation-text text-center">
+                New here? <a routerLink="/register">Create an account</a>
+              </p>
             </div>
           </div>
         </form>

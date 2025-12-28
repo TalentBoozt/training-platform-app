@@ -1,32 +1,81 @@
+@use '../../shared/styles/utilities';
+
+:host {
+  display: block;
+  width: 100%;
+  margin-top: 75px;
+}
+
+.quiz-form {
+  @include utilities.glass-premium;
+  padding: 2.5rem;
+  border-radius: 28px;
+  border: 1px solid hsla(var(--foreground) / 0.05);
+
+  .form-label {
+    font-weight: 700;
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: hsl(var(--primary));
+    margin-bottom: 0.75rem;
+    display: block;
+  }
+
+  input[type="text"],
+  input[type="number"],
+  textarea,
+  select {
+    @include utilities.input-premium;
+    margin-bottom: 1.5rem;
+
+    &:last-child {
+      margin-bottom: 0;
+    }
+  }
+
+  textarea {
+    min-height: 120px;
+    resize: vertical;
+  }
+}
+
+.sticky-actions {
+  position: sticky;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  padding: 1.5rem 0 0;
+  margin-top: 2rem;
+  background: linear-gradient(to top, hsla(var(--background) / 0.9), transparent);
+  backdrop-filter: blur(5px);
+  z-index: 10;
+  display: flex;
+  justify-content: flex-end;
+  border-top: 1px solid hsla(var(--foreground) / 0.05);
+}
+
 @keyframes shakeX {
-  0%, 100% {
+
+  0%,
+  100% {
     transform: translateX(0);
   }
-  10%, 30%, 50%, 70%, 90% {
+
+  10%,
+  30%,
+  50%,
+  70%,
+  90% {
     transform: translateX(-6px);
   }
-  20%, 40%, 60%, 80% {
+
+  20%,
+  40%,
+  60%,
+  80% {
     transform: translateX(6px);
   }
-}
-
-input, textarea, select {
-  width: 100%;
-  margin: var(--margin-2) 0;
-  padding: var(--padding-2);
-  font-size: var(--fs-16);
-  border-radius: var(--br-5);
-  border: 1px solid var(--color-text-700);
-  background-color: var(--color-surface-200);
-  color: var(--color-text-100);
-
-  &::placeholder {
-    color: var(--color-text-300);
-  }
-}
-
-label {
-  color: var(--color-text-300);
 }
 
 .animate-shake {

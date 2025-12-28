@@ -1,0 +1,118 @@
+@use '../../../shared/styles/utilities';
+
+.form-card-1 {
+    @include utilities.glass-premium;
+    padding: 2rem;
+    border-radius: 24px;
+    border: 1px solid hsla(var(--foreground)/ 0.05);
+
+    .section-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: 2.5rem;
+        padding-bottom: 1.25rem;
+        border-bottom: 1px solid hsla(var(--foreground)/ 0.05);
+
+        h5 {
+            font-size: 1.5rem;
+            font-weight: 800;
+            letter-spacing: -0.02em;
+            @include utilities.gradient-text;
+            margin: 0;
+        }
+    }
+
+    .form-wrapper {
+        margin-top: 1rem;
+    }
+
+    .form-control {
+        @include utilities.input-premium;
+    }
+
+    select.form-control {
+        @include utilities.select-premium;
+    }
+
+    .form-group {
+        @include utilities.form-group-premium;
+
+        label {
+            font-weight: 700;
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: hsl(var(--muted-foreground));
+            margin-bottom: 0.75rem;
+        }
+    }
+
+    .form-check {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        padding: 1rem 1.25rem;
+        background: hsla(var(--foreground)/ 0.03);
+        border-radius: 16px;
+        border: 1px solid hsla(var(--foreground)/ 0.05);
+        @include utilities.transition-base;
+        cursor: pointer;
+
+        &:hover {
+            background: hsla(var(--primary)/ 0.05);
+            border-color: hsla(var(--primary)/ 0.2);
+            transform: translateY(-2px);
+        }
+
+        .form-check-input {
+            margin: 0;
+            width: 1.25rem;
+            height: 1.25rem;
+            border: 2px solid hsla(var(--foreground)/ 0.1);
+            background: transparent;
+            cursor: pointer;
+            @include utilities.transition-base;
+
+            &:checked {
+                background-color: hsl(var(--primary));
+                border-color: hsl(var(--primary));
+                @include utilities.shadow-soft;
+            }
+        }
+
+        .form-check-label {
+            font-weight: 700;
+            font-size: 0.95rem;
+            color: hsl(var(--foreground));
+            cursor: pointer;
+        }
+    }
+
+    .payment-options {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 1.25rem;
+        margin-top: 0.75rem;
+    }
+}
+
+@include utilities.respond-to(md) {
+    .form-card-1 {
+        padding: 1.5rem;
+
+        .section-header {
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 1.5rem;
+
+            button {
+                width: 100%;
+            }
+        }
+
+        .payment-options {
+            grid-template-columns: 1fr;
+        }
+    }
+}

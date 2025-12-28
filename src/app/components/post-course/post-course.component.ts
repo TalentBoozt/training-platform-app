@@ -1,13 +1,13 @@
-import {Component, OnInit} from '@angular/core';
-import {NgIf, NgSwitch, NgSwitchCase} from '@angular/common';
-import {BasicDetailsComponent} from './basic-details/basic-details.component';
-import {CourseDetailsComponent} from './course-details/course-details.component';
-import {RelavantDetailsComponent} from './relavant-details/relavant-details.component';
-import {PaymentDetailsComponent} from './payment-details/payment-details.component';
-import {ModuleDetailsComponent} from './module-details/module-details.component';
-import {PreviewPostComponent} from './preview-post/preview-post.component';
-import {ResumeStorageService} from '../../services/support/resume-storage.service';
-import {RouterLink} from '@angular/router';
+import { Component, OnInit } from '@angular/core';
+import { NgForOf, NgIf, NgSwitch, NgSwitchCase } from '@angular/common';
+import { BasicDetailsComponent } from './basic-details/basic-details.component';
+import { CourseDetailsComponent } from './course-details/course-details.component';
+import { RelavantDetailsComponent } from './relavant-details/relavant-details.component';
+import { PaymentDetailsComponent } from './payment-details/payment-details.component';
+import { ModuleDetailsComponent } from './module-details/module-details.component';
+import { PreviewPostComponent } from './preview-post/preview-post.component';
+import { ResumeStorageService } from '../../services/support/resume-storage.service';
+import { RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-post-course',
@@ -21,15 +21,16 @@ import {RouterLink} from '@angular/router';
     PaymentDetailsComponent,
     ModuleDetailsComponent,
     PreviewPostComponent,
-    RouterLink
+    RouterLink,
+    NgForOf
   ],
   templateUrl: './post-course.component.html',
   styleUrl: './post-course.component.scss',
   standalone: true
 })
-export class PostCourseComponent implements OnInit{
+export class PostCourseComponent implements OnInit {
   currentStep = 0;
-  steps = [0, 1, 2, 3, 4, 5];
+  steps = ['Basic Details', 'Course Overview', 'Relevant Info', 'Payment Plans', 'Syllabus', 'Final Review'];
   draft: boolean = false;
 
   constructor(private resumeStorage: ResumeStorageService) {
@@ -38,7 +39,7 @@ export class PostCourseComponent implements OnInit{
     this.loadDraft();
   }
 
-  loadDraft(){
+  loadDraft() {
     const savedData = this.resumeStorage.getData();
     this.draft = savedData && Object.keys(savedData).length > 0;
   }
@@ -60,7 +61,7 @@ export class PostCourseComponent implements OnInit{
   }
 
   clearDraft(): void {
-    if (confirm('This will remove all your savings!')){
+    if (confirm('This will remove all your savings!')) {
       this.resumeStorage.clearData();
       this.loadDraft();
     }

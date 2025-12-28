@@ -1,0 +1,140 @@
+<div class="wizard-step pricing-step container-fluid mt-4">
+    <div class="step-header mb-4">
+        <h2><i class="fas fa-dollar-sign me-2 text-success"></i>Pricing & Access</h2>
+        <p>Set the price for your course or make it free.</p>
+    </div>
+
+    <form [formGroup]="form" class="mt-4 wizard-form p-4 rounded-3 shadow-sm">
+
+        <!-- Free Checkbox -->
+        <div class="form-check custom-switch mb-5 p-3 rounded-3 d-flex align-items-center">
+            <input type="checkbox" formControlName="isFree" id="isFreeCheckbox" class="form-check-input"
+                style="width: 3em; height: 1.5em; margin-right: 1em;" />
+            <label for="isFreeCheckbox" class="form-check-label fw-bold mb-0">
+                Make this course free for everyone
+            </label>
+        </div>
+
+        <!-- Pricing Section -->
+        <ng-container *ngIf="!form.value.isFree">
+            <div class="row g-4 animate-fade-in">
+                <div class="form-group col-md-6">
+                    <label class="form-label" for="price">Standard Price (USD)</label>
+                    <div class="input-wrapper">
+                        <span class="input-icon"><i class="fas fa-tag"></i></span>
+                        <input id="price" formControlName="price" type="number" class="form-control" min="0"
+                            placeholder="0.00" />
+                    </div>
+                    <div class="invalid-feedback" *ngIf="form.controls.price.invalid && form.get('price')?.touched">
+                        Price is required
+                    </div>
+                </div>
+                <div class="form-group col-md-6">
+                    <label class="form-label">Discounted Price (Optional)</label>
+                    <div class="input-wrapper">
+                        <span class="input-icon"><i class="fas fa-percent"></i></span>
+                        <input formControlName="discountedPrice" type="number" class="form-control" min="0"
+                            placeholder="0.00" />
+                    </div>
+                    <div class="invalid-feedback"
+                        *ngIf="form.controls.discountedPrice.invalid && form.get('discountedPrice')?.touched">
+                        Discounted price is required
+                    </div>
+                </div>
+            </div>
+        </ng-container>
+
+        <div class="my-4 form-check">
+            <input type="checkbox" id="policyCheck" class="form-check-input" [(ngModel)]="policyAccepted"
+                [ngModelOptions]="{standalone: true}">
+            <label for="policyCheck" class="form-check-label">
+                I agree to the <a href="/payment-policy" target="_blank" class="text-decoration-none">Payment Policy</a>
+            </label>
+        </div>
+
+        <!-- Actions -->
+        <div class="d-flex align-items-center gap-3 mt-4 pt-3 border-top">
+            <button class="btn btn-primary px-4" (click)="save()" [disabled]="form.invalid || !policyAccepted">
+                <i class="fas fa-save me-2"></i> Save Pricing
+            </button>
+
+            <!-- Trigger Button for Modal -->
+            <button type="button" class="btn btn-outline-info" data-bs-toggle="modal"
+                data-bs-target="#earningsCalculatorModal">
+                <i class="fas fa-calculator me-2"></i>Calculate Earnings
+            </button>
+        </div>
+    </form>
+
+    <!-- Earnings Breakdown Modal -->
+    <div class="modal fade" id="earningsCalculatorModal" tabindex="-1" aria-labelledby="earningsCalculatorModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content border-0 shadow-lg">
+                <div class="modal-header bg-light">
+                    <h5 class="modal-title" id="earningsCalculatorModalLabel"><i
+                            class="fas fa-calculator me-2 text-primary"></i>Earnings Calculator</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body p-4">
+                    <!-- Target Earnings Field -->
+                    <div class="mb-4">
+                        <label for="targetEarnings" class="form-label fw-bold">How much do you want to earn
+                            (Net)?</label>
+                        <div class="input-group">
+                            <span class="input-group-text">$</span>
+                            <input type="number" id="targetEarnings" class="form-control" [(ngModel)]="targetEarnings"
+                                min="0" (input)="onTargetEarningsChanged(targetEarnings)">
+                        </div>
+                    </div>
+
+                    <!-- Split Type Selector -->
+                    <div class="mb-4">
+                        <label for="splitType" class="form-label fw-bold">Traffic Source</label>
+                        <select id="splitType" class="form-select" [(ngModel)]="splitType">
+                            <option value="trainer-led">Trainer-Led (You bring the student)</option>
+                            <option value="promotion">Promotion</option>
+                            <option value="platform-led">Platform-Led (We bring the student)</option>
+                            <option value="default">Default</option>
+                        </select>
+                    </div>
+
+                    <!-- Info on Final Price -->
+                    <div class="alert alert-primary d-flex align-items-start gap-3">
+                        <i class="fas fa-bullseye mt-1 fs-5"></i>
+                        <div>
+                            <h6 class="alert-heading mb-1">Target Earnings: <strong>{{ targetEarnings | currency: 'USD'
+                                    }}</strong></h6>
+                            <p class="mb-0">
+                                You should list your course at: <strong class="fs-5">{{ finalAmount | currency: 'USD'
+                                    }}</strong><br />
+                                <small class="text-muted">This price covers VAT and fees.</small>
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- Earnings Breakdown -->
+                    <div class="card bg-light border-0">
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between mb-2">
+                                <span class="text-muted">Your Net Earnings:</span>
+                                <span class="fw-bold text-success">{{ calcTrainerEarning(targetEarnings, splitType) |
+                                    currency: 'USD' }}</span>
+                            </div>
+                            <div class="d-flex justify-content-between">
+                                <span class="text-muted">Platform Fee:</span>
+                                <span class="fw-bold">{{ calcPlatformEarning(targetEarnings, splitType) | currency:
+                                    'USD' }}</span>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class="modal-footer bg-light border-top-0">
+                    <button type="button" class="btn btn-primary px-4" data-bs-dismiss="modal">Got it</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,74 +1,104 @@
-<div class="form-card-1">
-  <div class="d-flex align-items-center justify-content-between gap-2 w-100">
-    <h5>Preview & Publish :</h5>
-    <div class="form-group d-flex align-items-center gap-2">
-      <button id="TP_PP_AdCourse" class="btn-fill btn-f-2" (click)="addCourse()">{{isUpdateId ? 'Update' : 'Publish'}}</button>
-      <button *ngIf="isUpdateId" id="TP_PP_NewBatch" class="btn-fill btn-f-2" (click)="updateWithNewBatch()">Publish for New Batch</button>
+<div class="form-card-1 animate-fade-in">
+  <div class="section-header">
+    <h5>Final Course Preview</h5>
+    <div class="action-row">
+      <button *ngIf="isUpdateId" id="TP_PP_NewBatch" class="btn-fill btn-f-1 px-4"
+        (click)="updateWithNewBatch()">Publish New Batch</button>
+      <button id="TP_PP_AdCourse" class="btn-fill btn-f-3 px-5" (click)="addCourse()">
+        {{isUpdateId ? 'Update & Sync' : 'Go Live & Publish'}}
+      </button>
     </div>
   </div>
 
-  <div style="width: 100%" *ngFor="let c of selectedCourse">
-    <div class="overview-wrapper" *ngIf="!isNotFound">
-      <div class="container mb-4">
-        <div class="d-flex flex-column gap-4">
-          <div class="title-2">{{c?.name}}</div>
-          <div class="paragraph-1">{{c?.overview}}</div>
-          <div class="paragraph-1"><span class="bold">Lecturers: </span>{{c?.lecturer}}</div>
-        </div>
-      </div>
+  <div class="magazine-preview" *ngFor="let c of selectedCourse">
+    <div *ngIf="!isNotFound">
 
-      <div class="details-wrapper">
-        <div class="container">
-          <div class="d-md-flex align-items-center justify-content-between w-100">
-            <div class="d-flex align-items-center justify-content-between w-100 mb-3 mb-md-0">
-              <div class="d-flex flex-column align-items-center justify-content-center w-100">
-                <div class="details-tag">Reviews</div>
-                <div class="details-val">
-                  <i class="material-icons star">star</i>
-                  {{c?.rating}}
-                </div>
-              </div>
-              <div class="d-flex flex-column align-items-center justify-content-center w-100">
-                <div class="details-tag">Language</div>
-                <div class="details-val">{{c?.language}}</div>
-              </div>
-            </div>
-            <div class="d-flex align-items-center justify-content-between w-100 mb-3 mb-md-0">
-              <div class="d-flex flex-column align-items-center justify-content-center w-100">
-                <div class="details-tag">Course</div>
-                <div class="details-val">{{c?.modules.length || '0'}} Modules</div>
-              </div>
-              <div class="d-flex flex-column align-items-center justify-content-center w-100">
-                <div class="details-tag">Experience</div>
-                <div class="details-val">{{c?.level}}</div>
-              </div>
-            </div>
-            <div class="d-flex align-items-center justify-content-between w-100">
-              <div class="d-flex flex-column align-items-center justify-content-center w-100">
-                <div class="details-tag">Duration</div>
-                <div class="details-val">{{c?.duration}}</div>
-              </div>
-              <div class="w-100"></div>
-            </div>
+      <!-- Hero Section -->
+      <section class="hero-section mb-5">
+        <div class="hero-content">
+          <h1 class="course-title">{{c?.name}}</h1>
+          <p class="course-overview">{{c?.overview}}</p>
+          <div class="lecturers">
+            <span>{{c?.lecturer}}</span>
           </div>
         </div>
-      </div>
+      </section>
 
-      <div class="container">
-        <button class="btn-fill btn-f-2">Enroll Now</button>
-      </div>
-    </div>
+      <!-- High Fidelity Details Grid -->
+      <section class="details-grid mb-5">
+        <div class="detail-card">
+          <span class="tag">Satisfaction</span>
+          <div class="value">
+            <i class="material-icons star">star</i>
+            <span>{{c?.rating}} / 5.0</span>
+          </div>
+        </div>
+        <div class="detail-card">
+          <span class="tag">Language</span>
+          <div class="value">
+            <i class="material-icons">language</i>
+            <span>{{c?.language}}</span>
+          </div>
+        </div>
+        <div class="detail-card">
+          <span class="tag">Curriculum</span>
+          <div class="value">
+            <i class="material-icons">school</i>
+            <span>{{c?.modules.length || '0'}} Modules</span>
+          </div>
+        </div>
+        <div class="detail-card">
+          <span class="tag">Difficulty</span>
+          <div class="value">
+            <i class="material-icons">bar_chart</i>
+            <span>{{c?.level}}</span>
+          </div>
+        </div>
+        <div class="detail-card">
+          <span class="tag">Commitment</span>
+          <div class="value">
+            <i class="material-icons">timer</i>
+            <span>{{c?.duration}}</span>
+          </div>
+        </div>
+      </section>
 
-    <div class="container py-5">
-      <div class="content-title">Skills you’ll gain</div>
-      <button class="btn-outline btn-o-2 me-2 mb-2" *ngFor="let s of c?.skills">{{s}}</button>
+      <!-- Main Content Area -->
+      <section class="content-section">
+        <div class="main-content">
+          <div class="section-title">Core Skills Gained</div>
+          <div class="skills-cloud">
+            <span class="skill-chip" *ngFor="let s of c?.skills">{{s}}</span>
+          </div>
 
-      <div class="content-title">What you’ll learn</div>
-      <div style="color: var(--color-text-200)" [innerHTML]="sanitizeHTML(c?.description)"></div>
+          <div class="section-title">Course Description</div>
+          <div class="description-body" [innerHTML]="sanitizeHTML(c?.description)"></div>
+        </div>
+
+        <!-- Sticky Sidebar Preview -->
+        <aside class="sidebar-actions">
+          <div class="cta-card">
+            <div class="price-display">
+              <small>From</small>
+              <span>{{selectedCurrency || '$'}}{{selectedPrice || '0.00'}}</span>
+            </div>
+            <button class="premium-btn">Enrollment Preview</button>
+            <ul>
+              <li><i class="material-icons">verified</i> Full Lifetime Access</li>
+              <li><i class="material-icons">description</i> Course Materials</li>
+              <li><i class="material-icons">workspace_premium</i> Certificate of Completion</li>
+            </ul>
+          </div>
+        </aside>
+      </section>
     </div>
   </div>
 
-  <div *ngIf="isNotFound" class="w-100 d-flex align-items-center justify-content-center" style="min-height: 80vh">
-    <p>Preview Not Available! Make sure to add course details and saved in every step!</p>
+  <!-- Empty State -->
+  <div *ngIf="isNotFound" class="not-found-state">
+    <i class="material-icons">visibility_off</i>
+    <h3>Preview Not Available</h3>
+    <p>Please ensure you've completed all previous steps and saved your changes to generate a high-fidelity preview.</p>
+    <button class="btn-fill btn-f-2 mt-3 px-4">Refresh Workspace</button>
   </div>
 </div>

@@ -1,42 +1,148 @@
-.warning-banner{
-  width: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border: 2px solid var(--color-text-700);
-  border-radius: 5px;
-  padding: 10px;
+@use '../../../shared/styles/utilities';
 
-  .warning-banner-content{
-    background-color: forestgreen;
-    padding: 10px;
-    border-radius: 5px;
-    margin: 10px 0;
+.form-card-1 {
+  .section-header {
     display: flex;
     align-items: center;
-    justify-content: center;
-    gap: 10px;
+    justify-content: space-between;
+    margin-bottom: 2rem;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid hsla(var(--border)/ 0.5);
 
-    p{
+    h5 {
+      font-size: 1.25rem;
+      font-weight: 800;
+      color: hsl(var(--foreground));
       margin: 0;
-      padding: 0;
-      color: #ffffff;
     }
+  }
 
-    .material-icons{
-      color: #ffffff;
-      font-size: 32px;
+  // Common modern form overrides
+  .form-control {
+    @include utilities.input-premium;
+  }
+
+  select.form-control {
+    @include utilities.select-premium;
+  }
+
+  .form-group {
+    @include utilities.form-group-premium;
+  }
+}
+
+.warning-banner {
+  @include utilities.glass;
+  background: hsla(20, 100%, 50%, 0.1); // Subtle amber/orange for warning
+  border: 1px solid hsla(20, 100%, 50%, 0.3);
+  border-radius: 12px;
+  padding: 1.25rem;
+  margin: 1.5rem 0;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  @include utilities.animate-fade-in;
+
+  i {
+    font-size: 2rem;
+    color: hsl(20, 100%, 50%);
+  }
+
+  p {
+    margin: 0;
+    font-size: 0.95rem;
+    color: hsl(var(--foreground));
+    font-weight: 500;
+    line-height: 1.5;
+
+    strong {
+      color: hsl(var(--foreground));
+      font-weight: 800;
+    }
+  }
+
+  &.success {
+    background: hsla(142, 70%, 45%, 0.1);
+    border-color: hsla(142, 70%, 45%, 0.3);
+
+    i {
+      color: hsl(142, 70%, 45%);
     }
   }
 }
 
-button {
-  &:disabled {
-    cursor: not-allowed;
-    background-color: #6e7681;
+.installment-list {
+  margin-top: 2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+
+  h6 {
+    font-size: 0.9rem;
+    font-weight: 700;
+    color: hsl(var(--muted-foreground));
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-bottom: 1rem;
   }
-  &:disabled:hover {
-    background-color: #6e7681;
-    color: #FFFFFF;
+
+  .installment-item {
+    @include utilities.glass;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1rem 1.25rem;
+    border-radius: 12px;
+    @include utilities.transition-base;
+    @include utilities.animate-slide-in;
+
+    &:hover {
+      background: hsla(var(--primary)/ 0.05);
+      border-color: hsla(var(--primary)/ 0.2);
+    }
+
+    .info {
+      display: flex;
+      flex-direction: column;
+      gap: 0.25rem;
+
+      .name {
+        font-weight: 700;
+        color: hsl(var(--foreground));
+        font-size: 0.95rem;
+      }
+
+      .price {
+        font-weight: 600;
+        color: hsl(var(--primary));
+        font-size: 0.85rem;
+      }
+    }
+
+    .btn-remove {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      @include utilities.flex-center;
+      background: hsla(0, 100%, 50%, 0.1);
+      color: #ff4d4d;
+      border: none;
+      @include utilities.transition-base;
+
+      &:hover {
+        background: #ff4d4d;
+        color: white;
+        @include utilities.shadow-soft;
+      }
+
+      i {
+        font-size: 1.1rem;
+      }
+    }
   }
+}
+
+.add-section {
+  @include utilities.flex-center;
+  margin-top: 0.5rem;
 }

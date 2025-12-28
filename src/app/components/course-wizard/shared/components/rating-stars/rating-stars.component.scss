@@ -1,0 +1,39 @@
+@use '../../../../../shared/styles/utilities';
+
+.rating-container {
+    display: flex;
+    align-items: center;
+    margin-bottom: 1.5rem;
+    padding: 0.5rem 1rem;
+    background: hsla(var(--background) / 0.5);
+    border-radius: 12px;
+    width: fit-content;
+    border: 1px solid hsla(var(--foreground) / 0.05);
+}
+
+.rating-score {
+    font-weight: 800;
+    margin-right: 0.75rem;
+    font-size: 1.25rem;
+    @include utilities.gradient-text;
+}
+
+.stars-wrapper {
+    margin-right: 0.75rem;
+    font-size: 0.9rem;
+    color: #eab308; // Keep gold for stars, or use primary if preferred
+    // For specialized star gradient:
+    // background: linear-gradient(135deg, #facc15, #ca8a04);
+    // -webkit-background-clip: text;
+    // -webkit-text-fill-color: transparent;
+
+    i {
+        margin-right: 2px;
+    }
+}
+
+.total-ratings {
+    color: hsl(var(--muted-foreground));
+    font-size: 0.85rem;
+    font-weight: 500;
+}

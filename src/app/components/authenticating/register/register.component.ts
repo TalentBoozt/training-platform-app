@@ -1,18 +1,18 @@
-import {AfterViewInit, Component, OnInit} from '@angular/core';
-import {FormControl, FormGroup, ReactiveFormsModule, Validators} from '@angular/forms';
-import {ActivatedRoute, Router, RouterLink} from '@angular/router';
-import {CredentialService} from '../../../services/credential.service';
-import {AlertsService} from '../../../services/support/alerts.service';
-import {EncryptionService} from '../../../services/support/encryption.service';
-import {ThemeService} from '../../../services/support/theme.service';
-import {AuthService} from '../../../services/support/auth.service';
-import {NgClass, NgStyle} from '@angular/common';
-import {WindowService} from '../../../services/common/window.service';
-import {HttpErrorResponse} from '@angular/common/http';
-import {GoogleAuthService} from '../../../services/authentication/google-auth.service';
-import {GitHubAuthService} from '../../../services/authentication/git-hub-auth.service';
-import {FacebookAuthService} from '../../../services/authentication/facebook-auth.service';
-import {LinkedInAuthService} from '../../../services/authentication/linked-in-auth.service';
+import { AfterViewInit, Component, OnInit } from '@angular/core';
+import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
+import { CredentialService } from '../../../services/credential.service';
+import { AlertsService } from '../../../services/support/alerts.service';
+import { EncryptionService } from '../../../services/support/encryption.service';
+import { ThemeService } from '../../../services/support/theme.service';
+import { AuthService } from '../../../services/support/auth.service';
+import { NgClass, NgIf, NgStyle } from '@angular/common';
+import { WindowService } from '../../../services/common/window.service';
+import { HttpErrorResponse } from '@angular/common/http';
+import { GoogleAuthService } from '../../../services/authentication/google-auth.service';
+import { GitHubAuthService } from '../../../services/authentication/git-hub-auth.service';
+import { FacebookAuthService } from '../../../services/authentication/facebook-auth.service';
+import { LinkedInAuthService } from '../../../services/authentication/linked-in-auth.service';
 
 @Component({
   selector: 'app-register',
@@ -20,13 +20,14 @@ import {LinkedInAuthService} from '../../../services/authentication/linked-in-au
     RouterLink,
     NgStyle,
     ReactiveFormsModule,
-    NgClass
+    NgClass,
+    NgIf
   ],
   templateUrl: './register.component.html',
   styleUrl: './register.component.scss',
   standalone: true
 })
-export class RegisterComponent implements OnInit, AfterViewInit{
+export class RegisterComponent implements OnInit, AfterViewInit {
   registerForm = new FormGroup({
     name: new FormControl('', [Validators.required]),
     email: new FormControl('', [Validators.required, Validators.email]),
@@ -39,17 +40,17 @@ export class RegisterComponent implements OnInit, AfterViewInit{
   termsErrorMsg = '';
 
   constructor(private router: Router,
-              private route: ActivatedRoute,
-              private credentialService: CredentialService,
-              private alertService: AlertsService,
-              private encryptionService: EncryptionService,
-              private googleAuthService: GoogleAuthService,
-              private gitHubAuthService: GitHubAuthService,
-              private facebookAuthService: FacebookAuthService,
-              private linkedInAuthService: LinkedInAuthService,
-              private windowService: WindowService,
-              public themeService: ThemeService,
-              private cookieService: AuthService) { }
+    private route: ActivatedRoute,
+    private credentialService: CredentialService,
+    private alertService: AlertsService,
+    private encryptionService: EncryptionService,
+    private googleAuthService: GoogleAuthService,
+    private gitHubAuthService: GitHubAuthService,
+    private facebookAuthService: FacebookAuthService,
+    private linkedInAuthService: LinkedInAuthService,
+    private windowService: WindowService,
+    public themeService: ThemeService,
+    private cookieService: AuthService) { }
 
   ngOnInit(): void {
     // this.googleAuthService.configureOAuth();
@@ -59,7 +60,7 @@ export class RegisterComponent implements OnInit, AfterViewInit{
   }
 
   ngAfterViewInit() {
-    if (this.windowService.nativeDocument){
+    if (this.windowService.nativeDocument) {
       const icons = document.querySelectorAll('.material-icons');
       icons.forEach((icon) => {
         icon.setAttribute('translate', 'no');
@@ -132,7 +133,7 @@ export class RegisterComponent implements OnInit, AfterViewInit{
               this.alertService.errorMessage('An unexpected error has occurred', 'Unexpected Error');
               break;
             default:
-              this.alertService.errorMessage(error.error.message, "Code: "+error.status);
+              this.alertService.errorMessage(error.error.message, "Code: " + error.status);
           }
         });
       } else {
@@ -160,10 +161,10 @@ export class RegisterComponent implements OnInit, AfterViewInit{
     this.facebookAuthService.loginWithFacebook();
   }
 
-  togglePasswordVisibility(){
-    if (this.windowService.nativeDocument){
+  togglePasswordVisibility() {
+    if (this.windowService.nativeDocument) {
       const input: HTMLInputElement = document.getElementById('password') as HTMLInputElement;
-      if (input.type === 'password'){
+      if (input.type === 'password') {
         input.type = 'text';
         this.isp1open = false;
       } else {

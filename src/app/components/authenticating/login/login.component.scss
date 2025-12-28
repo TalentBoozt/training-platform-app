@@ -1,103 +1,187 @@
-.shared-background{
-  display: flex;
-  align-items: center;
-  justify-content: center;
+@use '../../../shared/styles/utilities';
 
-  .content-holder{
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    height: 100vh;
+:host {
+  display: block;
+  height: 100vh;
+  @include utilities.mesh-gradient;
+  overflow: hidden;
+}
+
+.shared-background {
+  height: 100%;
+  @include utilities.flex-center;
+  padding: 1rem;
+
+  .content-holder {
     width: 100%;
+    max-width: 900px;
+    height: 600px;
+    @include utilities.glass-premium;
+    border-radius: 32px;
+    overflow: hidden;
+    display: flex;
+    @include utilities.animate-fade-in;
+    border: 1px solid hsla(var(--foreground)/ 0.1);
+    box-shadow: utilities.$shadow-premium;
 
-    .main-content-wrapper{
-      width: auto;
-      max-width: 800px;
-      height: 100%;
-      max-height: 700px;
+    .main-content-wrapper {
       display: flex;
-      align-items: center;
-      justify-content: center;
-
-      .form-card-1{
-        min-width: 360px;
-        height: 100%;
-        margin: 0;
-        border-radius: 0;
-      }
-      .img-card-1{
-        flex: 1;
-        height: 100%;
-
-        img{
-          width: 100%;
-          height: 100%;
-        }
-
-        @media screen and (max-width: 800px){
-          display: none;
-        }
-      }
-    }
-  }
-}
-
-.s-login-btn{
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-  border: 2px solid var(--color-surface-mixed-100);
-  padding: 5px;
-  transition: .3s ease-in-out;
-
-  img{
-    width: 100%;
-  }
-
-  &:hover{
-    cursor: pointer;
-    //background-color: var(--color-primary-200);
-    box-shadow: 0 1px 10px rgba(0,0,0, .5);
-  }
-}
-
-.btn-2{
-  width: 100%;
-  background-color: transparent;
-  border: 2px solid var(--color-primary-100);
-  border-radius: 0;
-  padding: 5px 10px;
-  display: flex;
-  align-items: center;
-  justify-content: flex-start;
-  margin-bottom: 3px;
-
-  span{
-    margin-left: 5px;
-    color: var(--color-text-200);
-    font-weight: 450;
-    font-size: 16px;
-  }
-
-  .icon-wrapper{
-    height: 30px;
-    aspect-ratio: 1/1;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-
-    img{
       width: 100%;
+      height: 100%;
     }
-  }
 
-  &:hover{
-    background-color: var(--color-primary-100);
-    backdrop-filter: opacity(.3);
-    span{
-      color: var(--color-text-100);
+    .img-card-1 {
+      flex: 1.2;
+      height: 100%;
+      position: relative;
+      overflow: hidden;
+
+      img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        filter: brightness(0.85) contrast(1.1);
+      }
+
+      &::after {
+        content: '';
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(to right, transparent, hsla(var(--background)/ 0.3));
+      }
+
+      @include utilities.respond-to(md) {
+        display: none;
+      }
+    }
+
+    .form-card-1 {
+      flex: 1;
+      padding: 3rem;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      background: hsla(var(--background)/ 0.2);
+
+      @include utilities.respond-to(sm) {
+        padding: 2rem;
+      }
+
+      .logo {
+        width: 140px;
+        height: 48px;
+        background-size: contain;
+        background-repeat: no-repeat;
+        margin-bottom: 2.5rem;
+      }
+
+      .title {
+        font-weight: 800;
+        font-size: 1.75rem;
+        letter-spacing: -0.02em;
+        margin-bottom: 2rem;
+        @include utilities.gradient-text;
+      }
+
+      .form-wrapper {
+        row-gap: 1.5rem;
+
+        label {
+          font-weight: 700;
+          font-size: 0.8rem;
+          text-transform: uppercase;
+          letter-spacing: 0.05em;
+          color: hsl(var(--primary));
+          margin-bottom: 0.5rem;
+          display: block;
+        }
+
+        input {
+          @include utilities.input-premium;
+        }
+
+        .input-group {
+          gap: 0;
+
+          input {
+            border-top-right-radius: 0 !important;
+            border-bottom-right-radius: 0 !important;
+          }
+
+          .btn-outline-secondary {
+            border: 1px solid hsla(var(--foreground)/ 0.1);
+            border-left: none;
+            border-top-right-radius: 12px;
+            border-bottom-right-radius: 12px;
+            background: hsla(var(--foreground)/ 0.02);
+            color: hsl(var(--foreground));
+            padding: 0 1rem;
+
+            &:hover {
+              background: hsla(var(--foreground)/ 0.05);
+            }
+          }
+        }
+
+        .link {
+          color: hsl(var(--primary));
+          font-weight: 600;
+          font-size: 0.85rem;
+          text-decoration: none;
+          @include utilities.transition-base;
+
+          &:hover {
+            text-decoration: underline;
+          }
+        }
+
+        .btn-f-3 {
+          @include utilities.btn-fill;
+          @include utilities.btn-f-3;
+          width: 100%;
+          padding: 0.85rem;
+          font-weight: 700;
+          border-radius: 12px;
+          font-size: 1rem;
+          @include utilities.shadow-soft;
+        }
+
+        .form-check {
+          display: flex;
+          align-items: center;
+          gap: 0.5rem;
+
+          .form-check-input {
+            @include utilities.checkbox-premium;
+            width: 18px;
+            height: 18px;
+          }
+
+          .form-check-label {
+            margin: 0;
+            font-weight: 600;
+            font-size: 0.85rem;
+            color: hsl(var(--muted-foreground));
+          }
+        }
+
+        .navigation-text {
+          font-size: 0.9rem;
+          color: hsl(var(--muted-foreground));
+          font-weight: 500;
+          margin-top: 1.5rem;
+
+          a {
+            color: hsl(var(--primary));
+            font-weight: 700;
+            text-decoration: none;
+
+            &:hover {
+              text-decoration: underline;
+            }
+          }
+        }
+      }
     }
   }
 }

@@ -10,11 +10,8 @@
 
   <div class="container mb-4">
     <div class="btn-group">
-      <button
-        class="btn btn-secondary"
-        [class.active]="getActiveTab(c.id) === 'content'"
-        (click)="setActiveTab(c.id, 'content')"
-      >
+      <button class="btn btn-secondary" [class.active]="getActiveTab(c.id) === 'content'"
+        (click)="setActiveTab(c.id, 'content')">
         Course Content
       </button>
     </div>
@@ -22,21 +19,13 @@
 
   <div class="course-content pb-3" *ngIf="getActiveTab(c.id) === 'content'">
     <div class="container">
-      <div class="content-title">Course Content</div>
-      <div class="d-flex flex-column gap-4 w-100 p-5 module-wrapper">
+      <div class="content-title">Course Syllabus</div>
+      <div class="module-wrapper d-flex flex-column gap-4 w-100">
         <div *ngFor="let m of c.modules; let i = index">
-          <app-module-card
-            [employeeId]="employeeId"
-            [courseId]="courseId"
-            [module]="m"
-            [moduleIndex]="i + 1"
-            [installment]="findInstallment(m)"
-            [employee]="employee"
-            [materials]="findMaterials(m, c)"
-            [recordings]="findRecordings(m, c)"
-            [assignments]="findQuizzes(m, c)"
-            (bankPayment)="openBankCard($event)"
-          ></app-module-card>
+          <app-module-card [employeeId]="employeeId" [courseId]="courseId" [module]="m" [moduleIndex]="i + 1"
+            [installment]="findInstallment(m)" [employee]="employee" [materials]="findMaterials(m, c)"
+            [recordings]="findRecordings(m, c)" [assignments]="findQuizzes(m, c)"
+            (bankPayment)="openBankCard($event)"></app-module-card>
         </div>
       </div>
       <div class="result-not-found" *ngIf="c.modules?.length === 0">
@@ -51,6 +40,6 @@
 </div>
 
 <button class="d-none" id="offcanvas-btn" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasBottom"
-        aria-controls="offcanvasBottom"></button>
+  aria-controls="offcanvasBottom"></button>
 
 <button id="bankCardBtn" type="button" class="d-none" data-bs-toggle="modal" data-bs-target="#bankCard"></button>

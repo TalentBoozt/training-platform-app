@@ -1,0 +1,33 @@
+<div class="video-preview mt-2">
+    <!-- Direct video -->
+    <video *ngIf="isDirectVideo(src)" [src]="src" controls preload="metadata" width="100%"
+        class="rounded border shadow-sm">
+    </video>
+
+    <!-- YouTube Embed -->
+    <iframe *ngIf="isYouTube(src)" [src]="getSafeUrl(getYouTubeEmbedUrl(src!))" width="100%" height="315"
+        frameborder="0" allowfullscreen class="rounded border shadow-sm">
+    </iframe>
+
+    <!-- Vimeo Embed -->
+    <iframe *ngIf="isVimeo(src)" [src]="getSafeUrl(getVimeoEmbedUrl(src!))" width="100%" height="315" frameborder="0"
+        allowfullscreen class="rounded border shadow-sm">
+    </iframe>
+
+    <!-- Google Drive Embed -->
+    <iframe *ngIf="isGoogleDrive(src)" [src]="getSafeUrl(getGoogleDriveEmbedUrl(src!))" width="100%" height="315"
+        frameborder="0" allowfullscreen class="rounded border shadow-sm">
+    </iframe>
+
+    <!-- Dropbox Embed -->
+    <iframe *ngIf="isDropbox(src)" [src]="getSafeUrl(getDropboxEmbedUrl(src!))" width="100%" height="315"
+        frameborder="0" allowfullscreen class="rounded border shadow-sm">
+    </iframe>
+
+    <!-- Fallback -->
+    <div *ngIf="src && !isPlayable(src)" class="alert alert-warning mt-2">
+        <i class="fas fa-exclamation-circle me-1"></i>
+        Unsupported video format. Only direct video links or supported platforms (YouTube, Vimeo, Drive, Dropbox) are
+        allowed.
+    </div>
+</div>

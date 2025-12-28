@@ -45,17 +45,20 @@
       </div>
     </div>
 
-    <div class="container">
-      <button id="TP_PC_Enroll" type="button" class="btn-fill btn-f-2" routerLink="/preview-course/{{c.id}}">Enroll Now</button>
+    <div class="container enroll-btn-container">
+      <button id="TP_PC_Enroll" type="button" class="btn-fill btn-f-2" routerLink="/preview-course/{{c.id}}">Enroll
+        Now</button>
     </div>
   </div>
 
   <div class="container py-5">
     <div class="content-title">Skills you’ll gain</div>
-    <button class="btn-outline btn-o-2 me-2 mb-2" *ngFor="let s of c.skills">{{s}}</button>
+    <div class="d-flex flex-wrap">
+      <span class="skills-badge" *ngFor="let s of c.skills">{{s}}</span>
+    </div>
 
     <div class="content-title">What you’ll learn</div>
-    <div style="color: var(--color-text-200)" [innerHTML]="sanitizeHTML(c.description)"></div>
+    <div class="description-content" [innerHTML]="sanitizeHTML(c.description)"></div>
   </div>
 </div>
 

@@ -1,49 +1,171 @@
-.title{
-  font-size: var(--fs-26);
-  font-weight: var(--fw-600);
-  color: var(--color-text-100);
+@use '../../shared/styles/utilities';
+
+:host {
+  display: block;
+  padding: 2rem 0;
+  @include utilities.mesh-gradient;
+  min-height: calc(100vh - 75px);
 }
 
-.form-card-1{
-  max-width: 1200px;
+.container {
+  max-width: 1400px;
+  margin-top: 75px;
 }
 
-.table-card-1{
-  width: 100%;
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: var(--padding-2) var(--padding-4);
-  border-radius: 8px;
-  background-color: var(--color-surface-200);
-  overflow-x: auto;
+.title {
+  font-size: 2.5rem;
+  font-weight: 800;
+  letter-spacing: -0.04em;
+  @include utilities.gradient-text;
+  margin-bottom: 2rem;
+  @include utilities.animate-slide-in;
 }
 
-.p-status{
-  font-size: var(--fs-14);
-  font-weight: var(--fw-500);
-  color: var(--color-white);
-  width: fit-content;
+.form-card-1 {
+  @include utilities.glass-premium;
+  border-radius: 24px;
+  padding: 2rem;
+  margin-bottom: 2rem;
+  @include utilities.animate-fade-in;
+  animation-delay: 0.1s;
 }
 
-.warning-msg{
-  font-size: var(--fs-14);
-  font-weight: var(--fw-500);
-  color: var(--color-text-100);
-  margin-bottom: var(--margin-2);
+.warning-msg {
+  background: hsla(var(--primary)/ 0.1);
+  border: 1px solid hsla(var(--primary)/ 0.2);
+  padding: 1rem;
+  border-radius: 16px;
+  margin-bottom: 2rem;
+  @include utilities.animate-fade-in;
+  animation-delay: 0.2s;
 
-  i{
-    font-size: var(--fs-18);
-    color: #CEB700;
+  i {
+    color: hsl(var(--primary));
+  }
+
+  p {
+    font-weight: 600;
+    color: hsl(var(--foreground));
+    font-size: 0.95rem;
+  }
+}
+
+.table-card-1 {
+  @include utilities.glass-premium;
+  border-radius: 24px;
+  padding: 1.5rem;
+  border: 1px solid hsla(var(--foreground)/ 0.05);
+  @include utilities.animate-fade-in;
+  animation-delay: 0.3s;
+  overflow: hidden;
+
+  .table {
+    background: transparent !important;
+    margin: 0;
+
+    th {
+      background: hsla(var(--foreground)/ 0.03);
+      border: none;
+      color: hsl(var(--muted-foreground));
+      font-weight: 800;
+      text-transform: uppercase;
+      font-size: 0.75rem;
+      letter-spacing: 0.1em;
+      padding: 1.25rem 1rem;
+    }
+
+    td {
+      border-bottom: 1px solid hsla(var(--foreground)/ 0.03);
+      padding: 1.25rem 1rem;
+      color: hsl(var(--foreground));
+      font-weight: 600;
+
+      &:last-child {
+        border-bottom: none;
+      }
+    }
+
+    tr:last-child td {
+      border-bottom: none;
+    }
+  }
+}
+
+.form-select {
+  @include utilities.select-premium;
+  font-size: 0.9rem;
+  font-weight: 700;
+  padding-top: 0.5rem;
+  padding-bottom: 0.5rem;
+  border: 1px solid hsla(var(--foreground)/ 0.1);
+
+  &.text-white {
+    color: white !important;
+    border: none;
   }
 }
 
 .pagination {
-  display: flex;
-  flex-wrap: wrap; /* Allow wrapping of pagination items */
-  justify-content: center; /* Center pagination items */
-  background-color: var(--color-surface-200);
+  margin-top: 2rem;
+  @include utilities.flex-center;
+
+  ::ng-deep .ngx-pagination {
+    margin: 0;
+    padding: 0;
+    display: flex;
+    gap: 0.5rem;
+
+    li {
+      border-radius: 10px;
+      @include utilities.transition-base;
+
+      &.current {
+        background: hsl(var(--primary)) !important;
+        border-radius: 10px;
+      }
+
+      a:hover {
+        background: hsla(var(--primary)/ 0.1) !important;
+        border-radius: 10px;
+      }
+    }
+  }
 }
 
-.pagination-controls {
-  flex-shrink: 0; /* Prevent pagination from shrinking */
+.modal-content {
+  @include utilities.glass-premium;
+  border-radius: 28px;
+  border: 1px solid hsla(var(--foreground)/ 0.1);
+  color: hsl(var(--foreground));
+
+  .modal-header {
+    border-bottom: 1px solid hsla(var(--foreground)/ 0.05);
+
+    h5 {
+      font-weight: 800;
+      @include utilities.gradient-text;
+    }
+  }
+
+  .modal-body p {
+    background: hsla(var(--foreground)/ 0.03);
+    padding: 1rem;
+    border-radius: 12px;
+    margin-bottom: 0.75rem;
+    font-weight: 600;
+
+    strong {
+      color: hsl(var(--primary));
+      text-transform: uppercase;
+      font-size: 0.75rem;
+      display: block;
+      margin-bottom: 0.25rem;
+    }
+  }
+}
+
+@include utilities.respond-to(md) {
+  .title {
+    font-size: 2rem;
+  }
 }

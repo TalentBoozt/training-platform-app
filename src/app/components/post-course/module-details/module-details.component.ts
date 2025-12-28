@@ -1,9 +1,9 @@
-import {Component, OnInit} from '@angular/core';
-import {ResumeStorageService} from '../../../services/support/resume-storage.service';
-import {AlertsService} from '../../../services/support/alerts.service';
-import {FormsModule, ReactiveFormsModule} from '@angular/forms';
-import {NgForOf, NgIf} from '@angular/common';
-import {TimezoneService} from '../../../services/support/timezone.service';
+import { Component, OnInit } from '@angular/core';
+import { ResumeStorageService } from '../../../services/support/resume-storage.service';
+import { AlertsService } from '../../../services/support/alerts.service';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { DatePipe, NgForOf, NgIf } from '@angular/common';
+import { TimezoneService } from '../../../services/support/timezone.service';
 
 import * as moment from 'moment-timezone';
 import { zonedTimeToUtc } from 'date-fns-tz';
@@ -14,13 +14,14 @@ import { zonedTimeToUtc } from 'date-fns-tz';
     FormsModule,
     NgForOf,
     NgIf,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    DatePipe
   ],
   templateUrl: './module-details.component.html',
   styleUrl: './module-details.component.scss',
   standalone: true
 })
-export class ModuleDetailsComponent implements OnInit{
+export class ModuleDetailsComponent implements OnInit {
   modules: any[] = [];
   newModule = {
     id: '',
@@ -48,8 +49,8 @@ export class ModuleDetailsComponent implements OnInit{
   trainerTimezone: string = '';
 
   constructor(private resumeStorage: ResumeStorageService,
-              private timezoneService: TimezoneService,
-              private alertService: AlertsService) {}
+    private timezoneService: TimezoneService,
+    private alertService: AlertsService) { }
 
   ngOnInit(): void {
     this.trainerTimezone = this.timezoneService.getTimezone();
@@ -71,7 +72,7 @@ export class ModuleDetailsComponent implements OnInit{
       this.isFreeCheck = true;
       this.newModule.installmentId = 'free';
     } else {
-      if (savedData.installment && savedData.installment.length > 0){
+      if (savedData.installment && savedData.installment.length > 0) {
         if (!this.isOnetimePayment) this.installments = savedData.installment;
       } else {
         this.alertService.errorMessage('You have not initialized any installment plan. You should initialize at least one installment plan in 4th step!', 'Error');
@@ -82,8 +83,8 @@ export class ModuleDetailsComponent implements OnInit{
 
   addModule(): void {
     const { name, description, installmentId, date, start, end } = this.newModule;
-    if (name && description && installmentId && date && start && end){
-      if (this.newModule.meetingLink &&!this.isValidUrl(this.newModule.meetingLink)){
+    if (name && description && installmentId && date && start && end) {
+      if (this.newModule.meetingLink && !this.isValidUrl(this.newModule.meetingLink)) {
         this.alertService.errorMessage('Please enter a valid url', 'Error');
         return;
       }

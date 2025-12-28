@@ -1,0 +1,217 @@
+@use '../../../../../shared/styles/utilities';
+
+.media-upload-step {
+    max-width: 900px;
+    margin: 2rem auto;
+}
+
+h2 {
+    font-size: 1.75rem;
+    font-weight: 700;
+    margin: 2rem 0;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    @include utilities.gradient-text;
+
+    i {
+        font-size: 1.5rem;
+        background: linear-gradient(135deg, hsl(var(--primary)), hsl(var(--secondary)));
+        -webkit-background-clip: text;
+        background-clip: text; // Standard property
+        -webkit-text-fill-color: transparent;
+    }
+}
+
+/* Container */
+.wizard-form {
+    @include utilities.glass-premium;
+    background: hsla(var(--card) / 0.6);
+    border: 1px solid hsla(var(--foreground) / 0.05);
+    border-radius: 24px;
+    padding: 2rem;
+    box-shadow: 0 8px 32px hsla(var(--background) / 0.5);
+}
+
+/* Form groups */
+.form-group {
+    position: relative;
+    margin-bottom: 1.5rem;
+
+    .form-label {
+        font-weight: 600;
+        color: hsl(var(--foreground));
+        margin-bottom: 0.75rem;
+        font-size: 0.85rem;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        opacity: 0.8;
+    }
+}
+
+/* Input wrapper */
+.input-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+
+    .input-icon {
+        position: absolute;
+        left: 1.25rem;
+        color: hsl(var(--muted-foreground));
+        pointer-events: none;
+        z-index: 2;
+        transition: color 0.3s;
+    }
+
+    input,
+    textarea,
+    select {
+        width: 100%;
+        padding-left: 3.25rem;
+        padding-right: 1.25rem;
+        padding-top: 1rem;
+        padding-bottom: 1rem;
+        border-radius: 12px;
+        border: 1px solid hsla(var(--foreground) / 0.1);
+        background: hsla(var(--background) / 0.5);
+        color: hsl(var(--foreground));
+        font-size: 1rem;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+
+        &:focus {
+            background: hsla(var(--background) / 0.9);
+            border-color: hsl(var(--primary));
+            box-shadow: 0 0 0 4px hsla(var(--primary) / 0.15);
+            outline: none;
+
+            &~.input-icon {
+                color: hsl(var(--primary));
+            }
+        }
+
+        &::placeholder {
+            color: hsla(var(--muted-foreground) / 0.7);
+        }
+
+        &.is-invalid {
+            border-color: hsl(var(--destructive));
+            background: hsla(var(--destructive) / 0.05);
+
+            &:focus {
+                box-shadow: 0 0 0 4px hsla(var(--destructive) / 0.1);
+            }
+        }
+    }
+}
+
+/* Hover effect */
+.input-wrapper:hover input,
+.input-wrapper:hover select {
+    border-color: hsla(var(--primary) / 0.5);
+}
+
+/* Validation text */
+.invalid-feedback {
+    color: hsl(var(--destructive));
+    font-size: 0.85rem;
+    margin-top: 0.5rem;
+    font-weight: 500;
+    margin-left: 0.5rem;
+}
+
+/* Dropdown (Category) */
+.dropdown-menu {
+    background: hsla(var(--background) / 0.95);
+    border-radius: 16px;
+    padding: 0.5rem;
+    box-shadow: 0 12px 32px hsla(var(--background) / 0.5);
+
+    .dropdown-item {
+        border-radius: 12px;
+        font-size: 0.9rem;
+        padding: 0.6rem 0.75rem;
+        transition: all 0.2s ease;
+
+        &:hover {
+            background: hsla(var(--primary) / 0.1);
+            color: hsl(var(--primary));
+        }
+    }
+}
+
+/* Skill & Requirement Chips */
+.badge {
+    font-weight: 500;
+    font-size: 0.85rem;
+    border-radius: 999px;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    cursor: default;
+    transition: all 0.25s ease;
+
+    i {
+        cursor: pointer;
+        opacity: 0.7;
+        transition: color 0.2s, transform 0.2s;
+
+        &:hover {
+            color: hsl(var(--destructive));
+            transform: scale(1.1);
+        }
+    }
+}
+
+/* Certificate Switch */
+.form-check {
+    background: hsla(var(--background) / 0.6);
+    border: 1px solid hsla(var(--foreground) / 0.08);
+    border-radius: 16px;
+    padding: 1rem 1.5rem;
+
+    .form-check-input {
+        cursor: pointer;
+
+        &:checked {
+            background-color: hsl(var(--primary));
+            border-color: hsl(var(--primary));
+        }
+
+        &:focus {
+            box-shadow: 0 0 0 3px hsla(var(--primary) / 0.25);
+        }
+    }
+
+    .form-check-label {
+        font-weight: 600;
+        color: hsl(var(--foreground));
+    }
+}
+
+/* Save Button */
+.save-btn {
+    background: hsl(var(--primary));
+    color: hsl(var(--background));
+    border: none;
+    padding: 0.75rem 1.75rem;
+    border-radius: 12px;
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 1rem;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    transition: all 0.3s ease;
+    box-shadow: 0 6px 18px hsla(var(--primary) / 0.25);
+
+    &:hover {
+        background: hsl(var(--primary) / 0.85);
+        box-shadow: 0 8px 24px hsla(var(--primary) / 0.4);
+    }
+
+    &.disabled {
+        opacity: 0.6;
+        cursor: not-allowed;
+        box-shadow: none;
+    }
+}

@@ -1,0 +1,7 @@
+<label class="uploader">
+    <input type="file" (change)="onFile($any($event.target).files)" />
+    <span class="upload-label">
+        <i class="{{icon}}"></i>
+        <span class="d-none d-sm-inline ms-2">{{label}}</span>
+    </span>
+</label>

@@ -1,0 +1,70 @@
+@use '../../../../../shared/styles/utilities';
+
+.preview-step {
+    max-width: 1200px;
+    margin: 2rem auto;
+}
+
+h2 {
+    font-size: 1.75rem;
+    font-weight: 700;
+    margin: 2rem 0;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    @include utilities.gradient-text;
+
+    i {
+        font-size: 1.5rem;
+        background: linear-gradient(135deg, hsl(var(--primary)), hsl(var(--secondary)));
+        -webkit-background-clip: text;
+        background-clip: text; // Standard property
+        -webkit-text-fill-color: transparent;
+    }
+}
+
+.shadow-net {
+    box-shadow: var(--box-shadow-1);
+}
+
+.accordion {
+    .accordion-button {
+        background-color: hsla(var(--card) / 0.7) !important;
+        color: hsl(var(--foreground)/0.9) !important;
+    }
+
+    .accordion-item {
+        background-color: hsla(var(--card) / 0.7) !important;
+        color: hsl(var(--foreground)/0.9) !important;
+    }
+}
+
+.custom-accordion .accordion-button:not(.collapsed) {
+    background-color: hsla(var(--card) / 0.7) !important;
+    color: hsl(var(--foreground)) !important;
+    box-shadow: none;
+}
+
+.accordion-button:focus {
+    box-shadow: none;
+    border-color: hsl(var(--border));
+}
+
+.w-25px {
+    width: 25px;
+}
+
+.sticky-top {
+    position: sticky;
+    top: 100px;
+}
+
+.preview-card {
+    @include utilities.glass-premium;
+    background: hsla(var(--card) / 0.9);
+    border: 1px solid hsla(var(--foreground) / 0.05);
+    border-radius: 24px;
+    padding: 2rem;
+    box-shadow: 0 8px 32px hsla(var(--background) / 0.5);
+    color: hsl(var(--foreground)/0.8);
+}

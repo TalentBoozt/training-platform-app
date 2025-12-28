@@ -1,166 +1,172 @@
-<div class="d-md-flex">
-  <div class="form-card-1 justify-content-start">
-    <h5>Initialize Pricing Plans :</h5>
+<div class="form-card-1 animate-fade-in shadow-premium">
+  <div class="section-header">
+    <h5>Pricing & Payment Configuration</h5>
+  </div>
 
-    <div *ngIf="!isFreeCheck">
-      <div *ngIf="paymentMethod == 'card'">
-        <form (ngSubmit)="addInstallment()">
-          <div class="row form-wrapper">
-            <div class="col-12">
-              <div class="form-group">
-                <label for="cname">Installment name *</label>
-                <input type="text" class="form-control" id="cname" placeholder="COURSE-NAME-INSTALLMENT-1" [(ngModel)]="newCardInstallment.name" [ngModelOptions]="{standalone: true}" required>
-              </div>
-            </div>
-            <div class="col-6 col-md-4">
-              <div class="form-group">
-                <label for="ccurrency">Currency *</label>
-                <select class="form-control" id="ccurrency" [(ngModel)]="newCardInstallment.currency" [ngModelOptions]="{standalone: true}" required>
-                  <option value="$">USD</option>
-                  <option value="Rs">LKR</option>
-                  <option value="₹">INR</option>
-                  <option value="€">EUR</option>
-                </select>
-              </div>
-            </div>
-            <div class="col-6 col-md-4">
-              <div class="form-group">
-                <label for="cprice">Price *</label>
-                <input type="number" class="form-control" id="cprice" placeholder="10" [(ngModel)]="newCardInstallment.price" required [ngModelOptions]="{standalone: true}">
-              </div>
-            </div>
-            <div class="col-6 col-md-4">
-              <div class="form-group">
-                <label for="cdprice">Discount (%)</label>
-                <input type="number" class="form-control" id="cdprice" placeholder="10" [(ngModel)]="newCardInstallment.discount" required [ngModelOptions]="{standalone: true}">
-              </div>
-            </div>
-<!--            <div class="col-12 col-md-6">-->
-<!--              <div class="form-group">-->
-<!--                <label for="cpaymentlink">Payment link *</label>-->
-<!--                <input type="text" class="form-control" id="cpaymentlink" [(ngModel)]="newCardInstallment.paymentLink" [ngModelOptions]="{standalone: true}" required>-->
-<!--              </div>-->
-<!--            </div>-->
-            <div class="col-12 col-md-6 col-lg-3">
-              <div class="form-group d-flex align-items-end w-100 h-100">
-                <button *ngIf="!isOnetimePayment" type="submit" class="btn-fill btn-f-2" translate="no">Add</button>
-                <button *ngIf="isOnetimePayment" type="submit" class="btn-fill btn-f-2" translate="no" [disabled]="bankInstallments.length > 0">Add</button>
-              </div>
+  <!-- Main Pricing Setup -->
+  <div *ngIf="!isFreeCheck">
+
+    <!-- Card Payment Form -->
+    <div *ngIf="paymentMethod == 'card'" class="animate-fade-in">
+      <form (ngSubmit)="addInstallment()">
+        <div class="row g-4 form-wrapper">
+          <div class="col-12 col-md-8">
+            <div class="form-group">
+              <label for="cname">Plan / Installment Name *</label>
+              <input type="text" class="form-control" id="cname" placeholder="E.g. Full Payment or Installment 1"
+                [(ngModel)]="newCardInstallment.name" [ngModelOptions]="{standalone: true}" required>
             </div>
           </div>
-        </form>
-
-        <div class="skill-set w-100" *ngIf="cardInstallments.length > 0">
-          <hr>
-          <div class="row my-2" *ngFor="let installment of cardInstallments; let i = index">
-            <div class="col-6">
-              <p>{{installment.name}}</p>
+          <div class="col-6 col-md-2">
+            <div class="form-group">
+              <label for="ccurrency">Currency *</label>
+              <select class="form-control" id="ccurrency" [(ngModel)]="newCardInstallment.currency"
+                [ngModelOptions]="{standalone: true}" required>
+                <option value="$">USD</option>
+                <option value="Rs">LKR</option>
+                <option value="₹">INR</option>
+                <option value="€">EUR</option>
+              </select>
             </div>
-            <div class="col-3">
-              <p>{{installment.currency + '' + installment.price}}</p>
+          </div>
+          <div class="col-6 col-md-2">
+            <div class="form-group">
+              <label for="cprice">Amount *</label>
+              <input type="number" class="form-control" id="cprice" placeholder="0.00"
+                [(ngModel)]="newCardInstallment.price" required [ngModelOptions]="{standalone: true}">
             </div>
-            <div class="col-3">
-              <button class="btn-fill btn-f-4" (click)="removeInstallment(i)"><i class="material-icons" translate="no">delete</i></button>
+          </div>
+          <div class="col-6 col-md-4 col-lg-3">
+            <div class="form-group">
+              <label for="cdprice">Discount (%)</label>
+              <input type="number" class="form-control" id="cdprice" placeholder="0"
+                [(ngModel)]="newCardInstallment.discount" required [ngModelOptions]="{standalone: true}">
             </div>
+          </div>
+          <div class="col-6 col-md-4 col-lg-3 d-flex align-items-end mb-4">
+            <button type="submit" class="btn-fill btn-f-3 w-100 py-2"
+              [disabled]="isOnetimePayment && cardInstallments.length > 0">
+              <i class="material-icons me-1" style="font-size: 1.1rem">add</i> Add Plan
+            </button>
           </div>
         </div>
-      </div>
+      </form>
 
-      <div *ngIf="paymentMethod == 'bank'">
-        <form (ngSubmit)="addInstallment()">
-          <div class="row form-wrapper">
-            <div class="col-12 col-lg-6">
-              <div class="form-group">
-                <label for="bholder">Account Holder name *</label>
-                <input type="text" class="form-control" id="bholder" placeholder="John Doe" [(ngModel)]="newBankInstallment.holder" [ngModelOptions]="{standalone: true}" required>
-              </div>
-            </div>
-            <div class="col-12 col-lg-6">
-              <div class="form-group">
-                <label for="baccount">Account Number *</label>
-                <input type="text" class="form-control" id="baccount" placeholder="123456789" [(ngModel)]="newBankInstallment.accountNb" [ngModelOptions]="{standalone: true}" required>
-              </div>
-            </div>
-            <div class="col-12 col-lg-6">
-              <div class="form-group">
-                <label for="bbank">Bank name *</label>
-                <input type="text" class="form-control" id="bbank" placeholder="Your Bank" [(ngModel)]="newBankInstallment.bank" [ngModelOptions]="{standalone: true}" required>
-              </div>
-            </div>
-            <div class="col-12 col-lg-6">
-              <div class="form-group">
-                <label for="bbranch">Branch name *</label>
-                <input type="text" class="form-control" id="bbranch" placeholder="Branch" [(ngModel)]="newBankInstallment.branch" [ngModelOptions]="{standalone: true}" required>
-              </div>
-            </div>
-            <div class="col-12">
-              <div class="form-group">
-                <label for="bname">Installment name *</label>
-                <input type="text" class="form-control" id="bname" placeholder="COURSE-NAME-INSTALLMENT-1" [(ngModel)]="newBankInstallment.name" [ngModelOptions]="{standalone: true}" required>
-              </div>
-            </div>
-            <div class="col-6 col-md-4">
-              <div class="form-group">
-                <label for="bcurrency">Currency *</label>
-                <select class="form-control" id="bcurrency" [(ngModel)]="newBankInstallment.currency" [ngModelOptions]="{standalone: true}" required>
-                  <option value="$">USD</option>
-                  <option value="Rs">LKR</option>
-                  <option value="₹">INR</option>
-                  <option value="€">EUR</option>
-                </select>
-              </div>
-            </div>
-            <div class="col-6 col-md-4">
-              <div class="form-group">
-                <label for="bprice">Price *</label>
-                <input type="number" class="form-control" id="bprice" placeholder="10.00" [(ngModel)]="newBankInstallment.price" required [ngModelOptions]="{standalone: true}">
-              </div>
-            </div>
-            <div class="col-6 col-md-4">
-              <div class="form-group">
-                <label for="bdprice">Discount (%)</label>
-                <input type="number" class="form-control" id="bdprice" placeholder="10" [(ngModel)]="newBankInstallment.discount" required [ngModelOptions]="{standalone: true}">
-              </div>
-            </div>
-            <div class="col-12 col-md-6 col-lg-3">
-              <div class="form-group d-flex align-items-end w-100 h-100">
-                <button *ngIf="!isOnetimePayment" type="submit" class="btn-fill btn-f-2" translate="no">Add</button>
-                <button *ngIf="isOnetimePayment" type="submit" class="btn-fill btn-f-2" translate="no" [disabled]="bankInstallments.length > 0">Add</button>
-              </div>
-            </div>
+      <!-- Installment Summary -->
+      <div class="installment-list mb-4" *ngIf="cardInstallments.length > 0">
+        <h6>Defined Payment Plans</h6>
+        <div class="installment-item" *ngFor="let installment of cardInstallments; let i = index">
+          <div class="info">
+            <span class="name">{{installment.name}}</span>
+            <span class="price">{{installment.currency}} {{installment.price | number:'1.2-2'}}</span>
           </div>
-        </form>
-
-        <div class="skill-set w-100" *ngIf="bankInstallments.length > 0">
-          <hr>
-          <div class="row my-2" *ngFor="let installment of bankInstallments; let i = index">
-            <div class="col-6">
-              <p>{{installment.name}}</p>
-            </div>
-            <div class="col-3">
-              <p>{{installment.currency + '' + installment.price}}</p>
-            </div>
-            <div class="col-3">
-              <button class="btn-fill btn-f-4" (click)="removeInstallment(i)"><i class="material-icons" translate="no">delete</i></button>
-            </div>
-          </div>
+          <button class="btn-remove" (click)="removeInstallment(i)">
+            <i class="material-icons">delete_outline</i>
+          </button>
         </div>
       </div>
     </div>
 
-    <div class="warning-banner" *ngIf="isFreeCheck">
-      <div class="warning-banner-content">
-        <i class="material-icons">check_circle_outline</i>
-        <p translate="no">This is a Free Course. An Installment Plan is not needed. If you want to make this a paid course go back an un tick the <strong>Initialize as a Free Course</strong> box</p>
+    <!-- Bank Payment Form -->
+    <div *ngIf="paymentMethod == 'bank'" class="animate-fade-in">
+      <form (ngSubmit)="addInstallment()">
+        <div class="row g-4 form-wrapper">
+          <div class="col-12 col-lg-6">
+            <div class="form-group">
+              <label for="bholder">Account Holder Name *</label>
+              <input type="text" class="form-control" id="bholder" placeholder="John Doe"
+                [(ngModel)]="newBankInstallment.holder" [ngModelOptions]="{standalone: true}" required>
+            </div>
+          </div>
+          <div class="col-12 col-lg-6">
+            <div class="form-group">
+              <label for="baccount">Account Number *</label>
+              <input type="text" class="form-control" id="baccount" placeholder="000-000-0000"
+                [(ngModel)]="newBankInstallment.accountNb" [ngModelOptions]="{standalone: true}" required>
+            </div>
+          </div>
+          <div class="col-12 col-lg-6">
+            <div class="form-group">
+              <label for="bbank">Bank Name *</label>
+              <input type="text" class="form-control" id="bbank" placeholder="E.g. Bank of Ceylon"
+                [(ngModel)]="newBankInstallment.bank" [ngModelOptions]="{standalone: true}" required>
+            </div>
+          </div>
+          <div class="col-12 col-lg-6">
+            <div class="form-group">
+              <label for="bbranch">Branch Office *</label>
+              <input type="text" class="form-control" id="bbranch" placeholder="E.g. Colombo Fort"
+                [(ngModel)]="newBankInstallment.branch" [ngModelOptions]="{standalone: true}" required>
+            </div>
+          </div>
+
+          <div class="col-12 col-md-8">
+            <div class="form-group">
+              <label for="bname">Plan / Installment Name *</label>
+              <input type="text" class="form-control" id="bname" placeholder="E.g. Full Payment"
+                [(ngModel)]="newBankInstallment.name" [ngModelOptions]="{standalone: true}" required>
+            </div>
+          </div>
+          <div class="col-6 col-md-2">
+            <div class="form-group">
+              <label for="bcurrency">Currency *</label>
+              <select class="form-control" id="bcurrency" [(ngModel)]="newBankInstallment.currency"
+                [ngModelOptions]="{standalone: true}" required>
+                <option value="$">USD</option>
+                <option value="Rs">LKR</option>
+                <option value="₹">INR</option>
+                <option value="€">EUR</option>
+              </select>
+            </div>
+          </div>
+          <div class="col-6 col-md-2">
+            <div class="form-group">
+              <label for="bprice">Amount *</label>
+              <input type="number" class="form-control" id="bprice" placeholder="0.00"
+                [(ngModel)]="newBankInstallment.price" required [ngModelOptions]="{standalone: true}">
+            </div>
+          </div>
+          <div class="col-6 col-md-4 col-lg-3">
+            <div class="form-group">
+              <label for="bdprice">Discount (%)</label>
+              <input type="number" class="form-control" id="bdprice" placeholder="0"
+                [(ngModel)]="newBankInstallment.discount" required [ngModelOptions]="{standalone: true}">
+            </div>
+          </div>
+          <div class="col-6 col-md-4 col-lg-3 d-flex align-items-end mb-4">
+            <button type="submit" class="btn-fill btn-f-3 w-100 py-2"
+              [disabled]="isOnetimePayment && bankInstallments.length > 0">
+              <i class="material-icons me-1" style="font-size: 1.1rem">add</i> Add Plan
+            </button>
+          </div>
+        </div>
+      </form>
+
+      <!-- Installment Summary -->
+      <div class="installment-list mb-4" *ngIf="bankInstallments.length > 0">
+        <h6>Defined Bank Payment Plans</h6>
+        <div class="installment-item" *ngFor="let installment of bankInstallments; let i = index">
+          <div class="info">
+            <span class="name">{{installment.name}}</span>
+            <span class="price">{{installment.currency}} {{installment.price | number:'1.2-2'}}</span>
+          </div>
+          <button class="btn-remove" (click)="removeInstallment(i)">
+            <i class="material-icons">delete_outline</i>
+          </button>
+        </div>
       </div>
     </div>
+  </div>
 
-    <div class="warning-banner" *ngIf="isOnetimePayment">
-      <div class="warning-banner-content">
-        <i class="material-icons">check_circle_outline</i>
-        <p translate="no">This is a One Time Payment Course. Please make sure to add only <strong>One Price</strong>!</p>
-      </div>
-    </div>
+  <!-- Validation Banners -->
+  <div class="warning-banner success shadow-soft" *ngIf="isFreeCheck">
+    <i class="material-icons">verified_user</i>
+    <p>This is configured as a <strong>Free Course</strong>. Pricing plans are not required. To add pricing, please go
+      back and untick the "Free Course" option.</p>
+  </div>
 
+  <div class="warning-banner animate-pulse-subtle shadow-soft" *ngIf="isOnetimePayment && !isFreeCheck">
+    <i class="material-icons">info_outline</i>
+    <p>One-Time Payment Mode: You can only define <strong>one single price plan</strong> for this course.</p>
   </div>
 </div>

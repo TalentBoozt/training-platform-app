@@ -1,16 +1,16 @@
-import {AfterViewInit, Component, ElementRef, OnInit, Renderer2, ViewChild} from '@angular/core';
-import {NavigationEnd, Router, RouterLink} from '@angular/router';
-import {AsyncPipe, NgForOf, NgIf} from '@angular/common';
-import {ThemeService} from '../../../services/support/theme.service';
-import {AlertsService} from '../../../services/support/alerts.service';
-import {AuthService} from '../../../services/support/auth.service';
-import {LinkedInAuthService} from '../../../services/authentication/linked-in-auth.service';
-import {WindowService} from '../../../services/common/window.service';
-import {CoursesService} from '../../../services/courses.service';
-import {tap} from 'rxjs';
-import {CommonService} from '../../../services/common/common.service';
-import {EmployeeProfile} from '../../../shared/data-models/cache/EmployeeProfile.model';
-import {EmployeeAuthStateService} from '../../../services/cacheStates/employee-auth-state.service';
+import { AfterViewInit, Component, ElementRef, OnInit, Renderer2, ViewChild } from '@angular/core';
+import { NavigationEnd, Router, RouterLink } from '@angular/router';
+import { AsyncPipe, NgForOf, NgIf } from '@angular/common';
+import { ThemeService } from '../../../services/support/theme.service';
+import { AlertsService } from '../../../services/support/alerts.service';
+import { AuthService } from '../../../services/support/auth.service';
+import { LinkedInAuthService } from '../../../services/authentication/linked-in-auth.service';
+import { WindowService } from '../../../services/common/window.service';
+import { CoursesService } from '../../../services/courses.service';
+import { tap } from 'rxjs';
+import { CommonService } from '../../../services/common/common.service';
+import { EmployeeProfile } from '../../../shared/data-models/cache/EmployeeProfile.model';
+import { EmployeeAuthStateService } from '../../../services/cacheStates/employee-auth-state.service';
 
 @Component({
   selector: 'app-header',
@@ -35,6 +35,9 @@ export class HeaderComponent implements OnInit, AfterViewInit {
 
   employeeProfile: EmployeeProfile | null = null;
 
+  isScrolled = false;
+  isMobileMenuOpen = false;
+
   constructor(
     public themeService: ThemeService,
     private router: Router,
@@ -46,7 +49,7 @@ export class HeaderComponent implements OnInit, AfterViewInit {
     private alertService: AlertsService,
     private cookieService: AuthService,
     public authState: EmployeeAuthStateService
-  ) {}
+  ) { }
 
   ngOnInit() {
     this.themeService.applyTheme();
@@ -61,7 +64,12 @@ export class HeaderComponent implements OnInit, AfterViewInit {
           this.updateActiveClass();
           const mainBody = document.querySelector('.main-body');
           mainBody ? (mainBody.scrollTop = 0) : window.scrollTo(0, 0);
+          this.isMobileMenuOpen = false;
         }
+      });
+
+      window.addEventListener('scroll', () => {
+        this.isScrolled = window.scrollY > 20;
       });
     }
 
@@ -145,7 +153,7 @@ export class HeaderComponent implements OnInit, AfterViewInit {
       this.cookieService.logout();
       this.removeUnwantedSession();
       this.authState.clearUser();
-      this.linkedInAuthService.logoutFromLinkedIn().then(() => {});
+      this.linkedInAuthService.logoutFromLinkedIn().then(() => { });
       this.alertService.successMessage('You have been logged out successfully.', 'Success');
     });
   }
@@ -189,7 +197,11 @@ export class HeaderComponent implements OnInit, AfterViewInit {
     this.themeService.toggleTheme();
   }
 
-  navigateToSearchResult(id:any) {
+  toggleMobileMenu() {
+    this.isMobileMenuOpen = !this.isMobileMenuOpen;
+  }
+
+  navigateToSearchResult(id: any) {
     this.router.navigate(['/preview', id])
   }
 }

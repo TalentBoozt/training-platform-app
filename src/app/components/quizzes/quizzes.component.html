@@ -1,24 +1,34 @@
-<form [formGroup]="quizForm">
-  <input type="text" formControlName="title" class="form-control mb-2" placeholder="Quiz Title" />
-  <textarea formControlName="description" class="form-control mb-2" placeholder="Description"></textarea>
+<div class="quiz-form">
+  <form [formGroup]="quizForm">
+    <label class="form-label">Quiz Title</label>
+    <input type="text" formControlName="title" placeholder="e.g. Mid-term Assessment" />
 
-  <div class="mb-2">
-    <label>Visibility</label>
-    <select formControlName="visibility" class="form-select">
-      <option value="public">Public</option>
-      <option value="participant">Participant</option>
-      <option value="only-me">Only Me</option>
-    </select>
-  </div>
+    <label class="form-label">Description</label>
+    <textarea formControlName="description" placeholder="Describe the learning objectives of this quiz..."></textarea>
 
-  <label>Attempt Limit</label>
-  <input formControlName="attemptLimit" type="number" class="form-control mb-3" placeholder="Attempt Limit" />
+    <div class="row g-4">
+      <div class="col-md-6">
+        <label class="form-label">Visibility</label>
+        <select formControlName="visibility">
+          <option value="public">Public</option>
+          <option value="participant">Participant</option>
+          <option value="only-me">Only Me</option>
+        </select>
+      </div>
+      <div class="col-md-6">
+        <label class="form-label">Attempt Limit</label>
+        <input formControlName="attemptLimit" type="number" placeholder="Enter limit (0 for unlimited)" />
+      </div>
+    </div>
 
-  <app-question-builder
-    [editQuestions]="questions"
-    (questionsChange)="onQuestionsChange($event)"></app-question-builder>
+    <app-question-builder [editQuestions]="questions"
+      (questionsChange)="onQuestionsChange($event)"></app-question-builder>
 
-  <div class="d-flex align-items-center justify-content-end w-100 sticky-bottom py-2">
-    <button [ngClass]="{'animate-shake': isAnimated}" class="btn btn-success mt-3" (click)="editMaterial ? update() : submit()" [disabled]="quizForm.invalid || questions.length === 0">{{editMaterial ? 'Update' : 'Create'}} Quiz</button>
-  </div>
-</form>
+    <div class="sticky-actions">
+      <button [ngClass]="{'animate-shake': isAnimated}" class="btn-fill btn-f-3 py-2 px-5"
+        (click)="editMaterial ? update() : submit()" [disabled]="quizForm.invalid || questions.length === 0">
+        {{editMaterial ? 'Update' : 'Create'}} Quiz
+      </button>
+    </div>
+  </form>
+</div>

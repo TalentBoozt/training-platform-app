@@ -1,0 +1,37 @@
+@use '../../../../../shared/styles/utilities';
+
+.video-preview {
+    margin-top: 1.5rem;
+    border-radius: 16px;
+    overflow: hidden;
+    position: relative;
+    background: hsla(var(--black) / 0.1); // Placeholder while loading
+    box-shadow: 0 10px 30px hsla(var(--black) / 0.15);
+    border: 1px solid hsla(var(--foreground) / 0.05);
+
+    iframe {
+        display: block; // Remove inline gap
+        width: 100%;
+        height: 480px;
+        background: #000;
+        border: none;
+
+        @media (max-width: 768px) {
+            height: 360px;
+        }
+
+        @media (max-width: 576px) {
+            height: 315px;
+        }
+    }
+
+    // Optional overlay for "Preview Mode"
+    &::after {
+        content: '';
+        position: absolute;
+        inset: 0;
+        border-radius: 16px;
+        box-shadow: inset 0 0 0 1px hsla(var(--foreground) / 0.1);
+        pointer-events: none;
+    }
+}

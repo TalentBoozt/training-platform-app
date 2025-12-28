@@ -2,59 +2,66 @@
   <form [formGroup]="materialsForm" (ngSubmit)="onSubmit()" enctype="multipart/form-data">
     <div class="form-row">
       <label for="name">Material Name</label>
-      <input type="text" id="name" formControlName="name" required />
+      <input type="text" id="name" formControlName="name" placeholder="Enter resource name" required />
     </div>
 
-    <div class="form-row">
-      <label for="type">Material Type</label>
-      <select id="type" formControlName="type" required>
-        <option value="pdf">PDF</option>
-        <option value="doc">DOC</option>
-        <option value="pptx">PPT(presentation)</option>
-        <option value="excel">Excel/CSV</option>
-        <option value="txt">TXT</option>
-        <option value="image">Image</option>
-        <option value="video" disabled>Video</option>
-        <option value="other">Other</option>
-      </select>
-    </div>
-
-    <div class="form-row">
-      <label for="category">Category</label>
-      <select id="category" formControlName="category" required>
-        <option value="book">Book</option>
-        <option value="slide">Slide</option>
-        <option value="note">Note</option>
-        <option value="assignment">Assignment</option>
-        <option value="quiz">Quiz</option>
-        <option value="video" disabled>Video</option>
-        <option value="recording" disabled>Recording</option>
-        <option value="other">Other</option>
-      </select>
+    <div class="row g-4">
+      <div class="col-md-6">
+        <div class="form-row">
+          <label for="type">Material Type</label>
+          <select id="type" formControlName="type" required>
+            <option value="pdf">PDF Document</option>
+            <option value="doc">Word/DOC</option>
+            <option value="pptx">PowerPoint</option>
+            <option value="excel">Excel/Spreadsheet</option>
+            <option value="txt">Plain Text</option>
+            <option value="image">Image Asset</option>
+            <option value="other">Other</option>
+          </select>
+        </div>
+      </div>
+      <div class="col-md-6">
+        <div class="form-row">
+          <label for="category">Category</label>
+          <select id="category" formControlName="category" required>
+            <option value="book">Reference Book</option>
+            <option value="slide">Presentation Slide</option>
+            <option value="note">Class Note</option>
+            <option value="assignment">Assignment</option>
+            <option value="quiz">Quiz Reference</option>
+            <option value="other">Other</option>
+          </select>
+        </div>
+      </div>
     </div>
 
     <div class="form-row toggle-upload">
       <label>
-        <input type="radio" formControlName="uploadOption" value="url" /> Use URL
+        <input type="radio" formControlName="uploadOption" value="url" /> Cloud Link (URL)
       </label>
       <label>
-        <input type="radio" formControlName="uploadOption" value="file" /> Upload File
+        <input type="radio" formControlName="uploadOption" value="file" /> Local File Upload
       </label>
     </div>
 
     <div class="form-row" *ngIf="materialsForm.value.uploadOption === 'url'">
-      <label for="url">File URL</label>
-      <input type="url" id="url" formControlName="url" />
+      <label for="url">Cloud URL</label>
+      <input type="url" id="url" formControlName="url" placeholder="https://..." />
     </div>
 
     <div class="form-row" *ngIf="materialsForm.value.uploadOption === 'file'">
-      <label for="file">Upload File</label>
+      <label for="file">Drop File Here</label>
       <input type="file" id="file" (change)="onFileChange($event)" />
     </div>
 
-    <div class="d-flex align-items-center gap-2">
-      <button class="btn" type="submit" [disabled]="materialsForm.invalid || uploading">{{uploading ? 'Uploading...' : editMaterial ? 'Update' : 'Upload'}}</button>
-      <button class="btn-outline btn-o-2" type="reset" *ngIf="editMaterial" (click)="onReset()">Cancel</button>
+    <div class="btn-group">
+      <button class="btn-fill btn-f-3 py-2 px-4" type="submit" [disabled]="materialsForm.invalid || uploading">
+        <i class="material-icons mb-0" style="font-size: 18px">{{ uploading ? 'sync' : editMaterial ? 'save' :
+          'cloud_upload' }}</i>
+        {{uploading ? 'Processing...' : editMaterial ? 'Update Material' : 'Upload Resource'}}
+      </button>
+      <button class="btn-outline btn-o-1 py-2 px-4" type="reset" *ngIf="editMaterial"
+        (click)="onReset()">Cancel</button>
     </div>
   </form>
 </div>

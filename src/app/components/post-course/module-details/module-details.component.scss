@@ -1,0 +1,166 @@
+@use '../../../shared/styles/utilities';
+
+.form-card-1 {
+    @include utilities.glass-premium;
+    padding: 2.5rem;
+    border-radius: 24px;
+    border: 1px solid hsla(var(--foreground)/ 0.05);
+
+    .section-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: 2.5rem;
+        padding-bottom: 1.25rem;
+        border-bottom: 1px solid hsla(var(--foreground)/ 0.05);
+
+        h5 {
+            font-size: 1.5rem;
+            font-weight: 800;
+            letter-spacing: -0.02em;
+            @include utilities.gradient-text;
+            margin: 0;
+        }
+    }
+
+    .form-control {
+        @include utilities.input-premium;
+    }
+
+    select.form-control {
+        @include utilities.select-premium;
+    }
+
+    .form-group {
+        @include utilities.form-group-premium;
+
+        label {
+            font-weight: 700;
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: hsl(var(--muted-foreground));
+            margin-bottom: 0.75rem;
+        }
+    }
+}
+
+.module-list {
+    margin-top: 3.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+
+    h6 {
+        font-size: 1rem;
+        font-weight: 800;
+        color: hsl(var(--foreground));
+        letter-spacing: -0.01em;
+        margin-bottom: 1.5rem;
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+
+        &::after {
+            content: '';
+            flex: 1;
+            height: 1px;
+            background: linear-gradient(to right, hsla(var(--foreground)/ 0.1), transparent);
+        }
+    }
+
+    .module-item {
+        @include utilities.glass;
+        padding: 1.5rem;
+        border-radius: 20px;
+        display: grid;
+        grid-template-columns: 1fr auto;
+        gap: 1.5rem;
+        border: 1px solid hsla(var(--foreground)/ 0.05);
+        @include utilities.transition-base;
+        @include utilities.animate-slide-in;
+
+        &:hover {
+            background: hsla(var(--primary)/ 0.05);
+            border-color: hsla(var(--primary)/ 0.2);
+            transform: translateX(8px);
+            @include utilities.shadow-soft;
+
+            .module-info .module-name {
+                color: hsl(var(--primary));
+            }
+        }
+
+        .module-info {
+            .module-name {
+                display: block;
+                font-weight: 800;
+                font-size: 1.15rem;
+                color: hsl(var(--foreground));
+                margin-bottom: 0.5rem;
+                @include utilities.transition-base;
+            }
+
+            .module-meta {
+                display: flex;
+                flex-wrap: wrap;
+                gap: 1.5rem;
+
+                .meta-tag {
+                    display: flex;
+                    align-items: center;
+                    gap: 0.5rem;
+                    font-size: 0.85rem;
+                    color: hsl(var(--muted-foreground));
+                    font-weight: 600;
+
+                    i {
+                        font-size: 1.2rem;
+                        @include utilities.gradient-text;
+                    }
+                }
+            }
+        }
+
+        .module-actions {
+            display: flex;
+            align-items: center;
+
+            .btn-delete {
+                width: 44px;
+                height: 44px;
+                border-radius: 14px;
+                @include utilities.flex-center;
+                @include utilities.glass;
+                color: #ff4d4d;
+                border: 1px solid hsla(0, 100%, 50%, 0.1);
+                @include utilities.transition-base;
+
+                &:hover {
+                    background: #ff4d4d;
+                    color: white;
+                    transform: scale(1.1) rotate(8deg);
+                    @include utilities.shadow-soft;
+                }
+
+                i {
+                    font-size: 1.4rem;
+                }
+            }
+        }
+    }
+}
+
+@include utilities.respond-to(md) {
+    .form-card-1 {
+        padding: 1.5rem;
+    }
+
+    .module-item {
+        grid-template-columns: 1fr;
+
+        .module-actions {
+            justify-content: flex-end;
+        }
+    }
+}

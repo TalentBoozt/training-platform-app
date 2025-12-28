@@ -1,19 +1,13 @@
 <div [ngClass]="{'theme-light': !themeService.isDarkMode(), 'theme-dark': themeService.isDarkMode()}"
-     style="max-height: 100vh;">
-  <div class="common-styles" style="width: 100%">
-    <div class="theme-wrapper">
-      <app-header *ngIf="showNavbar"></app-header>
+  class="common-styles app-root-container">
 
-      <router-outlet (activate)="toggleCommonComponent($event)"/>
+  <div class="theme-wrapper">
+    <app-header *ngIf="showNavbar"></app-header>
 
-<!--      <div class="cookie-banner" *ngIf="!isCookiesAccepted">-->
-<!--        <p>-->
-<!--          We use cookies and tracking technologies essential for security, fraud prevention, and ensuring proper website functionality.-->
-<!--          We don’t use ads, profiling, or sell any personal data. Learn more in our-->
-<!--          <a href="https://talentboozt.com/privacy-policy" target="_blank">Privacy Policy</a>.-->
-<!--        </p>-->
-<!--        <button id="TRAINER_APP_AcceptCookie" type="button" (click)="acceptCookies()">Understood</button>-->
-<!--      </div>-->
+    <div class="main-body animate-fade-in">
+      <router-outlet (activate)="toggleCommonComponent($event)" />
     </div>
+
+    <app-footer *ngIf="showFooter"></app-footer>
   </div>
 </div>

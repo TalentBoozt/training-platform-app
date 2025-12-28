@@ -1,495 +1,536 @@
 import {
-  Component,
-  AfterViewInit,
-  ViewChild,
-  ElementRef,
-  Input,
-  Output,
-  EventEmitter,
-  HostListener,
-  ChangeDetectorRef,
-  NgZone
+    Component,
+    AfterViewInit,
+    ViewChild,
+    ElementRef,
+    Input,
+    Output,
+    EventEmitter,
+    HostListener,
+    ChangeDetectorRef,
+    NgZone,
+    OnInit
 } from '@angular/core';
-import {NgForOf} from '@angular/common';
-import {WindowService} from '../../../../services/common/window.service';
-import {TimerService} from '../../../../services/common/timer.service';
+import { NgClass, NgForOf, NgIf } from '@angular/common';
+import { WindowService } from '../../../course-wizard/core/services/common/window.service';
+import { TimerService } from '../../../course-wizard/core/services/common/timer.service';
+import { ThemeService } from '../../../course-wizard/core/services/common/theme.service';
+import { FormsModule } from '@angular/forms';
 
 @Component({
-  selector: 'app-rich-text-editor',
-  imports: [
-    NgForOf
-  ],
-  templateUrl: './rich-text-editor.component.html',
-  styleUrl: './rich-text-editor.component.scss',
-  standalone: true
+    selector: 'app-rich-text-editor',
+    imports: [
+        NgForOf,
+        NgClass,
+        NgIf,
+        FormsModule
+    ],
+    templateUrl: './rich-text-editor.component.html',
+    styleUrl: './rich-text-editor.component.scss',
+    standalone: true
 })
-export class RichTextEditorComponent implements AfterViewInit {
-  @ViewChild('editor') editor!: ElementRef<HTMLDivElement>;
-  @Input() title: string = '';
-  @Input() setContent: string = '';
-  @Output() content = new EventEmitter<string>();
+export class RichTextEditorComponent implements AfterViewInit, OnInit {
+    @ViewChild('editor') editor!: ElementRef<HTMLDivElement>;
+    @Input() title: string = '';
+    @Input() setContent: string = '';
+    @Output() content = new EventEmitter<string>();
 
-  // History management
-  private undoStack: string[] = [];
-  private redoStack: string[] = [];
-  private maxHistorySize = 50;
+    // History management
+    undoStack: string[] = [];
+    redoStack: string[] = [];
+    private maxHistorySize = 50;
 
-  // Toolbar state
-  activeStyles = {
-    bold: false,
-    italic: false,
-    underline: false,
-    alignLeft: false,
-    alignCenter: false,
-    alignRight: false
-  };
-
-  currentFontSize = '16px';
-  currentColor = '#000000';
-  currentFontFamily = 'Arial, sans-serif';
-
-  // Track if content was modified
-  contentModified = false;
-
-  // Available font sizes
-  fontSizes = [
-    { value: '12px', label: '12' },
-    { value: '14px', label: '14' },
-    { value: '16px', label: '16' },
-    { value: '18px', label: '18' },
-    { value: '20px', label: '20' },
-    { value: '24px', label: '24' },
-    { value: '28px', label: '28' }
-  ];
-
-  // Available font families
-  fontFamilies = [
-    { value: 'Arial, sans-serif', label: 'Arial' },
-    { value: 'Helvetica, sans-serif', label: 'Helvetica' },
-    { value: 'Times New Roman, serif', label: 'Times New Roman' },
-    { value: 'Georgia, serif', label: 'Georgia' },
-    { value: 'Courier New, monospace', label: 'Courier New' },
-    { value: 'Verdana, sans-serif', label: 'Verdana' },
-    { value: 'Tahoma, sans-serif', label: 'Tahoma' },
-    { value: 'Trebuchet MS, sans-serif', label: 'Trebuchet MS' },
-    { value: 'Impact, sans-serif', label: 'Impact' },
-    { value: 'Comic Sans MS, cursive', label: 'Comic Sans MS' }
-  ];
-
-  constructor(
-    private cdr: ChangeDetectorRef,
-    private ngZone: NgZone,
-    private windowService: WindowService,
-    private timerService: TimerService
-  ) {}
-
-  ngAfterViewInit() {
-    // Use NgZone.runOutsideAngular to avoid triggering change detection
-    this.ngZone.runOutsideAngular(() => {
-      // Initialize editor with content if provided
-      if (this.setContent && this.editor) {
-        this.editor.nativeElement.innerHTML = this.setContent;
-
-        // Queue up a save state operation after the current cycle completes
-        this.timerService.setTimeout(() => {
-          // Save initial state for undo
-          this.saveState();
-        }, 0);
-      }
-
-      // Add input listener for any content changes
-      if (this.editor) {
-        this.editor.nativeElement.addEventListener('input', () => {
-          // Run inside Angular Zone to properly update bindings
-          this.ngZone.run(() => {
-            this.contentModified = true;
-            this.cdr.detectChanges();
-          });
-        });
-      }
-
-      // Set initial focus to improve UX (delay to avoid issues)
-      this.timerService.setTimeout(() => {
-        if (this.editor) {
-          this.editor.nativeElement.focus();
-        }
-      }, 100);
-    });
-  }
-
-  // Track selection changes across the entire document
-  @HostListener('document:selectionchange', ['$event'])
-  onSelectionChange() {
-    if (this.windowService.nativeWindow){
-      this.ngZone.run(() => {
-        const selection = window.getSelection();
-        if (selection && this.isSelectionInEditor(selection)) {
-          this.updateActiveStyles();
-        }
-      });
-    }
-  }
-
-  // Check if the selection is within our editor
-  private isSelectionInEditor(selection: Selection): boolean {
-    if (!selection.rangeCount || !this.editor) return false;
-
-    let node = selection.anchorNode;
-    while (node !== null) {
-      if (node === this.editor.nativeElement) {
-        return true;
-      }
-      node = node.parentNode;
-    }
-    return false;
-  }
-
-  // Save current state to undo stack
-  saveState() {
-    if (!this.editor) return;
-
-    const currentHTML = this.editor.nativeElement.innerHTML;
-
-    // Don't save if the content hasn't changed
-    if (this.undoStack.length > 0 && this.undoStack[this.undoStack.length - 1] === currentHTML) {
-      return;
-    }
-
-    this.undoStack.push(currentHTML);
-
-    // Limit stack size
-    if (this.undoStack.length > this.maxHistorySize) {
-      this.undoStack.shift();
-    }
-
-    // Clear redo stack on new changes
-    this.redoStack = [];
-
-    // Update modified state
-    this.contentModified = true;
-
-    // Run change detection to update the UI
-    this.cdr.detectChanges();
-  }
-
-  // Undo last action
-  undo() {
-    if (this.undoStack.length > 1 && this.editor) { // Keep at least one state in the stack
-      // Save current state to redo stack
-      this.redoStack.push(this.undoStack.pop()!);
-
-      // Restore previous state
-      this.editor.nativeElement.innerHTML = this.undoStack[this.undoStack.length - 1];
-
-      // Update toolbar state
-      this.updateActiveStyles();
-
-      // Set modified flag
-      this.contentModified = true;
-      this.cdr.detectChanges();
-    }
-  }
-
-  // Redo previously undone action
-  redo() {
-    if (this.redoStack.length > 0 && this.editor) {
-      const state = this.redoStack.pop()!;
-      this.undoStack.push(state);
-      this.editor.nativeElement.innerHTML = state;
-
-      // Update toolbar state
-      this.updateActiveStyles();
-
-      // Set modified flag
-      this.contentModified = true;
-      this.cdr.detectChanges();
-    }
-  }
-
-  // Handle keyboard shortcuts
-  @HostListener('window:keydown', ['$event'])
-  handleKeyboardShortcut(event: KeyboardEvent) {
-    if (this.windowService.nativeWindow){
-      // Check if selection is in editor first
-      const selection = window.getSelection();
-      if (!selection || !this.isSelectionInEditor(selection)) return;
-    }
-
-    // Handle common shortcuts
-    if (event.ctrlKey || event.metaKey) {
-      switch (event.key.toLowerCase()) {
-        case 'b':
-          event.preventDefault();
-          this.applyStyle('bold');
-          break;
-        case 'i':
-          event.preventDefault();
-          this.applyStyle('italic');
-          break;
-        case 'u':
-          event.preventDefault();
-          this.applyStyle('underline');
-          break;
-        case 'z':
-          event.preventDefault();
-          if (event.shiftKey) {
-            this.redo();
-          } else {
-            this.undo();
-          }
-          break;
-        case 'y':
-          event.preventDefault();
-          this.redo();
-          break;
-      }
-    }
-  }
-
-  // Execute a document command with proper state saving
-  executeCommand(command: string, value: string = '') {
-    if (!this.editor) return;
-
-    // Save current state before making changes
-    this.saveState();
-
-    // Focus the editor
-    this.editor.nativeElement.focus();
-
-    if (this.windowService.nativeDocument){
-      // Execute the command
-      document.execCommand(command, false, value);
-    }
-
-    // Update toolbar state to match new formatting
-    this.updateActiveStyles();
-  }
-
-  // Apply text formatting style
-  applyStyle(style: string) {
-    switch (style) {
-      case 'bold':
-        this.executeCommand('bold');
-        break;
-      case 'italic':
-        this.executeCommand('italic');
-        break;
-      case 'underline':
-        this.executeCommand('underline');
-        break;
-    }
-  }
-
-  // Apply text alignment
-  applyAlignment(alignment: string) {
-    this.executeCommand('justifyLeft', '');
-    this.executeCommand('justifyCenter', '');
-    this.executeCommand('justifyRight', '');
-
-    switch (alignment) {
-      case 'left':
-        this.executeCommand('justifyLeft');
-        break;
-      case 'center':
-        this.executeCommand('justifyCenter');
-        break;
-      case 'right':
-        this.executeCommand('justifyRight');
-        break;
-    }
-  }
-
-  // Insert lists
-  insertList(isOrdered: boolean) {
-    this.executeCommand(isOrdered ? 'insertOrderedList' : 'insertUnorderedList');
-  }
-
-  // Apply font size
-  applyFontSize(event: Event) {
-    const size = (event.target as HTMLSelectElement).value;
-    this.currentFontSize = size;
-    this.executeCommand('fontSize', '7'); // Use placeholder size
-
-    if (this.windowService.nativeWindow){
-      // Apply actual CSS size to the fontsize elements
-      const selection = window.getSelection();
-      if (!selection || selection.rangeCount === 0 || !this.editor) return;
-    }
-
-    const elements = this.editor.nativeElement.querySelectorAll('font[size="7"]');
-    elements.forEach(el => {
-      el.removeAttribute('size');
-      (el as HTMLElement).style.fontSize = size;
-    });
-  }
-
-  // Apply font family
-  applyFontFamily(event: Event) {
-    const fontFamily = (event.target as HTMLSelectElement).value;
-    this.currentFontFamily = fontFamily;
-    this.executeCommand('fontName', fontFamily);
-  }
-
-  // Apply text color
-  applyColor(event: Event) {
-    const color = (event.target as HTMLInputElement).value;
-    this.currentColor = color;
-    this.executeCommand('foreColor', color);
-  }
-
-  // Insert link
-  insertLink() {
-    if (!this.editor) return;
-
-    if (this.windowService.nativeWindow){
-      const selection = window.getSelection();
-      if (!selection || selection.rangeCount === 0) return;
-
-      const url = prompt("Enter URL:", "https://");
-      if (!url) return;
-
-      this.executeCommand('createLink', url);
-
-      // Set target attribute for new links
-      const range = selection.getRangeAt(0);
-      const links = this.editor.nativeElement.querySelectorAll('a');
-
-      links.forEach(link => {
-        if (range.intersectsNode(link)) {
-          link.target = "_blank";
-          link.rel = "noopener noreferrer";
-        }
-      });
-    }
-  }
-
-  // Update toolbar state based on current selection
-  updateActiveStyles() {
-    if (this.windowService.nativeWindow && this.windowService.nativeDocument){
-      const selection = window.getSelection();
-      if (!selection || selection.rangeCount === 0) return;
-
-      // Reset state
-      this.activeStyles = {
+    // Toolbar state
+    activeStyles = {
         bold: false,
         italic: false,
         underline: false,
+        strikethrough: false,
+        subscript: false,
+        superscript: false,
         alignLeft: false,
         alignCenter: false,
-        alignRight: false
-      };
+        alignRight: false,
+        alignJustify: false
+    };
 
-      // Check for document.queryCommandState
-      this.activeStyles.bold = document.queryCommandState('bold');
-      this.activeStyles.italic = document.queryCommandState('italic');
-      this.activeStyles.underline = document.queryCommandState('underline');
-      this.activeStyles.alignLeft = document.queryCommandState('justifyLeft');
-      this.activeStyles.alignCenter = document.queryCommandState('justifyCenter');
-      this.activeStyles.alignRight = document.queryCommandState('justifyRight');
+    currentFontSize = '16px';
+    currentColor = '#6366f1'; // Primary color
+    currentHighlight = 'transparent';
+    currentFontFamily = 'Arial, sans-serif';
+    currentHeading = 'p';
 
-      // Detect font size and color from current selection
-      const node = selection.anchorNode?.parentElement;
-      if (node) {
-        this.detectFontStyles(node);
-      }
+    // Track if content was modified
+    contentModified = false;
+
+    // Word and character count
+    wordCount = 0;
+    charCount = 0;
+
+    // Available headings
+    headings = [
+        { value: 'p', label: 'Paragraph' },
+        { value: 'h1', label: 'Heading 1' },
+        { value: 'h2', label: 'Heading 2' },
+        { value: 'h3', label: 'Heading 3' },
+        { value: 'h4', label: 'Heading 4' },
+        { value: 'h5', label: 'Heading 5' },
+        { value: 'h6', label: 'Heading 6' }
+    ];
+
+    // Available font sizes
+    fontSizes = [
+        { value: '12px', label: '12' },
+        { value: '14px', label: '14' },
+        { value: '16px', label: '16' },
+        { value: '18px', label: '18' },
+        { value: '20px', label: '20' },
+        { value: '24px', label: '24' },
+        { value: '28px', label: '28' },
+        { value: '32px', label: '32' },
+        { value: '36px', label: '36' }
+    ];
+
+    // Available font families
+    fontFamilies = [
+        { value: 'Arial, sans-serif', label: 'Arial' },
+        { value: 'Helvetica, sans-serif', label: 'Helvetica' },
+        { value: '"Times New Roman", serif', label: 'Times New Roman' },
+        { value: 'Georgia, serif', label: 'Georgia' },
+        { value: '"Courier New", monospace', label: 'Courier New' },
+        { value: 'Verdana, sans-serif', label: 'Verdana' },
+        { value: 'Tahoma, sans-serif', label: 'Tahoma' },
+        { value: '"Trebuchet MS", sans-serif', label: 'Trebuchet' },
+        { value: '"Segoe UI", sans-serif', label: 'Segoe UI' },
+        { value: 'Poppins, sans-serif', label: 'Poppins' },
+        { value: 'Inter, sans-serif', label: 'Inter' }
+    ];
+
+    // Color palette (excluding pure black and white)
+    colorPalette = [
+        '#6366f1', // Primary (Indigo)
+        '#8b5cf6', // Purple
+        '#ec4899', // Pink
+        '#f43f5e', // Rose
+        '#ef4444', // Red
+        '#f97316', // Orange
+        '#f59e0b', // Amber
+        '#eab308', // Yellow
+        '#84cc16', // Lime
+        '#22c55e', // Green
+        '#10b981', // Emerald
+        '#14b8a6', // Teal
+        '#06b6d4', // Cyan
+        '#0ea5e9', // Sky
+        '#3b82f6', // Blue
+        '#6366f1', // Indigo
+        '#8b5cf6', // Violet
+        '#a855f7', // Purple
+        '#d946ef', // Fuchsia
+        '#64748b', // Slate
+        '#71717a', // Zinc
+        '#78716c'  // Stone
+    ];
+
+    // Highlight palette (semi-transparent colors)
+    highlightPalette = [
+        'transparent',
+        'rgba(99, 102, 241, 0.2)',  // Indigo
+        'rgba(139, 92, 246, 0.2)',  // Purple
+        'rgba(236, 72, 153, 0.2)',  // Pink
+        'rgba(239, 68, 68, 0.2)',   // Red
+        'rgba(249, 115, 22, 0.2)',  // Orange
+        'rgba(245, 158, 11, 0.2)',  // Amber
+        'rgba(234, 179, 8, 0.2)',   // Yellow
+        'rgba(132, 204, 22, 0.2)',  // Lime
+        'rgba(34, 197, 94, 0.2)',   // Green
+        'rgba(20, 184, 166, 0.2)',  // Teal
+        'rgba(6, 182, 212, 0.2)'    // Cyan
+    ];
+
+    constructor(
+        private cdr: ChangeDetectorRef,
+        private ngZone: NgZone,
+        private windowService: WindowService,
+        private timerService: TimerService,
+        public themeService: ThemeService
+    ) { }
+
+    ngOnInit() {
+        // Theme is handled by ThemeService
     }
 
-    // Run change detection to update UI
-    this.cdr.detectChanges();
-  }
+    ngAfterViewInit() {
+        this.ngZone.runOutsideAngular(() => {
+            if (this.setContent && this.editor) {
+                this.editor.nativeElement.innerHTML = this.setContent;
+                this.timerService.setTimeout(() => {
+                    this.saveState();
+                    this.updateStats();
+                }, 0);
+            }
 
-  // Extract font styles from current node or parent nodes
-  private detectFontStyles(node: Element) {
-    if (this.windowService.nativeWindow){
-      const computedStyle = window.getComputedStyle(node);
+            if (this.editor) {
+                this.editor.nativeElement.addEventListener('input', () => {
+                    this.ngZone.run(() => {
+                        this.contentModified = true;
+                        this.updateStats();
+                        this.cdr.detectChanges();
+                    });
+                });
+            }
 
-      // Check for font size
-      if (computedStyle.fontSize) {
-        // Find nearest match in our available sizes
-        const sizePx = parseFloat(computedStyle.fontSize);
-        let closestSize = this.fontSizes[0].value;
-        let minDiff = Math.abs(parseFloat(closestSize) - sizePx);
-
-        this.fontSizes.forEach(size => {
-          const diff = Math.abs(parseFloat(size.value) - sizePx);
-          if (diff < minDiff) {
-            minDiff = diff;
-            closestSize = size.value;
-          }
+            this.timerService.setTimeout(() => {
+                if (this.editor) {
+                    this.editor.nativeElement.focus();
+                }
+            }, 100);
         });
+    }
 
-        this.currentFontSize = closestSize;
-      }
+    // Update word and character count
+    updateStats() {
+        if (!this.editor) return;
 
-      // Check for font family
-      if (computedStyle.fontFamily) {
-        const fontFamily = computedStyle.fontFamily;
+        const text = this.editor.nativeElement.innerText || '';
+        this.charCount = text.length;
+        this.wordCount = text.trim().split(/\s+/).filter(word => word.length > 0).length;
+    }
 
-        // Find matching font family or use default
-        const matchedFont = this.fontFamilies.find(font =>
-          fontFamily.includes(font.label) ||
-          fontFamily.includes(font.value.split(',')[0])
-        );
-
-        if (matchedFont) {
-          this.currentFontFamily = matchedFont.value;
+    @HostListener('document:selectionchange')
+    onSelectionChange() {
+        if (this.windowService.nativeWindow) {
+            this.ngZone.run(() => {
+                const selection = window.getSelection();
+                if (selection && this.isSelectionInEditor(selection)) {
+                    this.updateActiveStyles();
+                }
+            });
         }
-      }
+    }
 
-      // Check for color
-      if (computedStyle.color) {
-        const rgb = computedStyle.color;
-        if (rgb.startsWith('rgb')) {
-          const rgbValues = rgb.match(/\d+/g);
-          if (rgbValues && rgbValues.length >= 3) {
-            const r = parseInt(rgbValues[0]);
-            const g = parseInt(rgbValues[1]);
-            const b = parseInt(rgbValues[2]);
+    private isSelectionInEditor(selection: Selection): boolean {
+        if (!selection.rangeCount || !this.editor) return false;
 
-            // Convert RGB to hex
-            this.currentColor = '#' + ((1 << 24) + (r << 16) + (g << 8) + b).toString(16).slice(1);
-          }
+        let node = selection.anchorNode;
+        while (node !== null) {
+            if (node === this.editor.nativeElement) {
+                return true;
+            }
+            node = node.parentNode;
         }
-      }
+        return false;
     }
-  }
 
-  // Check if style is active
-  isActive(style: string): boolean {
-    return this.activeStyles[style as keyof typeof this.activeStyles];
-  }
+    saveState() {
+        if (!this.editor) return;
 
-  // Save content and emit it
-  saveContent() {
-    if (!this.editor) return;
+        const currentHTML = this.editor.nativeElement.innerHTML;
 
-    const content = this.editor.nativeElement.innerHTML;
-    this.content.emit(content);
-    this.contentModified = false;
-    this.cdr.detectChanges();
-  }
+        if (this.undoStack.length > 0 && this.undoStack[this.undoStack.length - 1] === currentHTML) {
+            return;
+        }
 
-  // Add a tooltip utility
-  showTooltip(event: MouseEvent, message: string) {
-    if (this.windowService.nativeDocument){
-      const tooltip = document.createElement('div');
-      tooltip.classList.add('rte-tooltip');
-      tooltip.textContent = message;
-      // Position tooltip near the mouse
-      tooltip.style.position = 'absolute';
-      tooltip.style.left = `${event.clientX + 10}px`;
-      tooltip.style.top = `${event.clientY + 10}px`;
-      // Add to document
-      document.body.appendChild(tooltip);
+        this.undoStack.push(currentHTML);
+
+        if (this.undoStack.length > this.maxHistorySize) {
+            this.undoStack.shift();
+        }
+
+        this.redoStack = [];
+        this.contentModified = true;
+        this.cdr.detectChanges();
     }
-  }
 
-  hideTooltip() {
-    if (this.windowService.nativeDocument){
-      const tooltip = document.querySelector('.rte-tooltip');
-      if (tooltip) {
-        document.body.removeChild(tooltip);
-      }
+    undo() {
+        if (this.undoStack.length > 1 && this.editor) {
+            this.redoStack.push(this.undoStack.pop()!);
+            this.editor.nativeElement.innerHTML = this.undoStack[this.undoStack.length - 1];
+            this.updateActiveStyles();
+            this.updateStats();
+            this.contentModified = true;
+            this.cdr.detectChanges();
+        }
     }
-  }
+
+    redo() {
+        if (this.redoStack.length > 0 && this.editor) {
+            const state = this.redoStack.pop()!;
+            this.undoStack.push(state);
+            this.editor.nativeElement.innerHTML = state;
+            this.updateActiveStyles();
+            this.updateStats();
+            this.contentModified = true;
+            this.cdr.detectChanges();
+        }
+    }
+
+    @HostListener('window:keydown', ['$event'])
+    handleKeyboardShortcut(event: KeyboardEvent) {
+        if (this.windowService.nativeWindow) {
+            const selection = window.getSelection();
+            if (!selection || !this.isSelectionInEditor(selection)) return;
+        }
+
+        if (event.ctrlKey || event.metaKey) {
+            switch (event.key.toLowerCase()) {
+                case 'b':
+                    event.preventDefault();
+                    this.applyStyle('bold');
+                    break;
+                case 'i':
+                    event.preventDefault();
+                    this.applyStyle('italic');
+                    break;
+                case 'u':
+                    event.preventDefault();
+                    this.applyStyle('underline');
+                    break;
+                case 'z':
+                    event.preventDefault();
+                    if (event.shiftKey) {
+                        this.redo();
+                    } else {
+                        this.undo();
+                    }
+                    break;
+                case 'y':
+                    event.preventDefault();
+                    this.redo();
+                    break;
+            }
+        }
+    }
+
+    executeCommand(command: string, value: string = '') {
+        if (!this.editor) return;
+
+        this.saveState();
+        this.editor.nativeElement.focus();
+
+        if (this.windowService.nativeDocument) {
+            document.execCommand(command, false, value);
+        }
+
+        this.updateActiveStyles();
+    }
+
+    applyStyle(style: string) {
+        switch (style) {
+            case 'bold':
+                this.executeCommand('bold');
+                break;
+            case 'italic':
+                this.executeCommand('italic');
+                break;
+            case 'underline':
+                this.executeCommand('underline');
+                break;
+            case 'strikethrough':
+                this.executeCommand('strikeThrough');
+                break;
+            case 'subscript':
+                this.executeCommand('subscript');
+                break;
+            case 'superscript':
+                this.executeCommand('superscript');
+                break;
+        }
+    }
+
+    applyAlignment(alignment: string) {
+        switch (alignment) {
+            case 'left':
+                this.executeCommand('justifyLeft');
+                break;
+            case 'center':
+                this.executeCommand('justifyCenter');
+                break;
+            case 'right':
+                this.executeCommand('justifyRight');
+                break;
+            case 'justify':
+                this.executeCommand('justifyFull');
+                break;
+        }
+    }
+
+    applyHeading(event: Event) {
+        const heading = (event.target as HTMLSelectElement).value;
+        this.currentHeading = heading;
+        this.executeCommand('formatBlock', heading);
+    }
+
+    insertList(isOrdered: boolean) {
+        this.executeCommand(isOrdered ? 'insertOrderedList' : 'insertUnorderedList');
+    }
+
+    applyFontSize(event: Event) {
+        const size = (event.target as HTMLSelectElement).value;
+        this.currentFontSize = size;
+        this.executeCommand('fontSize', '7');
+
+        if (this.editor) {
+            const elements = this.editor.nativeElement.querySelectorAll('font[size="7"]');
+            elements.forEach(el => {
+                el.removeAttribute('size');
+                (el as HTMLElement).style.fontSize = size;
+            });
+        }
+    }
+
+    applyFontFamily(event: Event) {
+        const fontFamily = (event.target as HTMLSelectElement).value;
+        this.currentFontFamily = fontFamily;
+        this.executeCommand('fontName', fontFamily);
+    }
+
+    applyColorFromPalette(color: string) {
+        this.currentColor = color;
+        this.executeCommand('foreColor', color);
+    }
+
+    applyHighlight(color: string) {
+        this.currentHighlight = color;
+        this.executeCommand('backColor', color);
+    }
+
+    insertLink() {
+        if (!this.editor) return;
+
+        if (this.windowService.nativeWindow) {
+            const selection = window.getSelection();
+            if (!selection || selection.rangeCount === 0) return;
+
+            const url = prompt("Enter URL:", "https://");
+            if (!url) return;
+
+            this.executeCommand('createLink', url);
+
+            const range = selection.getRangeAt(0);
+            const links = this.editor.nativeElement.querySelectorAll('a');
+
+            links.forEach(link => {
+                if (range.intersectsNode(link)) {
+                    link.target = "_blank";
+                    link.rel = "noopener noreferrer";
+                }
+            });
+        }
+    }
+
+    insertCode() {
+        this.saveState();
+        if (this.windowService.nativeDocument) {
+            const selection = window.getSelection();
+            if (!selection || selection.rangeCount === 0) return;
+
+            const range = selection.getRangeAt(0);
+            const code = document.createElement('code');
+            code.style.backgroundColor = 'rgba(99, 102, 241, 0.1)';
+            code.style.padding = '2px 6px';
+            code.style.borderRadius = '4px';
+            code.style.fontFamily = 'monospace';
+
+            try {
+                range.surroundContents(code);
+            } catch (e) {
+                code.textContent = range.toString();
+                range.deleteContents();
+                range.insertNode(code);
+            }
+        }
+    }
+
+    insertBlockquote() {
+        this.executeCommand('formatBlock', 'blockquote');
+    }
+
+    removeFormat() {
+        this.executeCommand('removeFormat');
+    }
+
+    updateActiveStyles() {
+        if (this.windowService.nativeWindow && this.windowService.nativeDocument) {
+            const selection = window.getSelection();
+            if (!selection || selection.rangeCount === 0) return;
+
+            this.activeStyles = {
+                bold: document.queryCommandState('bold'),
+                italic: document.queryCommandState('italic'),
+                underline: document.queryCommandState('underline'),
+                strikethrough: document.queryCommandState('strikeThrough'),
+                subscript: document.queryCommandState('subscript'),
+                superscript: document.queryCommandState('superscript'),
+                alignLeft: document.queryCommandState('justifyLeft'),
+                alignCenter: document.queryCommandState('justifyCenter'),
+                alignRight: document.queryCommandState('justifyRight'),
+                alignJustify: document.queryCommandState('justifyFull')
+            };
+
+            const node = selection.anchorNode?.parentElement;
+            if (node) {
+                this.detectFontStyles(node);
+            }
+        }
+
+        this.cdr.detectChanges();
+    }
+
+    private detectFontStyles(node: Element) {
+        if (this.windowService.nativeWindow) {
+            const computedStyle = window.getComputedStyle(node);
+
+            if (computedStyle.fontSize) {
+                const sizePx = parseFloat(computedStyle.fontSize);
+                let closestSize = this.fontSizes[0].value;
+                let minDiff = Math.abs(parseFloat(closestSize) - sizePx);
+
+                this.fontSizes.forEach(size => {
+                    const diff = Math.abs(parseFloat(size.value) - sizePx);
+                    if (diff < minDiff) {
+                        minDiff = diff;
+                        closestSize = size.value;
+                    }
+                });
+
+                this.currentFontSize = closestSize;
+            }
+
+            if (computedStyle.fontFamily) {
+                const fontFamily = computedStyle.fontFamily;
+                const matchedFont = this.fontFamilies.find(font =>
+                    fontFamily.includes(font.label) ||
+                    fontFamily.includes(font.value.split(',')[0].replace(/"/g, ''))
+                );
+
+                if (matchedFont) {
+                    this.currentFontFamily = matchedFont.value;
+                }
+            }
+
+            // Detect heading
+            const tagName = node.tagName.toLowerCase();
+            if (['h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'p'].includes(tagName)) {
+                this.currentHeading = tagName;
+            }
+        }
+    }
+
+    isActive(style: string): boolean {
+        return this.activeStyles[style as keyof typeof this.activeStyles];
+    }
+
+    saveContent() {
+        if (!this.editor) return;
+
+        const content = this.editor.nativeElement.innerHTML;
+        this.content.emit(content);
+        this.contentModified = false;
+        this.cdr.detectChanges();
+    }
+
+    toggleTheme() {
+        this.themeService.toggleTheme();
+    }
 }

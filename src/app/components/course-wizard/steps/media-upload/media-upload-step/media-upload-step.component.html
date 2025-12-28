@@ -1,0 +1,132 @@
+<div class="wizard-step media-upload-step container-fluid mt-4">
+    <div class="step-header mb-4">
+        <h2><i class="fas fa-list-check me-2 text-primary"></i>Course Details</h2>
+        <p>Categorize your course, define requirements, and highlight skills taught.</p>
+    </div>
+
+    <form [formGroup]="form" class="mt-4 wizard-form">
+        <!-- Language -->
+        <div class="form-group mb-4">
+            <label for="language" class="form-label">Language</label>
+            <div class="input-wrapper">
+                <span class="input-icon"><i class="fas fa-language"></i></span>
+                <input id="language" type="text" class="form-control" formControlName="language"
+                    placeholder="e.g. English, Spanish"
+                    [ngClass]="{'is-invalid': form.controls.language.invalid && form.get('language')?.touched}" />
+            </div>
+            <div class="invalid-feedback" *ngIf="form.controls.language.invalid && form.get('language')?.touched">
+                Language is required
+            </div>
+        </div>
+
+        <div class="row g-4 mb-4">
+            <!-- Category -->
+            <div class="col-12 col-md-6">
+                <div class="form-group position-relative">
+                    <label for="category" class="form-label">Category</label>
+                    <div class="input-wrapper">
+                        <span class="input-icon"><i class="fas fa-folder"></i></span>
+                        <input id="category" type="text" class="form-control" [(ngModel)]="selectedCategory"
+                            [ngModelOptions]="{standalone: true}" (input)="filterCategories()"
+                            placeholder="Select or type to add" autocomplete="off" />
+                    </div>
+
+                    <div *ngIf="filteredCategories.length && selectedCategory"
+                        class="dropdown-menu show w-100 mt-2 shadow border-0"
+                        style="max-height: 200px; overflow-y: auto;">
+                        <button *ngFor="let category of filteredCategories" class="dropdown-item py-2"
+                            (click)="selectCategory(category)">
+                            {{ category }}
+                        </button>
+
+                        <button *ngIf="!filteredCategories.includes(selectedCategory)"
+                            class="dropdown-item fw-bold text-primary border-top" (click)="addCategory()">
+                            <i class="fas fa-plus me-2"></i>Add "{{ selectedCategory }}"
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Difficulty Level -->
+            <div class="col-12 col-md-6">
+                <div class="form-group">
+                    <label for="preferredLevel" class="form-label">Difficulty Level</label>
+                    <div class="input-wrapper">
+                        <span class="input-icon"><i class="fas fa-layer-group"></i></span>
+                        <select id="preferredLevel" class="form-control" formControlName="level">
+                            <option *ngFor="let level of preferredLevels" [value]="level">
+                                {{ level }}
+                            </option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Skills -->
+        <div class="form-group mb-4">
+            <label for="skills" class="form-label">Skills Taught</label>
+            <div class="input-wrapper">
+                <span class="input-icon"><i class="fas fa-cogs"></i></span>
+                <input id="skills" type="text" class="form-control" formControlName="skillsInput"
+                    (input)="onSkillsInput($event)" placeholder="Type skill and press comma"
+                    [ngClass]="{'is-invalid': skillsArray.length === 0 && form.get('skillsInput')?.touched}" />
+            </div>
+            <div class="invalid-feedback" *ngIf="skillsArray.length === 0 && form.get('skillsInput')?.touched">
+                At least one skill is required
+            </div>
+
+            <div class="d-flex flex-wrap gap-2 mt-2">
+                <div *ngFor="let skill of skillsArray"
+                    class="badge bg-primary-subtle text-primary rounded-pill px-3 py-2 d-flex align-items-center">
+                    {{ skill }}
+                    <i class="fas fa-times ms-2 cursor-pointer" (click)="removeSkill(skill)"></i>
+                </div>
+            </div>
+        </div>
+
+        <!-- Requirements -->
+        <div class="form-group mb-4">
+            <label for="requirements" class="form-label">Requirements / Prerequisites</label>
+            <div class="input-wrapper">
+                <span class="input-icon"><i class="fas fa-check-circle"></i></span>
+                <input id="requirements" type="text" class="form-control" formControlName="requirementsInput"
+                    (input)="onRequirementsInput($event)" placeholder="Type requirement and press comma"
+                    [ngClass]="{'is-invalid': requirementsArray.length === 0 && form.get('requirementsInput')?.touched}" />
+            </div>
+            <div class="invalid-feedback"
+                *ngIf="requirementsArray.length === 0 && form.get('requirementsInput')?.touched">
+                At least one requirement is required
+            </div>
+
+            <div class="d-flex flex-wrap gap-2 mt-2">
+                <div *ngFor="let req of requirementsArray"
+                    class="badge bg-secondary-subtle text-secondary rounded-pill px-3 py-2 d-flex align-items-center">
+                    {{ req }}
+                    <i class="fas fa-times ms-2 cursor-pointer" (click)="removeRequirement(req)"></i>
+                </div>
+            </div>
+        </div>
+
+        <!-- Certificate -->
+        <div class="form-group mb-5">
+            <div class="form-check form-switch">
+                <input id="certificate" type="checkbox" class="form-check-input" formControlName="certificate" />
+                <label class="form-check-label ms-2" for="certificate">
+                    Certificate of Completion included
+                </label>
+            </div>
+        </div>
+
+        <!-- Save Button -->
+        <div class="d-flex justify-content-end">
+            <button class="save-btn" (click)="save()"
+                [disabled]="form.invalid || skillsArray.length === 0 || requirementsArray.length === 0"
+                [class.disabled]="form.invalid">
+                <i class="fas fa-save me-2"></i>
+                Save Details
+            </button>
+        </div>
+    </form>
+
+</div>
