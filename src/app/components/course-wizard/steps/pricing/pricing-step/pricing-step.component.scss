@@ -150,6 +150,11 @@ h2 {
     }
 }
 
+.model-backdrop {
+    display: none !important;
+    z-index: 1050 !important;
+}
+
 .modal-content {
     @include utilities.glass-premium;
     background: hsla(var(--card) / 0.95);
@@ -157,6 +162,8 @@ h2 {
     border-radius: 20px;
     color: hsl(var(--card-foreground));
     box-shadow: 0 20px 40px hsla(var(--black) / 0.2);
+    z-index: 1055 !important;
+    max-height: 400px;
 
     .modal-header {
         border-bottom: 1px solid hsla(var(--foreground) / 0.05);
@@ -174,4 +181,10 @@ h2 {
     .modal-footer {
         border-top: 1px solid hsla(var(--foreground) / 0.05);
     }
+}
+
+.card {
+    background: hsla(var(--card) / 0.6);
+    border: 1px solid hsla(var(--foreground) / 0.05);
+    color: hsl(var(--foreground));
 }

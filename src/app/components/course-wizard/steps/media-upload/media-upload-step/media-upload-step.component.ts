@@ -123,7 +123,7 @@ export class MediaUploadStepComponent implements OnInit {
         return this.courseService.getAllCategories().pipe(
             tap(categories => {
                 if (categories && categories.length > 0) {
-                    this.availableCategories = categories;
+                    this.availableCategories = Array.from(new Set([...this.availableCategories, ...categories]));
                 }
             })
         );

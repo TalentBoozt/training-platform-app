@@ -31,7 +31,7 @@
                             placeholder="Select or type to add" autocomplete="off" />
                     </div>
 
-                    <div *ngIf="filteredCategories.length && selectedCategory"
+                    <div *ngIf="selectedCategory && (filteredCategories.length > 0 || !availableCategories.includes(selectedCategory))"
                         class="dropdown-menu show w-100 mt-2 shadow border-0"
                         style="max-height: 200px; overflow-y: auto;">
                         <button *ngFor="let category of filteredCategories" class="dropdown-item py-2"

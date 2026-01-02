@@ -153,14 +153,35 @@
                                     </div>
 
                                     <!-- Duration -->
-                                    <div class="form-group mb-3">
-                                        <label class="form-label">Duration (seconds)</label>
-                                        <div class="input-wrapper">
-                                            <span class="input-icon"><i class="fas fa-clock"></i></span>
-                                            <input formControlName="duration" type="number" class="form-control"
-                                                placeholder="e.g. 600" min="0" />
+                                    <div class="row mb-3">
+                                        <div class="col-6">
+                                            <div class="form-group">
+                                                <label class="form-label">Duration (Minutes)</label>
+                                                <div class="input-wrapper">
+                                                    <span class="input-icon"><i class="fas fa-clock"></i></span>
+                                                    <input formControlName="durationMinutes" type="number"
+                                                        class="form-control" placeholder="0" min="0"
+                                                        (input)="convertTimeToSeconds(i, j)" />
+                                                </div>
+                                            </div>
                                         </div>
-                                        <div *ngIf="isEmbed(lectureCtrl.value.videoUrl)" class="form-hint">
+                                        <div class="col-6">
+                                            <div class="form-group">
+                                                <label class="form-label">Duration (Seconds)</label>
+                                                <div class="input-wrapper">
+                                                    <span class="input-icon"><i class="fas fa-stopwatch"></i></span>
+                                                    <input formControlName="durationSeconds" type="number"
+                                                        class="form-control" placeholder="0" min="0" max="59"
+                                                        (input)="convertTimeToSeconds(i, j)" />
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-12 text-muted small mt-1"
+                                            *ngIf="lectureCtrl.get('duration')?.value">
+                                            <i class="fas fa-info-circle me-1"></i>Total: {{
+                                            lectureCtrl.get('duration')?.value }} seconds
+                                        </div>
+                                        <div *ngIf="isEmbed(lectureCtrl.value.videoUrl)" class="col-12 form-hint mt-1">
                                             <i class="fas fa-info-circle me-1"></i>For embedded videos, set duration
                                             manually
                                         </div>

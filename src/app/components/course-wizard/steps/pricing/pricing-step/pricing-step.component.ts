@@ -19,6 +19,9 @@ export class PricingStepComponent implements OnInit {
     form = this.fb.group({
         isFree: [false, Validators.required],
         price: [0, [Validators.required, Validators.min(0)]],
+        enableDiscount: [false],
+        discountType: ['fixed'], // 'fixed' or 'percentage'
+        discountValue: [0, [Validators.min(0)]],
         discountedPrice: [0, [Validators.min(0)]],
     });
 
@@ -40,11 +43,50 @@ export class PricingStepComponent implements OnInit {
     ngOnInit() {
         this.snap = this.draft.getSnapshot();
 
+        const price = this.snap.price ?? 0;
+        const discountedPrice = this.snap.discountedPrice ?? 0;
+        const hasDiscount = discountedPrice > 0 && discountedPrice < price;
+
         this.form.patchValue({
             isFree: this.snap.isFree ?? false,
-            price: this.snap.price ?? 0,
-            discountedPrice: this.snap.discountedPrice ?? 0,
+            price: price,
+            enableDiscount: hasDiscount,
+            discountType: 'fixed', // Default to fixed when loading
+            discountValue: hasDiscount ? (price - discountedPrice) : 0,
+            discountedPrice: discountedPrice,
         });
+
+        // Recalculate on load to ensure consistency
+        if (hasDiscount) {
+            this.calculateDiscount();
+        }
+    }
+
+    calculateDiscount() {
+        const price = this.form.get('price')?.value || 0;
+        const enableDiscount = this.form.get('enableDiscount')?.value;
+        const type = this.form.get('discountType')?.value;
+        const value = this.form.get('discountValue')?.value || 0;
+
+        if (!enableDiscount || !price) {
+            this.form.patchValue({ discountedPrice: 0 }, { emitEvent: false });
+            return;
+        }
+
+        let calculated = 0;
+        if (type === 'percentage') {
+            calculated = price - (price * (value / 100));
+        } else {
+            calculated = price - value;
+        }
+
+        // Ensure not negative
+        calculated = Math.max(0, calculated);
+
+        // Round to 2 decimals
+        calculated = Math.round(calculated * 100) / 100;
+
+        this.form.patchValue({ discountedPrice: calculated }, { emitEvent: false });
     }
 
     save() {
@@ -54,6 +96,12 @@ export class PricingStepComponent implements OnInit {
         }
 
         const val = this.form.value;
+
+        // Final validation check
+        if (val.enableDiscount && val.discountedPrice! >= val.price!) {
+            return; // Error is shown in UI
+        }
+
         if (val.isFree) {
             this.draft.update({
                 isFree: true,
@@ -61,13 +109,16 @@ export class PricingStepComponent implements OnInit {
                 discountedPrice: 0,
             });
         } else {
+            const finalDiscountedPrice = val.enableDiscount ? val.discountedPrice : 0;
+
+            // ... (rest of logic)
             const payload = {
                 id: this.generateUUID(),
                 name: this.snap.title + ' - ' + (this.snap.subtitle || 'Course Fee'),
                 currency: '$',
                 price: val.price,
-                discountedPrice: val.discountedPrice !== 0 ? val.discountedPrice : null,
-                priceType: val.discountedPrice !== 0 ? 'discounted' : 'default'
+                discountedPrice: finalDiscountedPrice !== 0 ? finalDiscountedPrice : null,
+                priceType: finalDiscountedPrice !== 0 ? 'discounted' : 'default'
             }
 
             this.courseService.createStripeProduct(payload, this.snap.title || 'Course Fee').subscribe((data: any) => {
@@ -75,7 +126,7 @@ export class PricingStepComponent implements OnInit {
                     installment: data,
                     isFree: false,
                     price: val.price,
-                    discountedPrice: val.discountedPrice,
+                    discountedPrice: finalDiscountedPrice,
                 });
             });
         }

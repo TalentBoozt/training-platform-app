@@ -63,18 +63,21 @@ export class ModulesStepComponent implements OnInit, OnDestroy {
                         description: [m.description || ''],
                         freePreview: [!!m.freePreview],
                         lectures: this.fb.array(
-                            (m.lectures || []).map((l) =>
-                                this.fb.group({
+                            (m.lectures || []).map((l) => {
+                                const { minutes, seconds } = this.getDurationParts(l.duration || 0);
+                                return this.fb.group({
                                     id: [l.id],
                                     title: [l.title || '', Validators.required],
                                     videoUrl: [l.videoUrl || '', Validators.required],
                                     description: [l.description || ''],
                                     notes: [l.notes || ''],
                                     duration: [l.duration || 0, [Validators.min(0)]],
+                                    durationMinutes: [minutes, [Validators.min(0)]],
+                                    durationSeconds: [seconds, [Validators.min(0), Validators.max(59)]],
                                     materials: [[...(l.materials || [])]],
-                                })
-                            )
-                        ),
+                                });
+                            })
+                        )
                     })
                 )
             ),
@@ -133,6 +136,8 @@ export class ModulesStepComponent implements OnInit, OnDestroy {
             description: [''],
             notes: [''],
             duration: [0, [Validators.min(0)]],
+            durationMinutes: [0, [Validators.min(0)]],
+            durationSeconds: [0, [Validators.min(0), Validators.max(59)]],
             materials: [[]],
         });
         lectures.push(g);
@@ -152,7 +157,13 @@ export class ModulesStepComponent implements OnInit, OnDestroy {
         const video = document.createElement('video');
         video.preload = 'metadata';
         video.onloadedmetadata = () => {
-            lecture.patchValue({ duration: Math.round(video.duration) });
+            const duration = Math.round(video.duration);
+            const { minutes, seconds } = this.getDurationParts(duration);
+            lecture.patchValue({
+                duration: duration,
+                durationMinutes: minutes,
+                durationSeconds: seconds
+            });
             URL.revokeObjectURL(video.src);
         };
         video.src = url;
@@ -186,17 +197,20 @@ export class ModulesStepComponent implements OnInit, OnDestroy {
                     description: [m.description],
                     freePreview: [m.freePreview],
                     lectures: this.fb.array(
-                        (m.lectures || []).map((l: any) =>
-                            this.fb.group({
+                        (m.lectures || []).map((l: any) => {
+                            const { minutes, seconds } = this.getDurationParts(l.duration || 0);
+                            return this.fb.group({
                                 id: [l.id],
                                 title: [l.title, Validators.required],
                                 videoUrl: [l.videoUrl, Validators.required],
                                 description: [l.description],
                                 notes: [l.notes],
                                 duration: [l.duration || 0, [Validators.min(0)]],
+                                durationMinutes: [minutes, [Validators.min(0)]],
+                                durationSeconds: [seconds, [Validators.min(0), Validators.max(59)]],
                                 materials: [[...(l.materials || [])]],
-                            })
-                        )
+                            });
+                        })
                     ),
                 })
             )
@@ -206,17 +220,20 @@ export class ModulesStepComponent implements OnInit, OnDestroy {
 
     private rebuildLecturesFromValue(moduleIndex: number, lecturesValue: any[]) {
         const arr = this.fb.array(
-            lecturesValue.map((l) =>
-                this.fb.group({
+            lecturesValue.map((l) => {
+                const { minutes, seconds } = this.getDurationParts(l.duration || 0);
+                return this.fb.group({
                     id: [l.id],
                     title: [l.title, Validators.required],
                     videoUrl: [l.videoUrl, Validators.required],
                     description: [l.description],
                     notes: [l.notes],
                     duration: [l.duration || 0, [Validators.min(0)]],
+                    durationMinutes: [minutes, [Validators.min(0)]],
+                    durationSeconds: [seconds, [Validators.min(0), Validators.max(59)]],
                     materials: [[...(l.materials || [])]],
-                })
-            )
+                });
+            })
         );
         this.moduleGroup(moduleIndex).setControl('lectures', arr);
     }
@@ -326,17 +343,20 @@ export class ModulesStepComponent implements OnInit, OnDestroy {
     }
 
     convertTimeToSeconds(i: number, j: number): void {
-        const totalSeconds =
-            (Number(this.timeConverter.hours || 0) * 3600) +
-            (Number(this.timeConverter.minutes || 0) * 60) +
-            (Number(this.timeConverter.seconds || 0));
+        const lecture = this.getLectures(i).at(j);
+        const mins = lecture.get('durationMinutes')?.value || 0;
+        const secs = lecture.get('durationSeconds')?.value || 0;
+        const total = (mins * 60) + secs;
 
-        if (this.modules && this.modules.at(i) && this.modules.at(i).get('lectures')) {
-            const lectureForm = this.modules.at(i).get('lectures') as FormArray;
-            if (lectureForm && lectureForm.at(j)) {
-                lectureForm.at(j).get('duration')?.setValue(totalSeconds);
-            }
-        }
-        this.timeConverter = { hours: 0, minutes: 0, seconds: 0 };
+        lecture.patchValue({ duration: total }, { emitEvent: false });
+        this.syncToService();
+    }
+
+    private getDurationParts(seconds: number) {
+        if (!seconds) return { minutes: 0, seconds: 0 };
+        return {
+            minutes: Math.floor(seconds / 60),
+            seconds: seconds % 60
+        };
     }
 }
