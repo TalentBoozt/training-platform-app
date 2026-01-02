@@ -4,6 +4,7 @@ import { Router, RouterModule, ActivatedRoute } from '@angular/router';
 import { ReactiveFormsModule } from '@angular/forms';
 import { CourseDraftService } from './core/services/course-draft.service';
 import { TruncatePipe } from './shared/pipes/truncate.pipe';
+import { v4 as uuidv4 } from 'uuid';
 
 @Component({
     selector: 'app-course-wizard-shell',
@@ -21,6 +22,7 @@ export class CourseWizardShellComponent implements OnInit {
     activeIndex = signal(0);
     progress = signal(0);
     saving = false;
+    isNew = this.route.snapshot.queryParamMap.get('type') === 'new';
 
     steps = [
         { id: '1', path: 'basic', label: 'Basic Details', icon: 'fas fa-info-circle' },
@@ -37,6 +39,14 @@ export class CourseWizardShellComponent implements OnInit {
         this.router.events.subscribe(() => {
             this.activeIndex.set(this.indexFromUrl(this.router.url));
         });
+
+        if (this.isNew) {
+            this.course().published = false;
+            this.course().approved = false;
+            this.course().createdAt = new Date().toISOString();
+            this.course().updatedAt = new Date().toISOString();
+            this.course().id = uuidv4();
+        }
 
         this.updateProgress();
     }

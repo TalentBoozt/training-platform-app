@@ -1,5 +1,5 @@
-import { Component } from '@angular/core';
-import {RouterLink} from '@angular/router';
+import { Component, inject } from '@angular/core';
+import { Router, RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-course-type',
@@ -12,4 +12,9 @@ import {RouterLink} from '@angular/router';
 })
 export class CourseTypeComponent {
 
+  private router = inject(Router);
+
+  goToRecorded() {
+    this.router.navigate(['/post-rec'], { queryParams: { type: 'new' } });
+  }
 }
