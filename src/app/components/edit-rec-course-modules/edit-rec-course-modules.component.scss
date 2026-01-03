@@ -1,0 +1,44 @@
+@use '../../shared/styles/utilities';
+
+.container {
+    margin-top: 75px;
+}
+
+.active-module {
+    background-color: hsla(var(--primary) / 0.1) !important;
+    border-left: 3px solid hsl(var(--primary));
+}
+
+.card {
+    border: none;
+    border-radius: 16px;
+    background: hsl(var(--background)/ 0.05);
+    color: hsl(var(--foreground)/ 0.7);
+}
+
+.btn-primary,
+.btn-success {
+    @include utilities.shadow-premium;
+}
+
+.input-group {
+    input {
+        border-top-left-radius: 8px;
+        border-bottom-left-radius: 8px;
+        background-color: hsl(var(--background)/ 0.5);
+        color: hsl(var(--foreground)/ 0.7);
+
+        &:focus {
+            background-color: hsl(var(--background)/ 0.7);
+        }
+
+        &::placeholder {
+            color: hsl(var(--foreground)/ 0.5);
+        }
+    }
+
+    button {
+        border-top-right-radius: 8px;
+        border-bottom-right-radius: 8px;
+    }
+}

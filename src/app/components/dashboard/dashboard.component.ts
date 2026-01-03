@@ -1,15 +1,18 @@
-import {Component, ElementRef, OnDestroy, OnInit, ViewChild} from '@angular/core';
-import {DecimalPipe, NgForOf, NgIf} from '@angular/common';
-import {CourseCardComponent} from '../shared/cards/course-card/course-card.component';
-import {Router, RouterLink} from '@angular/router';
-import {CoursesService} from '../../services/courses.service';
-import {AlertsService} from '../../services/support/alerts.service';
-import {ResumeStorageService} from '../../services/support/resume-storage.service';
-import {Subscription} from 'rxjs';
-import {CourseManagementService} from '../../services/support/course-management.service';
-import {Card1x2LoaderComponent} from '../shared/cards/loaders/card1x2-loader/card1x2-loader.component';
-import {CardFullLoaderComponent} from '../shared/cards/loaders/card-full-loader/card-full-loader.component';
-import {EmployeeAuthStateService} from '../../services/cacheStates/employee-auth-state.service';
+
+import { Component, ElementRef, Injector, OnDestroy, OnInit, ViewChild, effect, inject, runInInjectionContext } from '@angular/core';
+import { DecimalPipe, NgForOf, NgIf } from '@angular/common';
+import { CourseCardComponent } from '../shared/cards/course-card/course-card.component';
+import { Router, RouterLink } from '@angular/router';
+import { CoursesService } from '../../services/courses.service';
+import { RecCoursesService } from '../../services/rec-courses.service';
+import { CourseStoreService } from '../../services/cacheStates/course-store.service';
+import { AlertsService } from '../../services/support/alerts.service';
+import { ResumeStorageService } from '../../services/support/resume-storage.service';
+import { Subscription } from 'rxjs';
+import { CourseManagementService } from '../../services/support/course-management.service';
+import { Card1x2LoaderComponent } from '../shared/cards/loaders/card1x2-loader/card1x2-loader.component';
+import { CardFullLoaderComponent } from '../shared/cards/loaders/card-full-loader/card-full-loader.component';
+import { EmployeeAuthStateService } from '../../services/cacheStates/employee-auth-state.service';
 
 import { utcToZonedTime, format } from 'date-fns-tz';
 
@@ -32,6 +35,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
   @ViewChild('skillsContainer', { static: false }) skillsContainer!: ElementRef;
 
   private courseSub!: Subscription;
+  private courseStore = inject(CourseStoreService);
 
   courses = [
     { name: 'All', category: 'All' },
@@ -73,27 +77,46 @@ export class DashboardComponent implements OnInit, OnDestroy {
   o_loading: boolean = true;
   u_loading: boolean = true;
 
-  constructor(private courseService: CoursesService,
-              private authState: EmployeeAuthStateService,
-              private courseManagementService: CourseManagementService,
-              private resumeStorage: ResumeStorageService,
-              private router: Router,
-              private alertService: AlertsService) {
+  constructor(
+    injector: Injector,
+    private courseService: CoursesService,
+    private recCoursesService: RecCoursesService,
+    private authState: EmployeeAuthStateService,
+    private courseManagementService: CourseManagementService,
+    private resumeStorage: ResumeStorageService,
+    private router: Router,
+    private alertService: AlertsService) {
+    runInInjectionContext(injector, () => {
+      effect(() => {
+        const courses = this.courseStore.allCourses$();
+        const loading = this.courseStore.loading$();
+
+        this.loading = loading;
+        if (!loading) {
+          this.courseCards = courses;
+          this.updateFilteredCourses();
+        }
+      });
+    });
   }
 
   ngOnInit() {
     this.companyId = this.authState.currentUser?.employee?.companyId || '';
+
+    // Listen for manual updates
     this.courseSub = this.courseManagementService
       .getCourseUpdateListener()
       .subscribe(() => {
         if (this.authState.currentUser?.employee?.companyId) {
-          this.getCourses(this.authState.currentUser.employee.companyId);
+          this.courseStore.refresh();
         }
       });
+
+    // Auth state listener for local overview - Store handles courses itself now
     this.authState.employee$.subscribe(profile => {
       const companyId = profile?.employee?.companyId;
       if (companyId) {
-        this.getCourses(companyId);
+        this.companyId = companyId;
         this.getOverview(companyId);
       }
     });
@@ -105,27 +128,9 @@ export class DashboardComponent implements OnInit, OnDestroy {
     }
   }
 
-  // Get Courses
+  // Get Courses - Deprecated direct call, now handled by Store
   getCourses(id: string) {
-    const userTimezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
-    this.loading = true;
-
-    this.courseService.getCoursesByOrganization(id).subscribe(courses => {
-      this.courseCards = courses.map((course: any) => {
-        const startLocal = utcToZonedTime(course.utcStart, userTimezone);
-        const endLocal = utcToZonedTime(course.utcEnd, userTimezone);
-
-        return {
-          ...course,
-          startDate: format(startLocal, 'yyyy-MM-dd', { timeZone: userTimezone }),
-          fromTime: format(startLocal, 'HH:mm', { timeZone: userTimezone }),
-          toTime: format(endLocal, 'HH:mm', { timeZone: userTimezone }),
-        };
-      });
-
-      this.updateFilteredCourses();
-      this.loading = false;
-    });
+    this.courseStore.refresh();
   }
 
   getOverview(id: string) {
@@ -158,19 +163,37 @@ export class DashboardComponent implements OnInit, OnDestroy {
   }
 
   deleteCourse(event: any) {
-    this.courseManagementService.deleteCourse(event).subscribe(
-      () => {
-        this.getCourses(this.companyId);
-        this.alertService.successMessage('Course deleted successfully.', 'Success');
-      },
-      (error) => {
-        this.alertService.errorMessage(error.message, 'Error');
-      }
-    );
+    const course = this.courseCards.find(c => c.id === event || c._id === event);
+
+    if (course?.courseType === 'recorded') {
+      this.recCoursesService.deleteCourse(event).subscribe(
+        () => {
+          this.courseStore.refresh();
+          this.alertService.successMessage('Recorded course deleted successfully.', 'Success');
+        },
+        (error) => {
+          this.alertService.errorMessage(error.message, 'Error');
+        }
+      );
+    } else {
+      this.courseManagementService.deleteCourse(event).subscribe(
+        () => {
+          this.courseStore.refresh();
+          this.alertService.successMessage('Course deleted successfully.', 'Success');
+        },
+        (error) => {
+          this.alertService.errorMessage(error.message, 'Error');
+        }
+      );
+    }
   }
 
-  editCourse(event: any) {
-    this.courseManagementService.editCourse(event);
+  editCourse(course: any) {
+    if (course.courseType === 'recorded') {
+      this.courseManagementService.editRecordedCourse(course);
+    } else {
+      this.courseManagementService.editCourse(course);
+    }
   }
 
   openMaterials($event: any) {

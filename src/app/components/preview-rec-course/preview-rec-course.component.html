@@ -1,0 +1,82 @@
+<div style="width: 100%" *ngFor="let c of course">
+    <div class="overview-wrapper">
+        <div class="container mb-4">
+            <div class="d-flex flex-column gap-4">
+                <div class="title-2">{{c.title}}</div>
+                <div class="paragraph-1">{{c.subtitle}}</div>
+                <div class="paragraph-1"><span class="bold">Instructor: </span>{{c.lecturer}}</div>
+            </div>
+        </div>
+
+        <div class="details-wrapper">
+            <div class="container">
+                <div class="d-md-flex align-items-center justify-content-between w-100">
+                    <div class="d-flex align-items-center justify-content-between w-100 mb-3 mb-md-0">
+                        <div class="d-flex flex-column align-items-center justify-content-center w-100">
+                            <div class="details-tag">Reviews</div>
+                            <div class="details-val">
+                                <i class="material-icons star">star</i>
+                                {{c.rating || '0'}}
+                            </div>
+                        </div>
+                        <div class="d-flex flex-column align-items-center justify-content-center w-100">
+                            <div class="details-tag">Language</div>
+                            <div class="details-val">{{c.language}}</div>
+                        </div>
+                    </div>
+                    <div class="d-flex align-items-center justify-content-between w-100 mb-3 mb-md-0">
+                        <div class="d-flex flex-column align-items-center justify-content-center w-100">
+                            <div class="details-tag">Modules</div>
+                            <div class="details-val">{{c.modules?.length || '0'}}</div>
+                        </div>
+                        <div class="d-flex flex-column align-items-center justify-content-center w-100">
+                            <div class="details-tag">Level</div>
+                            <div class="details-val">{{c.level}}</div>
+                        </div>
+                    </div>
+                    <div class="d-flex align-items-center justify-content-between w-100">
+                        <div class="d-flex flex-column align-items-center justify-content-center w-100">
+                            <div class="details-tag">Price</div>
+                            <div class="details-val">
+                                {{c.price === '0' || !c.price ? 'Free' : (c.currency + ' ' + c.price)}}
+                            </div>
+                        </div>
+                        <div class="w-100"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="container enroll-btn-container">
+            <!-- TODO: Implement Purchase/Enroll Flow -->
+            <button id="TP_PRC_Enroll" type="button" class="btn-fill btn-f-2">Enroll Now</button>
+        </div>
+    </div>
+
+    <div class="container py-5">
+        <div class="content-title" *ngIf="c.skills?.length">Skills you’ll gain</div>
+        <div class="d-flex flex-wrap mb-5" *ngIf="c.skills?.length">
+            <span class="skills-badge" *ngFor="let s of c.skills">{{s}}</span>
+        </div>
+
+        <div class="content-title">Course Curriculum</div>
+        <div class="modules-list mb-5">
+            <div class="module-item mb-3" *ngFor="let module of c.modules; let i = index">
+                <div class="module-header p-3 rounded-3">
+                    <h5 class="m-0 d-flex justify-content-between align-items-center">
+                        <span>Module {{i + 1}}: {{module.name || module.title}}</span>
+                        <span class="badge bg-secondary">{{module.lectures?.length || 0}} Lectures</span>
+                    </h5>
+                    <p class="small m-0 mt-1" *ngIf="module.description">{{module.description}}</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="content-title">Description</div>
+        <div class="description-content" [innerHTML]="sanitizeHTML(c.description)"></div>
+    </div>
+</div>
+
+<div class="container" *ngIf="loading">
+    <app-course-preview-loader></app-course-preview-loader>
+</div>

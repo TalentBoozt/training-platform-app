@@ -139,6 +139,7 @@
     margin-top: 1rem;
     min-width: 240px;
     box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+    background: hsla(var(--background) / 0.8);
 
     .dropdown-item {
       border-radius: 12px;
@@ -232,12 +233,13 @@
 .search-results-wrapper {
   position: absolute;
   top: calc(100% + 10px);
-  right: 0;
+  right: 100px;
   width: 320px;
   @include utilities.glass-premium;
   border-radius: 20px;
   padding: 0.6rem;
   box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+  background: hsl(var(--background));
 
   .search-result {
     padding: 0.8rem 1rem;
@@ -265,5 +267,9 @@
     text-align: center;
     color: hsl(var(--muted-foreground));
     font-size: 0.85rem;
+  }
+
+  @media (max-width: 768px) {
+    right: 0;
   }
 }

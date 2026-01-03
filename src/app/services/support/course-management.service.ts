@@ -1,11 +1,12 @@
 import { Injectable } from '@angular/core';
-import {Observable, Subject, tap} from 'rxjs';
+import { Observable, Subject, tap } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { ResumeStorageService } from './resume-storage.service';
 import { AlertsService } from './alerts.service';
-import {CoursesService} from '../courses.service';
-import {WindowService} from '../common/window.service';
+import { CoursesService } from '../courses.service';
+import { WindowService } from '../common/window.service';
+import { CourseDraftService } from '../../components/course-wizard/core/services/course-draft.service';
 
 @Injectable({
   providedIn: 'root',
@@ -17,10 +18,11 @@ export class CourseManagementService {
     private http: HttpClient,
     private router: Router,
     private courseService: CoursesService,
+    private courseDraftService: CourseDraftService, // for recorded courses
     private alertService: AlertsService,
     private windowService: WindowService,
     private resumeStorage: ResumeStorageService
-  ) {}
+  ) { }
 
   getCourseUpdateListener(): Observable<void> {
     return this.courseUpdated.asObservable();
@@ -91,7 +93,18 @@ export class CourseManagementService {
       this.resumeStorage.saveData('installment', installment);
       this.resumeStorage.saveData('modules', modules);
 
-      this.router.navigate(['/post-course']);
+      this.router.navigate(['/post-live']);
+    }
+  }
+
+  editRecordedCourse(event: any) {
+    if (this.windowService.nativeSessionStorage) {
+      sessionStorage.setItem('editRecordedCourse', event.id);
+      this.courseDraftService.clearDraft();
+
+      this.courseDraftService.setFullDraft(event);
+
+      this.router.navigate(['/post-rec']);
     }
   }
 
