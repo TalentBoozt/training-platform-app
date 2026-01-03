@@ -3,13 +3,13 @@
     <img src="{{course.image || '/assets/images/course-card/placeholder.webp'}}" alt="course banner">
 
     <div class="badge-container">
-      <div class="dropdown">
+      <div class="dropdown" *ngIf="course.courseType !== 'recorded'">
         <button class="status-tag border-0" [ngClass]="getClassForStatus(course.courseStatus)"
           data-bs-toggle="dropdown">
           <span class="dot"></span>
           {{ getClassForStatus(course.courseStatus) }}
         </button>
-        <ul class="dropdown-menu">
+        <ul class="dropdown-menu glass-premium animate-fade-in">
           <li><a class="dropdown-item" (click)="changeStatus('upcoming', course)"><i class="material-icons">event</i>
               Upcoming</a></li>
           <li><a class="dropdown-item" (click)="changeStatus('ongoing', course)"><i
@@ -20,6 +20,9 @@
               Cancelled</a></li>
         </ul>
       </div>
+      <div *ngIf="course.courseType === 'recorded'" class="status-tag completed">
+        <span class="dot"></span> Recorded
+      </div>
     </div>
   </div>
 
@@ -27,30 +30,52 @@
     <div class="card-title" (click)="navigateToDetails(course.id)">{{course.name}}</div>
 
     <div class="meta-info">
-      <div class="d-flex align-items-center justify-content-between mb-1">
-        <div class="platform-chip">
-          <img *ngIf="course.platform === 'online'" src="/assets/images/course-card/online.svg" alt="online">
-          <img *ngIf="course.platform === 'physical'" src="/assets/images/course-card/physical.svg" alt="physical">
-          <img *ngIf="course.platform === 'zoom'" src="/assets/images/course-card/zoom.svg" alt="zoom">
-          <img *ngIf="course.platform === 'team'" src="/assets/images/course-card/ms-teams.svg" alt="teams">
-          <img *ngIf="course.platform === 'meet'" src="/assets/images/course-card/meet.svg" alt="meet">
-          {{course.platform}}
+      <!-- LIVE COURSE INFO -->
+      <ng-container *ngIf="course.courseType !== 'recorded'">
+        <div class="d-flex align-items-center justify-content-between mb-1">
+          <div class="platform-chip">
+            <img *ngIf="course.platform === 'online'" src="/assets/images/course-card/online.svg" alt="online">
+            <img *ngIf="course.platform === 'physical'" src="/assets/images/course-card/physical.svg" alt="physical">
+            <img *ngIf="course.platform === 'zoom'" src="/assets/images/course-card/zoom.svg" alt="zoom">
+            <img *ngIf="course.platform === 'team'" src="/assets/images/course-card/ms-teams.svg" alt="teams">
+            <img *ngIf="course.platform === 'meet'" src="/assets/images/course-card/meet.svg" alt="meet">
+            {{course.platform}}
+          </div>
+          <div class="info-item">
+            <i class="material-icons">calendar_today</i>
+            {{course.startDate}}
+          </div>
         </div>
-        <div class="info-item">
-          <i class="material-icons">calendar_today</i>
-          {{course.startDate}}
-        </div>
-      </div>
 
-      <div class="info-item">
-        <i class="material-icons">schedule</i>
-        {{course.fromTime}} - {{course.toTime}}
-      </div>
+        <div class="info-item">
+          <i class="material-icons">schedule</i>
+          {{course.fromTime}} - {{course.toTime}}
+        </div>
+      </ng-container>
+
+      <!-- RECORDED COURSE INFO -->
+      <ng-container *ngIf="course.courseType === 'recorded'">
+        <div class="d-flex align-items-center justify-content-between mb-1">
+          <div class="info-item">
+            <i class="material-icons">schedule</i>
+            {{course.duration || 'Self-paced'}}
+          </div>
+          <div class="info-item" *ngIf="course.modules">
+            <i class="material-icons">layers</i>
+            {{course.modules.length}} Modules
+          </div>
+        </div>
+        <div class="info-item text-truncate">
+          {{course.subtitle}}
+        </div>
+      </ng-container>
     </div>
 
     <div class="card-footer">
       <div class="participants-count">
-        <strong>{{participants.length}}</strong> Participants
+        <strong *ngIf="course.courseType !== 'recorded'">{{participants.length}} Participants</strong>
+        <strong *ngIf="course.courseType === 'recorded'">{{course.price === '0' || !course.price ? 'Free' :
+          (course.currency + ' ' + course.price)}}</strong>
       </div>
 
       <div class="dropdown">
@@ -58,27 +83,44 @@
           <i class="material-icons">more_vert</i>
         </div>
         <ul class="dropdown-menu dropdown-menu-end">
-          <li><a class="dropdown-item" routerLink="/preview/{{course.id}}"><i class="material-icons">visibility</i>
-              Preview</a></li>
-          <li><a class="dropdown-item" (click)="navigateToParticipant(course.id)"><i class="material-icons">people</i>
+          <li>
+            <a class="dropdown-item" *ngIf="course.courseType !== 'recorded'"
+              routerLink="/preview/{{course.id || course._id}}">
+              <i class="material-icons">visibility</i> Preview
+            </a>
+            <a class="dropdown-item" *ngIf="course.courseType === 'recorded'"
+              routerLink="/preview-rec/{{course.id || course._id}}">
+              <i class="material-icons">visibility</i> Preview
+            </a>
+          </li>
+          <li *ngIf="course.courseType !== 'recorded'"><a class="dropdown-item"
+              (click)="navigateToParticipant(course.id)"><i class="material-icons">people</i>
               Participants</a></li>
-          <li><a class="dropdown-item" (click)="navigateToMaterials(course.id)"><i
-                class="material-icons">folder_open</i> Materials</a></li>
+          <li *ngIf="course.courseType !== 'recorded'"><a class="dropdown-item"
+              (click)="navigateToMaterials(course.id)"><i class="material-icons">folder_open</i> Materials</a></li>
           <li>
             <hr class="dropdown-divider">
           </li>
           <li><a class="dropdown-item" (click)="editCourse(course)"><i class="material-icons">edit</i> Edit Course</a>
           </li>
-          <li><a class="dropdown-item" routerLink="/edit-modules/{{course.id}}"><i class="material-icons">layers</i>
-              Edit Modules</a></li>
+          <li>
+            <a class="dropdown-item" *ngIf="course.courseType !== 'recorded'"
+              routerLink="/edit-modules/{{course.id || course._id}}">
+              <i class="material-icons">layers</i> Edit Modules
+            </a>
+            <a class="dropdown-item" *ngIf="course.courseType === 'recorded'"
+              routerLink="/edit-rec-modules/{{course.id || course._id}}">
+              <i class="material-icons">layers</i> Edit Curriculum
+            </a>
+          </li>
           <li>
             <hr class="dropdown-divider">
           </li>
-          <li><a class="dropdown-item" (click)="toggleAudience(course.id)">
+          <li *ngIf="course.courseType !== 'recorded'"><a class="dropdown-item" (click)="toggleAudience(course.id)">
               <i class="material-icons">{{course.publicity ? 'vibration' : 'public'}}</i>
               {{course.publicity ? 'Make Private' : 'Make Public'}}
             </a></li>
-          <li><a class="dropdown-item text-danger" (click)="deleteCourse(course.id)"><i
+          <li><a class="dropdown-item text-danger" (click)="deleteCourse(course.id || course._id)"><i
                 class="material-icons">delete</i> Delete</a></li>
         </ul>
       </div>

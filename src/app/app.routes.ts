@@ -3,7 +3,7 @@ import { AuthGuard } from './guards/auth.guard';
 
 export const routes: Routes = [
   { path: '', redirectTo: '/dashboard', pathMatch: 'full' },
-  { path: 'dashboard', loadComponent: () => import('./components/dashboard/dashboard.component').then(c => c.DashboardComponent) },
+  { path: 'dashboard', loadComponent: () => import('./components/dashboard/dashboard.component').then(c => c.DashboardComponent), canActivate: [AuthGuard] },
   { path: 'my-profile', loadComponent: () => import('./components/trainer-profile/trainer-profile.component').then(c => c.TrainerProfileComponent), canActivate: [AuthGuard] },
   { path: 'post-course', loadComponent: () => import('./components/post-course/course-type/course-type.component').then(c => c.CourseTypeComponent), canActivate: [AuthGuard] },
   { path: 'post-live', loadComponent: () => import('./components/post-course/post-course.component').then(c => c.PostCourseComponent), canActivate: [AuthGuard] },
@@ -12,7 +12,9 @@ export const routes: Routes = [
   { path: 'courses', loadComponent: () => import('./components/my-courses/my-courses.component').then(c => c.MyCoursesComponent), canActivate: [AuthGuard] },
   { path: 'preview/:courseId', loadComponent: () => import('./components/preview-course/preview-course.component').then(c => c.PreviewCourseComponent) },
   { path: 'preview-course/:courseId', loadComponent: () => import('./components/course-modules/course-modules.component').then(c => c.CourseModulesComponent) },
+  { path: 'preview-rec/:courseId', loadComponent: () => import('./components/preview-rec-course/preview-rec-course.component').then(c => c.PreviewRecCourseComponent) },
   { path: 'edit-modules/:courseId', loadComponent: () => import('./components/update-modules/update-modules.component').then(c => c.UpdateModulesComponent), canActivate: [AuthGuard] },
+  { path: 'edit-rec-modules/:courseId', loadComponent: () => import('./components/edit-rec-course-modules/edit-rec-course-modules.component').then(c => c.EditRecCourseModulesComponent), canActivate: [AuthGuard] },
   { path: 'courses/:courseId/modules/:moduleId/materials/upload', loadComponent: () => import('./components/materials/materials.component').then(c => c.MaterialsComponent), canActivate: [AuthGuard] },
   { path: 'courses/:courseId/modules/:moduleId/quizzes/upload', loadComponent: () => import('./components/quiz-manager/quiz-manager.component').then(c => c.QuizManagerComponent), canActivate: [AuthGuard] },
   { path: 'manage-materials/:courseId', loadComponent: () => import('./components/material-management/material-management.component').then(c => c.MaterialManagementComponent), canActivate: [AuthGuard] },

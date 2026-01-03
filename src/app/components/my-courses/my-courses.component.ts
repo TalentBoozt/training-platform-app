@@ -1,13 +1,16 @@
-import {Component, OnDestroy, OnInit} from '@angular/core';
-import {CoursesService} from '../../services/courses.service';
-import {Subscription, tap} from 'rxjs';
-import {AuthService} from '../../services/support/auth.service';
-import {CourseCardComponent} from '../shared/cards/course-card/course-card.component';
-import {NgForOf, NgIf} from '@angular/common';
-import {CourseManagementService} from '../../services/support/course-management.service';
-import {Card1x2LoaderComponent} from '../shared/cards/loaders/card1x2-loader/card1x2-loader.component';
-import {Router} from '@angular/router';
-import {format, utcToZonedTime} from 'date-fns-tz';
+import { Component, OnDestroy, OnInit } from '@angular/core';
+import { CoursesService } from '../../services/courses.service';
+import { Subscription, tap } from 'rxjs';
+import { AuthService } from '../../services/support/auth.service';
+import { CourseCardComponent } from '../shared/cards/course-card/course-card.component';
+import { NgForOf, NgIf } from '@angular/common';
+import { CourseManagementService } from '../../services/support/course-management.service';
+import { Card1x2LoaderComponent } from '../shared/cards/loaders/card1x2-loader/card1x2-loader.component';
+import { Router } from '@angular/router';
+import { CourseStoreService } from '../../services/cacheStates/course-store.service';
+import { RecCoursesService } from '../../services/rec-courses.service';
+import { AlertsService } from '../../services/support/alerts.service';
+import { effect } from '@angular/core';
 
 @Component({
   selector: 'app-my-courses',
@@ -29,18 +32,25 @@ export class MyCoursesComponent implements OnInit, OnDestroy {
   loading: boolean = false;
 
   constructor(private courseService: CoursesService,
-              private courseManagementService: CourseManagementService,
-              private router: Router,
-              private cookieService: AuthService) {}
+    private courseManagementService: CourseManagementService,
+    private recCoursesService: RecCoursesService,
+    private courseStore: CourseStoreService,
+    private router: Router,
+    private alertService: AlertsService,
+    private cookieService: AuthService) {
+    effect(() => {
+      this.courses = this.courseStore.allCourses$();
+      this.loading = this.courseStore.loading$();
+    });
+  }
 
   ngOnInit(): void {
     this.companyId = this.cookieService.organization();
-    this.courseSub = this.courseManagementService
-      .getCourseUpdateListener()
-      .subscribe(() => {
-        this.getAllCourses().subscribe();
-      });
-    this.getAllCourses().subscribe(() => this.loading = false);
+    // Manual fetching removed, store handles it.
+    // Ensure store is refreshed if needed, though Dashboard likely triggered it.
+    if (!this.courseStore.allCourses$().length) {
+      this.courseStore.refresh();
+    }
   }
 
   ngOnDestroy() {
@@ -49,40 +59,38 @@ export class MyCoursesComponent implements OnInit, OnDestroy {
     }
   }
 
-  getAllCourses() {
-    const userTimezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
-    this.loading = true;
-    return this.courseService.getCoursesByOrganization(this.companyId).pipe(
-      tap((courses: any) => {
-        this.loading = false;
-        this.courses = courses.map((course: any) => {
-          const startLocal = utcToZonedTime(course.utcStart, userTimezone);
-          const endLocal = utcToZonedTime(course.utcEnd, userTimezone);
-
-          return {
-            ...course,
-            startDate: format(startLocal, 'yyyy-MM-dd', { timeZone: userTimezone }),
-            fromTime: format(startLocal, 'HH:mm', { timeZone: userTimezone }),
-            toTime: format(endLocal, 'HH:mm', { timeZone: userTimezone }),
-          };
-        });
-      })
-    )
-  }
+  // getAllCourses removed -> logic is in CourseStoreService now
 
   deleteCourse(event: any) {
-    this.courseManagementService.deleteCourse(event).subscribe(
-      () => {
-        this.getAllCourses().subscribe();
-      },
-      (error) => {
-        // Handle error if needed
-      }
-    );
+    const course = this.courses.find(c => c.id === event || c._id === event);
+
+    if (course?.courseType === 'recorded') {
+      this.recCoursesService.deleteCourse(event).subscribe(
+        () => {
+          this.courseStore.refresh();
+          this.alertService.successMessage('Recorded course deleted.', 'Success');
+        },
+        (error) => this.alertService.errorMessage(error.message, 'Error')
+      );
+    } else {
+      this.courseManagementService.deleteCourse(event).subscribe(
+        () => {
+          this.courseStore.refresh();
+          // Alert handled in service usually, or we can add here
+        },
+        (error) => {
+          // Error handled
+        }
+      );
+    }
   }
 
-  editCourse(event: any) {
-    this.courseManagementService.editCourse(event);
+  editCourse(course: any) {
+    if (course.courseType === 'recorded') {
+      this.courseManagementService.editRecordedCourse(course);
+    } else {
+      this.courseManagementService.editCourse(course);
+    }
   }
 
   navigateToMaterials($event: any) {

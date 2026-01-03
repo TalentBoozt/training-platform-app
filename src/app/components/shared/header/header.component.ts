@@ -11,6 +11,8 @@ import { tap } from 'rxjs';
 import { CommonService } from '../../../services/common/common.service';
 import { EmployeeProfile } from '../../../shared/data-models/cache/EmployeeProfile.model';
 import { EmployeeAuthStateService } from '../../../services/cacheStates/employee-auth-state.service';
+import { CourseStoreService } from '../../../services/cacheStates/course-store.service';
+import { effect } from '@angular/core';
 
 @Component({
   selector: 'app-header',
@@ -48,8 +50,13 @@ export class HeaderComponent implements OnInit, AfterViewInit {
     private windowService: WindowService,
     private alertService: AlertsService,
     private cookieService: AuthService,
-    public authState: EmployeeAuthStateService
-  ) { }
+    public authState: EmployeeAuthStateService,
+    private courseStore: CourseStoreService
+  ) {
+    effect(() => {
+      this.commonSearchResults = this.courseStore.allCourses$();
+    });
+  }
 
   ngOnInit() {
     this.themeService.applyTheme();
@@ -75,7 +82,11 @@ export class HeaderComponent implements OnInit, AfterViewInit {
 
     this.authState.employee$.subscribe((profile) => {
       if (profile?.employee?.id) {
-        this.getCourses(profile.employee.companyId).subscribe();
+        // Search results now come from the store, which is already initialized by Dashboard or app init
+        // We can just rely on the store's signal
+        effect(() => {
+          this.commonSearchResults = this.courseStore.allCourses$();
+        });
       }
     });
   }
@@ -87,13 +98,8 @@ export class HeaderComponent implements OnInit, AfterViewInit {
     }
   }
 
-  getCourses(companyId: any) {
-    return this.coursesService.getCoursesByOrganization(companyId).pipe(
-      tap(data => {
-        this.commonSearchResults = data;
-      })
-    );
-  }
+  // getCourses is no longer needed as we use the store
+  // getCourses(companyId: any) { ... }
 
   updateActiveClass() {
     const currentRoute = this.router.url;
@@ -201,7 +207,11 @@ export class HeaderComponent implements OnInit, AfterViewInit {
     this.isMobileMenuOpen = !this.isMobileMenuOpen;
   }
 
-  navigateToSearchResult(id: any) {
-    this.router.navigate(['/preview', id])
+  navigateToSearchResult(course: any) {
+    if (course.courseType === 'recorded') {
+      this.router.navigate(['/preview-rec', course.id || course._id]);
+    } else {
+      this.router.navigate(['/preview', course.id || course._id]);
+    }
   }
 }

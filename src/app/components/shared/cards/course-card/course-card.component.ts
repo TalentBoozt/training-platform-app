@@ -1,9 +1,9 @@
-import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
-import {NgClass, NgIf} from '@angular/common';
-import {Router, RouterLink} from '@angular/router';
-import {CoursesService} from '../../../../services/courses.service';
-import {finalize} from 'rxjs';
-import {AlertsService} from '../../../../services/support/alerts.service';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { NgClass, NgIf } from '@angular/common';
+import { Router, RouterLink } from '@angular/router';
+import { CoursesService } from '../../../../services/courses.service';
+import { finalize } from 'rxjs';
+import { AlertsService } from '../../../../services/support/alerts.service';
 
 @Component({
   selector: 'app-course-card',
@@ -31,7 +31,9 @@ export class CourseCardComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.getAllParticipants();
+    if (this.course?.courseType !== 'recorded') {
+      this.getAllParticipants();
+    }
   }
 
   getAllParticipants() {
@@ -41,11 +43,16 @@ export class CourseCardComponent implements OnInit {
   }
 
   navigateToDetails(id: any) {
-    this.router.navigate(['/course', id]);
+    if (this.course.courseType === 'recorded') {
+      this.router.navigate(['/preview-rec', id]);
+    } else {
+      // Assuming /preview is the correct route for live course details or staying with existing if valid
+      this.router.navigate(['/preview', id]);
+    }
   }
 
-  navigateToParticipant(id:any) {
-    this.router.navigate(['/participants'],{queryParams:{id}});
+  navigateToParticipant(id: any) {
+    this.router.navigate(['/participants'], { queryParams: { id } });
   }
 
   deleteCourse(id: any) {
