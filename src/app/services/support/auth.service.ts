@@ -1,9 +1,9 @@
 import { Injectable } from '@angular/core';
-import {CookieService} from "ngx-cookie-service";
-import {WindowService} from '../common/window.service';
-import {Observable} from 'rxjs';
-import {CommonService} from "../common/common.service";
-import {AlertsService} from "./alerts.service";
+import { CookieService } from "ngx-cookie-service";
+import { WindowService } from '../common/window.service';
+import { Observable } from 'rxjs';
+import { CommonService } from "../common/common.service";
+import { AlertsService } from "./alerts.service";
 
 
 @Injectable({
@@ -12,59 +12,59 @@ import {AlertsService} from "./alerts.service";
 export class AuthService {
 
   constructor(private cookieService: CookieService,
-              private windowService: WindowService,
-              private commonService: CommonService,
-              private alertService: AlertsService) { }
+    private windowService: WindowService,
+    private commonService: CommonService,
+    private alertService: AlertsService) { }
 
-  public createUserID(token:any){
-    this.cookieService.set('user-token-id',token, {expires: 60* 60* 24* 7, path: '/', sameSite: 'Strict', secure: true});
+  public createUserID(token: any) {
+    this.cookieService.set('user-token-id', token, { expires: 60 * 60 * 24 * 7, path: '/', sameSite: 'Strict', secure: true });
   }
 
-  public createOrganizationID(token:any){
-    this.cookieService.set('organization',token, 60*60*24*7);
+  public createOrganizationID(token: any) {
+    this.cookieService.set('organization', token, 60 * 60 * 24 * 7);
   }
 
-  public createLevel(token:any){
-    this.cookieService.set('level', token, {expires: 60* 60* 24* 7, path: '/', sameSite: 'Strict', secure: true});
+  public createLevel(token: any) {
+    this.cookieService.set('level', token, { expires: 60 * 60 * 24 * 7, path: '/', sameSite: 'Strict', secure: true });
   }
 
-  public createAdmin(token:string){
-    this.cookieService.set('admin-token',token,60*60*24*7);
+  public createAdmin(token: string) {
+    this.cookieService.set('admin-token', token, 60 * 60 * 24 * 7);
   }
 
-  public createProAdmin(token:string){
-    this.cookieService.set('pro-admin-token',token,60*60*24*7);
+  public createProAdmin(token: string) {
+    this.cookieService.set('pro-admin-token', token, 60 * 60 * 24 * 7);
   }
 
   createSession(user: any) {
-    if (this.windowService.nativeSessionStorage){
+    if (this.windowService.nativeSessionStorage) {
       sessionStorage.setItem('access_token', user.access_token);
     }
   }
 
-  public logout(){
+  public logout() {
     this.cookieService.deleteAll();
-    if (this.windowService.nativeSessionStorage){
+    if (this.windowService.nativeSessionStorage) {
       sessionStorage.clear();
     }
   }
 
-  public isExists():boolean{
+  public isExists(): boolean {
     let user = this.cookieService.get('user-token-id');
     return user.length !== 0; //user.length === 0?false:true
   }
 
-  public isAdmin():boolean{
+  public isAdmin(): boolean {
     let admin = this.cookieService.get('admin-token');
     return admin.length !== 0;
   }
 
-  public isProAdmin():boolean{
+  public isProAdmin(): boolean {
     let proAdmin = this.cookieService.get('pro-admin-token');
     return proAdmin.length !== 0;
   }
 
-  public isOrganization():boolean{
+  public isOrganization(): boolean {
     let org = this.cookieService.get('organization');
     return org.length !== 0;
   }
@@ -99,7 +99,7 @@ export class AuthService {
   }
 
   public setThemeMode(themeMode: string) {
-    this.cookieService.set('theme-mode', themeMode, 60*60*24*30);
+    this.cookieService.set('theme-mode', themeMode, 60 * 60 * 24 * 30);
   }
 
   public getThemeMode() {
@@ -107,7 +107,7 @@ export class AuthService {
   }
 
   public setThemeColor(themeColor: string) {
-    this.cookieService.set('theme-color', themeColor, 60*60*24*30);
+    this.cookieService.set('theme-color', themeColor, 60 * 60 * 24 * 30);
   }
 
   public getThemeColor() {
@@ -115,11 +115,11 @@ export class AuthService {
   }
 
   public acceptAllCookies() {
-    this.cookieService.set('cookies-accepted', 'true', 60*60*24*20);
+    this.cookieService.set('cookies-accepted', 'true', 60 * 60 * 24 * 20);
   }
 
   public necessaryCookiesOnly() {
-    this.cookieService.set('cookies-accepted', 'false', 60*60*24*20);
+    this.cookieService.set('cookies-accepted', 'false', 60 * 60 * 24 * 20);
   }
 
   public isCookiesAccepted() {
@@ -128,15 +128,15 @@ export class AuthService {
   }
 
   public createReferer(referer: string) {
-    this.cookieService.set('referer', referer, 60*60*24*30);
+    this.cookieService.set('referer', referer, 60 * 60 * 24 * 30);
   }
 
   public createPlatform(platform: string) {
-    this.cookieService.set('platform', platform, 60*60*24*30);
+    this.cookieService.set('platform', platform, 60 * 60 * 24 * 30);
   }
 
   public createPromotion(promotion: string) {
-    this.cookieService.set('promotion', promotion, 60*60*24*30);
+    this.cookieService.set('promotion', promotion, 60 * 60 * 24 * 30);
   }
 
   public getReferer() {
@@ -181,7 +181,7 @@ export class AuthService {
     const promo = this.getPromotion();
     if (this.windowService.nativeDocument) {
       const aElm: HTMLAnchorElement = document.createElement('a');
-      aElm.href = 'https://login.talentboozt.com/register?redirectUri='+window.location.href+'?&plat='+platform+'&ref='+referrer+'&prom='+promo+'&rb=TRAINER&lv=5';
+      aElm.href = 'https://login.talnova.io/register?redirectUri=' + window.location.href + '?&plat=' + platform + '&ref=' + referrer + '&prom=' + promo + '&rb=TRAINER&lv=5';
       aElm.target = '_self';
       aElm.click();
     }
@@ -213,27 +213,27 @@ export class AuthService {
 
     return new Promise((resolve, reject) => {
       this.commonService.getSession().subscribe({
-          next: (userData) => {
-            this.createUserID(userData.employeeId);
-            this.createLevel(userData.userLevel);
-            this.unlock();
+        next: (userData) => {
+          this.createUserID(userData.employeeId);
+          this.createLevel(userData.userLevel);
+          this.unlock();
 
-            userData.organizations?.forEach((organization: any) => {
-              this.createOrganizationID(organization.TrainerPlatform || '');
-            });
+          userData.organizations?.forEach((organization: any) => {
+            this.createOrganizationID(organization.TrainerPlatform || '');
+          });
 
-            this.commonService.getTokens(userData.email).subscribe((tokens) => {
-              this.createAuthToken(tokens.accessToken);
-              this.createRefreshToken(tokens.refreshToken);
-              if (this.windowService.nativeSessionStorage)
-                sessionStorage.setItem('sso-initialized', 'true');
-              resolve(true);
-            });
-            },
-          error: () => {
-            this.alertService.successMessage('Claim your free account today!', 'Talent Boozt ✨');
-            reject();
-          }
+          this.commonService.getTokens(userData.email).subscribe((tokens) => {
+            this.createAuthToken(tokens.accessToken);
+            this.createRefreshToken(tokens.refreshToken);
+            if (this.windowService.nativeSessionStorage)
+              sessionStorage.setItem('sso-initialized', 'true');
+            resolve(true);
+          });
+        },
+        error: () => {
+          this.alertService.successMessage('Claim your free account today!', 'Talent Boozt ✨');
+          reject();
+        }
       });
     });
   }

@@ -1,19 +1,19 @@
-import {AfterViewInit, Component, OnDestroy, OnInit} from '@angular/core';
-import {ActivatedRoute, RouterOutlet} from '@angular/router';
-import {HeaderComponent} from './components/shared/header/header.component';
-import {FooterComponent} from './components/shared/footer/footer.component';
-import {AuthService} from './services/support/auth.service';
-import {LockScreenComponent} from './components/authenticating/lock-screen/lock-screen.component';
-import {LoginComponent} from './components/authenticating/login/login.component';
-import {RegisterComponent} from './components/authenticating/register/register.component';
-import {ResetPasswordComponent} from './components/authenticating/reset-password/reset-password.component';
-import {NgClass, NgIf} from '@angular/common';
-import {ThemeService} from './services/support/theme.service';
-import {WindowService} from './services/common/window.service';
-import {CommonService} from './services/common/common.service';
-import {AlertsService} from './services/support/alerts.service';
-import {LoginService} from './services/common/login.service';
-import {EmployeeAuthStateService} from './services/cacheStates/employee-auth-state.service';
+import { AfterViewInit, Component, OnDestroy, OnInit } from '@angular/core';
+import { ActivatedRoute, RouterOutlet } from '@angular/router';
+import { HeaderComponent } from './components/shared/header/header.component';
+import { FooterComponent } from './components/shared/footer/footer.component';
+import { AuthService } from './services/support/auth.service';
+import { LockScreenComponent } from './components/authenticating/lock-screen/lock-screen.component';
+import { LoginComponent } from './components/authenticating/login/login.component';
+import { RegisterComponent } from './components/authenticating/register/register.component';
+import { ResetPasswordComponent } from './components/authenticating/reset-password/reset-password.component';
+import { NgClass, NgIf } from '@angular/common';
+import { ThemeService } from './services/support/theme.service';
+import { WindowService } from './services/common/window.service';
+import { CommonService } from './services/common/common.service';
+import { AlertsService } from './services/support/alerts.service';
+import { LoginService } from './services/common/login.service';
+import { EmployeeAuthStateService } from './services/cacheStates/employee-auth-state.service';
 
 @Component({
   selector: 'app-root',
@@ -34,13 +34,13 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
   isCookiesAccepted: boolean = false;
 
   constructor(private route: ActivatedRoute,
-              private commonService: CommonService,
-              private loginService: LoginService,
-              private authStateService: EmployeeAuthStateService,
-              private windowService: WindowService,
-              private cookieService: AuthService,
-              private alertService: AlertsService,
-              public themeService: ThemeService) {
+    private commonService: CommonService,
+    private loginService: LoginService,
+    private authStateService: EmployeeAuthStateService,
+    private windowService: WindowService,
+    private cookieService: AuthService,
+    private alertService: AlertsService,
+    public themeService: ThemeService) {
   }
 
   async ngOnInit(): Promise<void> {
@@ -87,7 +87,7 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
           lv: '5',
         });
 
-        aElm.href = `https://login.talentboozt.com/login?redirectUri=${currentUrl}?&${redirectParams.toString()}`;
+        aElm.href = `https://login.talnova.io/login?redirectUri=${currentUrl}?&${redirectParams.toString()}`;
         aElm.target = '_self';
         aElm.click();
       }
@@ -109,7 +109,7 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   ngAfterViewInit() {
-    if(this.windowService.nativeDocument){
+    if (this.windowService.nativeDocument) {
       const icons = document.querySelectorAll('.material-icons');
       icons.forEach((icon) => {
         icon.setAttribute('translate', 'no');

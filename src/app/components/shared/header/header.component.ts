@@ -187,11 +187,11 @@ export class HeaderComponent implements OnInit, AfterViewInit {
       });
 
       let finalRedirectParams = profile === 'trainer' ? redirectParams : shortRedirectParams;
-      let finalRedirectUrl = `https://login.talentboozt.com/login?redirectUri=${currentUrl}?&${finalRedirectParams.toString()}`;
+      let finalRedirectUrl = `https://login.talnova.io/login?redirectUri=${currentUrl}?&${finalRedirectParams.toString()}`;
       if (action === 'login')
-        finalRedirectUrl = `https://login.talentboozt.com/login?redirectUri=${currentUrl}?&${finalRedirectParams.toString()}`;
+        finalRedirectUrl = `https://login.talnova.io/login?redirectUri=${currentUrl}?&${finalRedirectParams.toString()}`;
       else if (action === 'register')
-        finalRedirectUrl = `https://login.talentboozt.com/register?redirectUri=${currentUrl}?&${finalRedirectParams.toString()}`;
+        finalRedirectUrl = `https://login.talnova.io/register?redirectUri=${currentUrl}?&${finalRedirectParams.toString()}`;
 
       aElm.href = finalRedirectUrl;
       aElm.target = '_self';

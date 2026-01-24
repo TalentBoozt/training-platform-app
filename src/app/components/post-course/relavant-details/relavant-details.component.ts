@@ -1,16 +1,16 @@
-import {ChangeDetectionStrategy, Component, ElementRef, OnChanges, OnDestroy, OnInit, ViewChild} from '@angular/core';
-import {FormsModule, ReactiveFormsModule} from "@angular/forms";
-import {ResumeStorageService} from '../../../services/support/resume-storage.service';
-import {AlertsService} from '../../../services/support/alerts.service';
-import {FileUploadService} from '../../../services/support/file-upload.service';
-import {NgClass, NgForOf, NgIf} from '@angular/common';
-import {CoursesService} from '../../../services/courses.service';
-import {tap} from 'rxjs';
-import {TimezoneService} from '../../../services/support/timezone.service';
+import { ChangeDetectionStrategy, Component, ElementRef, OnChanges, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { FormsModule, ReactiveFormsModule } from "@angular/forms";
+import { ResumeStorageService } from '../../../services/support/resume-storage.service';
+import { AlertsService } from '../../../services/support/alerts.service';
+import { FileUploadService } from '../../../services/support/file-upload.service';
+import { NgClass, NgForOf, NgIf } from '@angular/common';
+import { CoursesService } from '../../../services/courses.service';
+import { tap } from 'rxjs';
+import { TimezoneService } from '../../../services/support/timezone.service';
 
 import * as moment from 'moment-timezone';
 import { zonedTimeToUtc } from 'date-fns-tz';
-import {ImageCropperComponent} from 'ngx-image-cropper';
+import { ImageCropperComponent } from 'ngx-image-cropper';
 
 @Component({
   selector: 'app-relavant-details',
@@ -62,10 +62,10 @@ export class RelavantDetailsComponent implements OnInit, OnChanges, OnDestroy {
   croppedImageBlob!: Blob | null;
 
   constructor(private resumeStorage: ResumeStorageService,
-              private alertService: AlertsService,
-              private courseService: CoursesService,
-              private timezoneService: TimezoneService,
-              private fileUploadService: FileUploadService) {
+    private alertService: AlertsService,
+    private courseService: CoursesService,
+    private timezoneService: TimezoneService,
+    private fileUploadService: FileUploadService) {
   }
 
   ngOnInit(): void {
@@ -92,7 +92,7 @@ export class RelavantDetailsComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   ngOnDestroy() {
-    if (this.relevantDetails.freeCheck){
+    if (this.relevantDetails.freeCheck) {
       const savedData = this.resumeStorage.getData();
       if (savedData?.basicDetails) {
         savedData.basicDetails.paymentMethod = 'free';
