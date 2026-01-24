@@ -1,14 +1,15 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
+import { environment } from '../../../../../environments/environment';
 
 @Injectable({
     providedIn: 'root'
 })
 export class RecCourseService {
 
-    private baseUrlSimple = 'https://api.talentboozt.com';
-    private baseUrl = 'https://api.talentboozt.com/api/v2';
+    private baseUrlSimple = environment.apiUrlSimple;
+    private baseUrl = environment.apiUrl;
 
     categoriesSubject = new BehaviorSubject<any[] | null>(null);
     categories$ = this.categoriesSubject.asObservable();

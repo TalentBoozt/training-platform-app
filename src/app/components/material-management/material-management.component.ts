@@ -1,10 +1,10 @@
-import {Component, OnInit} from '@angular/core';
-import {NgForOf, NgIf} from '@angular/common';
-import {ActivatedRoute, Router} from '@angular/router';
-import {CoursesService} from '../../services/courses.service';
-import {finalize} from 'rxjs';
-import {AlertsService} from '../../services/support/alerts.service';
-import {FileUploadService} from '../../services/support/file-upload.service';
+import { Component, OnInit } from '@angular/core';
+import { NgForOf, NgIf } from '@angular/common';
+import { ActivatedRoute, Router } from '@angular/router';
+import { CoursesService } from '../../services/courses.service';
+import { finalize } from 'rxjs';
+import { AlertsService } from '../../services/support/alerts.service';
+import { FileUploadService } from '../../services/support/file-upload.service';
 
 @Component({
   selector: 'app-material-management',
@@ -27,10 +27,10 @@ export class MaterialManagementComponent implements OnInit {
   isUpdating: boolean = false;
 
   constructor(private route: ActivatedRoute,
-              private courseService: CoursesService,
-              private fileUploadService: FileUploadService,
-              private router: Router,
-              private alertService: AlertsService) {
+    private courseService: CoursesService,
+    private fileUploadService: FileUploadService,
+    private router: Router,
+    private alertService: AlertsService) {
   }
 
   ngOnInit() {
@@ -131,9 +131,9 @@ export class MaterialManagementComponent implements OnInit {
   onEdit(moduleId: any, materialId: any, type: any) {
     if (moduleId) {
       if (type === 'quiz') {
-        this.router.navigate(['courses', this.courseId, 'modules', moduleId, 'quizzes', 'upload'], {queryParams: {materialId, edit: true}});
+        this.router.navigate(['courses', this.courseId, 'modules', moduleId, 'quizzes', 'upload'], { queryParams: { materialId, edit: true } });
       } else if (type === 'material') {
-        this.router.navigate(['courses', this.courseId, 'modules', moduleId, 'materials', 'upload'], {queryParams: {materialId, edit: true}});
+        this.router.navigate(['courses', this.courseId, 'modules', moduleId, 'materials', 'upload'], { queryParams: { materialId, edit: true } });
       }
     }
   }
@@ -182,7 +182,7 @@ export class MaterialManagementComponent implements OnInit {
 
   onCopyUrl(id: any, type: string) {
     if (type === 'quiz') {
-      const domain = 'https://courses.talentboozt.com/quiz/';
+      const domain = 'https://learner.talnova.io/quiz/';
       navigator.clipboard.writeText(domain + this.courseId + '/' + id).then(() => {
         this.alertService.successMessage('Link copied to clipboard.', 'Success');
       });
