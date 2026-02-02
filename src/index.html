@@ -2,122 +2,336 @@
 <html lang="en">
 
 <head>
-  <meta charset="utf-8">
-  <title>Talnova | Trainer</title>
-  <base href="/">
-  <meta name="viewport"
-    content="width=device-width, user-scalable=yes, initial-scale=1.0, maximum-scale=5.5, minimum-scale=1.0">
-  <meta http-equiv="X-UA-Compatible" content="ie=edge">
-  <link rel="icon" type="image/x-icon" href="/favicon.ico">
-  <link rel="apple-touch-icon" type="image/png" sizes="180x180" href="/apple-touch-icon.png">
-  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
-  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
-  <meta name="description" content="Find the best place in Sri Lanka to share your knowledge and start earning money.">
-  <meta name="keywords" content="talnova, trainer, trainer in sri lanka, job hunting in sri lanka, career guidance in sri lanka,
+    <meta charset="utf-8">
+    <title>Talnova | Trainer</title>
+    <base href="/">
+    <meta name="viewport"
+        content="width=device-width, user-scalable=yes, initial-scale=1.0, maximum-scale=5.5, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="icon" type="image/x-icon" href="/favicon.ico">
+    <link rel="apple-touch-icon" type="image/png" sizes="180x180" href="/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+    <meta name="description"
+        content="Find the best place in Sri Lanka to share your knowledge and start earning money.">
+    <meta name="keywords" content="talnova, trainer, trainer in sri lanka, job hunting in sri lanka, career guidance in sri lanka,
         career coaching in sri lanka, sell my course, share my course free, online course selling in sri lanka,
         easy course selling in sri lanka, online course selling in sri lanka">
-  <meta name="author" content="kavi castelo">
-  <meta name="author" content="kavindu kokila">
-  <meta name="author" content="talnova">
+    <meta name="author" content="kavi castelo">
+    <meta name="author" content="kavindu kokila">
+    <meta name="author" content="talnova">
 
-  <!-- bootstrap cdn -->
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
-    integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
-  <!-- google fonts -->
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <!-- material icons -->
-  <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
-  <script src="https://az3as6d.netlify.app/tracking-script.min.js" data-tracking-id="TALNOVA_TRAINER" async></script>
-  <!-- Google Tag Manager -->
-  <script>(function (w, d, s, l, i) {
-      w[l] = w[l] || []; w[l].push({
-        'gtm.start':
-          new Date().getTime(), event: 'gtm.js'
-      }); var f = d.getElementsByTagName(s)[0],
-        j = d.createElement(s), dl = l != 'dataLayer' ? '&l=' + l : ''; j.async = true; j.src =
-          'https://www.googletagmanager.com/gtm.js?id=' + i + dl; f.parentNode.insertBefore(j, f);
-    })(window, document, 'script', 'dataLayer', 'GTM-5DZ7GXF8');</script>
-  <!-- End Google Tag Manager -->
+    <!-- bootstrap cdn -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <!-- google fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <!-- material icons -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+
+    <!-- TEMPORARY FIX: Use old v1 tracker until ES5 build is ready -->
+    <!-- This is the original tracker.js that works without ES6 classes -->
+    <script>
+        // Inline minimal tracker (ES5-compatible) - TEMPORARY SOLUTION
+        (function () {
+            var config = {
+                trackingId: 'TALNOVA_TRAINER',
+                apiEndpoint: 'https://api.talnova.io/api/event/track',
+                consentRequired: true
+            };
+
+            var hasConsent = false;
+
+            function getSessionId() {
+                var session = sessionStorage.getItem('session_id');
+                if (!session) {
+                    session = 'sess_' + Date.now().toString(36) + Math.random().toString(36).substring(2);
+                    sessionStorage.setItem('session_id', session);
+                }
+                return session;
+            }
+
+            function getUserId() {
+                return localStorage.getItem('user-token-id') || null;
+            }
+
+            function sendEvent(eventType, data) {
+                if (config.consentRequired && !hasConsent) {
+                    return;
+                }
+
+                var payload = {
+                    tracking_id: config.trackingId,
+                    event_type: eventType,
+                    url: window.location.pathname,
+                    referrer: document.referrer || 'direct',
+                    session_id: getSessionId(),
+                    user_id: getUserId(),
+                    timestamp: new Date().toISOString(),
+                    screen_resolution: window.screen.width + 'x' + window.screen.height,
+                    browser: navigator.userAgent,
+                    language: navigator.language
+                };
+
+                if (data) {
+                    for (var key in data) {
+                        if (data.hasOwnProperty(key)) {
+                            payload[key] = data[key];
+                        }
+                    }
+                }
+
+                fetch(config.apiEndpoint, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload),
+                    keepalive: true
+                }).catch(function (err) {
+                    console.error('Tracking error:', err);
+                });
+            }
+
+            function trackPageView() {
+                sendEvent('page_view', {
+                    page_title: document.title,
+                    page_path: window.location.pathname + window.location.search
+                });
+            }
+
+            function trackClicks() {
+                document.addEventListener('click', function (event) {
+                    var element = event.target;
+                    sendEvent('click', {
+                        element_id: element.id || null,
+                        element_text: element.innerText ? element.innerText.trim().substring(0, 50) : null,
+                        element_type: element.tagName ? element.tagName.toLowerCase() : null,
+                        click_x: event.clientX,
+                        click_y: event.clientY
+                    });
+                });
+            }
+
+            // Public API
+            window.talnovaTracker = {
+                sendCustomEvent: function (type, data) {
+                    sendEvent(type, data || {});
+                },
+                identify: function (userId) {
+                    localStorage.setItem('user-token-id', userId);
+                    sendEvent('user_identified', { user_id: userId });
+                },
+                setConsent: function (categories) {
+                    hasConsent = categories.analytics === true;
+                    if (hasConsent) {
+                        trackPageView();
+                    }
+                },
+                optOut: function () {
+                    hasConsent = false;
+                    localStorage.setItem('talnova_optout', 'true');
+                },
+                optIn: function () {
+                    localStorage.removeItem('talnova_optout');
+                    hasConsent = true;
+                },
+                getPrivacyStatus: function () {
+                    return { canTrack: hasConsent };
+                },
+                version: '1.0.0-temp'
+            };
+
+            // Alias for backward compatibility
+            window.talentTracker = window.talnovaTracker;
+
+            // Initialize
+            function init() {
+                var optedOut = localStorage.getItem('talnova_optout') === 'true';
+                if (optedOut) {
+                    hasConsent = false;
+                    return;
+                }
+
+                if (!config.consentRequired) {
+                    hasConsent = true;
+                    trackPageView();
+                    trackClicks();
+                }
+            }
+
+            if (document.readyState === 'loading') {
+                document.addEventListener('DOMContentLoaded', init);
+            } else {
+                init();
+            }
+        })();
+    </script>
+
+    <!-- Google Tag Manager -->
+    <script>(function (w, d, s, l, i) {
+            w[l] = w[l] || []; w[l].push({
+                'gtm.start':
+                    new Date().getTime(), event: 'gtm.js'
+            }); var f = d.getElementsByTagName(s)[0],
+                j = d.createElement(s), dl = l != 'dataLayer' ? '&l=' + l : ''; j.async = true; j.src =
+                    'https://www.googletagmanager.com/gtm.js?id=' + i + dl; f.parentNode.insertBefore(j, f);
+        })(window, document, 'script', 'dataLayer', 'GTM-W3KFBFQ5');</script>
+    <!-- End Google Tag Manager -->
 </head>
 
 <body>
-  <div id="loading-screen">
-    <div class="overlay-wrapper">
-      <div class="overlay-r"></div>
-      <img src="/assets/images/shared/loading2.gif" alt="loading..." width="100%" height="auto">
+    <div id="loading-screen">
+        <div class="overlay-wrapper">
+            <div class="overlay-r"></div>
+            <img src="/assets/images/shared/loading2.gif" alt="loading..." width="100%" height="auto">
+        </div>
     </div>
-  </div>
-  <div id="cookie-banner">
-    <p>
-      We use cookies and tracking technologies essential for security, fraud prevention, and ensuring proper website
-      functionality.
-      We don’t use ads, profiling, or sell any personal data. Learn more in our
-      <a href="https://talnova.io/privacy-policy" target="_blank">Privacy Policy</a>.
-    </p>
-    <button id="accept-cookies-btn" style="padding: 0.5rem 1rem;">Understood</button>
-  </div>
+    <div id="cookie-banner">
+        <p>
+            We use cookies and tracking technologies to enhance your experience, analyze traffic, and ensure security.
+            We don't use ads, profiling, or sell any personal data. Learn more in our
+            <a href="https://talnova.io/privacy-policy" target="_blank">Privacy Policy</a>.
+        </p>
+        <div style="display: flex; gap: 10px; margin-top: 10px;">
+            <button id="accept-cookies-btn"
+                style="padding: 0.5rem 1rem; background-color: #3b82f6; color: white; border: none; border-radius: 4px; cursor: pointer;">Accept
+                All</button>
+            <button id="decline-cookies-btn"
+                style="padding: 0.5rem 1rem; background-color: transparent; color: #ccc; border: 1px solid #444; border-radius: 4px; cursor: pointer;">Decline</button>
+        </div>
+    </div>
 
-  <app-root style="display: none;"></app-root>
+    <app-root></app-root>
 
-  <script>
-    document.addEventListener('DOMContentLoaded', () => {
-      function getCookieConsent() {
-        try {
-          return localStorage.getItem('TB_COOKIES_ACCEPTED') === 'true';
-        } catch (e) {
-          console.warn('localStorage access blocked. Showing banner.');
-          return false;
-        }
-      }
+    <script>
+        window.TalnovaConsentManager = (function () {
+            var STORAGE_KEY = 'TALNOVA_TRACKING_CONSENT';
+            var MAX_ATTEMPTS = 50;
+            var CHECK_INTERVAL = 100;
 
-      const hasAcceptedCookies = getCookieConsent();
+            function getStoredConsent() {
+                try {
+                    return localStorage.getItem(STORAGE_KEY);
+                } catch (e) {
+                    return null;
+                }
+            }
 
-      const banner = document.getElementById('cookie-banner');
-      const appRoot = document.querySelector('app-root');
-      const loading = document.getElementById('loading-screen');
+            function storeConsent(value) {
+                try {
+                    localStorage.setItem(STORAGE_KEY, value);
+                } catch (e) { }
+            }
 
-      if (!hasAcceptedCookies) {
-        banner.style.display = 'block';
-      } else {
-        appRoot.style.display = 'block';
-        banner.style.display = 'none';
-        loading.style.display = 'none';
-      }
+            function waitForTracker(callback, attempts) {
+                attempts = attempts || 0;
 
-      document.getElementById('accept-cookies-btn').addEventListener('click', () => {
-        try {
-          localStorage.setItem('TB_COOKIES_ACCEPTED', 'true');
-        } catch (e) {
-          console.warn('Unable to save cookie preference');
-        }
+                if (window.talnovaTracker) {
+                    callback();
+                    return;
+                }
 
-        banner.style.display = 'none';
-        appRoot.style.display = 'block';
-        loading.style.display = 'none';
+                if (attempts >= MAX_ATTEMPTS) {
+                    console.warn('[ConsentManager] Tracker not available');
+                    return;
+                }
 
-        window.dispatchEvent(new Event('cookieConsentAccepted'));
-      });
+                setTimeout(function () {
+                    waitForTracker(callback, attempts + 1);
+                }, CHECK_INTERVAL);
+            }
 
-      // Fallback failsafe
-      setTimeout(() => {
-        if (appRoot.style.display === 'none') {
-          console.warn('Failsafe triggered: showing app');
-          appRoot.style.display = 'block';
-          loading.style.display = 'none';
-        }
-      }, 10000);
-    });
-  </script>
+            function applyConsent(consent) {
+                waitForTracker(function () {
+                    if (consent === 'accepted') {
+                        window.talnovaTracker.setConsent({
+                            analytics: true,
+                            marketing: true,
+                            functional: true
+                        });
+                    } else {
+                        window.talnovaTracker.optOut();
+                    }
+
+                    window.dispatchEvent(
+                        new CustomEvent('trackingConsentApplied', {
+                            detail: consent
+                        })
+                    );
+                });
+            }
+
+            function init() {
+                var consent = getStoredConsent();
+                if (consent) {
+                    applyConsent(consent);
+                }
+                return consent;
+            }
+
+            function accept() {
+                storeConsent('accepted');
+                applyConsent('accepted');
+            }
+
+            function decline() {
+                storeConsent('declined');
+                applyConsent('declined');
+            }
+
+            return {
+                init: init,
+                accept: accept,
+                decline: decline,
+                getStoredConsent: getStoredConsent
+            };
+        })();
+    </script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            var banner = document.getElementById('cookie-banner');
+            var appRoot = document.querySelector('app-root');
+            var loading = document.getElementById('loading-screen');
+
+            // Ensure app always renders
+            appRoot.style.display = 'block';
+            loading.style.display = 'none';
+
+            var consent = TalnovaConsentManager.init();
+
+            // Show banner only if no decision exists
+            banner.style.display = consent ? 'none' : 'flex';
+
+            document
+                .getElementById('accept-cookies-btn')
+                .addEventListener('click', function () {
+                    TalnovaConsentManager.accept();
+                    banner.style.display = 'none';
+
+                    // Dispatch legacy event for backward compatibility
+                    window.dispatchEvent(new Event('cookieConsentAccepted'));
+                });
+
+            document
+                .getElementById('decline-cookies-btn')
+                .addEventListener('click', function () {
+                    TalnovaConsentManager.decline();
+                    banner.style.display = 'none';
+                });
+        });
+    </script>
+
 </body>
 <!-- Google Tag Manager (noscript) -->
-<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-5DZ7GXF8" height="0" width="0"
-    style="display:none;visibility:hidden"></iframe></noscript>
+<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-W3KFBFQ5" height="0" width="0"
+        style="display:none;visibility:hidden"></iframe></noscript>
 <!-- End Google Tag Manager (noscript) -->
 <!--  fontawesome cdn js-->
 <script async src="https://kit.fontawesome.com/4f2ef9abbc.js" crossorigin="anonymous"></script>
 <!-- bootstrap cdn -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
-  integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+    integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
+    crossorigin="anonymous"></script>
 
 </html>

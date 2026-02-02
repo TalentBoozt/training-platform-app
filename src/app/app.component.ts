@@ -47,6 +47,10 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
     if (this.windowService.nativeDocument &&
       this.windowService.nativeSessionStorage &&
       this.windowService.nativeLocalStorage) {
+      // Listen for both new and legacy consent events
+      window.addEventListener('trackingConsentApplied', async () => {
+        await this.startApp();
+      });
       window.addEventListener('cookieConsentAccepted', async () => {
         await this.startApp();
       });
@@ -240,6 +244,13 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
 
   isAcceptCookies() {
     if (this.windowService.nativeLocalStorage) {
+      // Check new consent key first
+      const newConsent = localStorage.getItem('TALNOVA_TRACKING_CONSENT');
+      if (newConsent === 'accepted') {
+        return true;
+      }
+
+      // Fallback to old key for backward compatibility
       return localStorage.getItem('TB_COOKIES_ACCEPTED') === 'true';
     }
     return false;

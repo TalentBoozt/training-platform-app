@@ -79,16 +79,6 @@ export class HeaderComponent implements OnInit, AfterViewInit {
         this.isScrolled = window.scrollY > 20;
       });
     }
-
-    this.authState.employee$.subscribe((profile) => {
-      if (profile?.employee?.id) {
-        // Search results now come from the store, which is already initialized by Dashboard or app init
-        // We can just rely on the store's signal
-        effect(() => {
-          this.commonSearchResults = this.courseStore.allCourses$();
-        });
-      }
-    });
   }
 
   ngAfterViewInit() {
