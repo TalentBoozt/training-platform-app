@@ -1,22 +1,44 @@
-<div class="captcha-wrapper container d-flex flex-column align-items-center justify-content-center">
+<div class="captcha-container d-flex align-items-center justify-content-center min-vh-100">
 
-  <re-captcha
-    (resolved)="onCaptchaResolved($event)"
-    siteKey="6LdAtUUrAAAAAN8oCAPEo__9F9K7XRuwhL6C57c1"
-    class="my-3">
-  </re-captcha>
+  <div class="captcha-card text-center p-4">
 
-  <div *ngIf="verifying" class="text-primary fs-6 mb-2 d-flex align-items-center">
-    <div class="spinner-border spinner-border-sm me-2" role="status"></div>
-    Verifying your humanity...
-  </div>
+    <div class="mb-4">
+      <h2 class="card-title fw-bold mb-2">Security Check</h2>
+      <p class="text-secondary small mb-0">
+        Please complete the captcha below to verify you are a human.
+      </p>
+    </div>
 
-  <div *ngIf="errorMessage" class="alert alert-danger mt-2 py-2 px-3 small">
-    {{ errorMessage }}
-  </div>
+    <div class="d-flex justify-content-center mb-4">
+      <re-captcha (resolved)="onCaptchaResolved($event)" [siteKey]="siteKey">
+      </re-captcha>
+    </div>
 
-  <div *ngIf="successMessage" class="alert alert-success mt-2 py-2 px-3 small">
-    {{ successMessage }}
+    <!-- Loading State -->
+    <div *ngIf="verifying"
+      class="status-message verifying mb-3 text-primary d-flex align-items-center justify-content-center gap-2">
+      <div class="spinner-border spinner-border-sm" role="status"></div>
+      <span class="fw-medium">Verifying...</span>
+    </div>
+
+    <!-- Error Message -->
+    <div *ngIf="errorMessage" class="status-message error mb-3 text-danger bg-danger-subtle p-2 rounded small">
+      <i class="bi bi-exclamation-circle-fill me-1"></i>
+      {{ errorMessage }}
+    </div>
+
+    <!-- Success Message -->
+    <div *ngIf="successMessage" class="status-message success mb-3 text-success bg-success-subtle p-2 rounded small">
+      <i class="bi bi-check-circle-fill me-1"></i>
+      {{ successMessage }}
+    </div>
+
+    <div class="mt-2">
+      <button class="btn btn-link text-decoration-none text-secondary btn-sm" (click)="goBack()">
+        <i class="bi bi-arrow-left me-1"></i> Go Back
+      </button>
+    </div>
+
   </div>
 
 </div>

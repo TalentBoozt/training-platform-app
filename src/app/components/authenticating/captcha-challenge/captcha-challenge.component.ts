@@ -1,10 +1,9 @@
 import { Component } from '@angular/core';
-import {RecaptchaModule} from "ng-recaptcha";
-import {HttpClient} from "@angular/common/http";
-import {environment} from "../../../../environments/environment";
-import {AuthService} from '../../../services/support/auth.service';
-import {WindowService} from '../../../services/common/window.service';
-import {NgIf} from '@angular/common';
+import { RecaptchaModule } from "ng-recaptcha";
+import { HttpClient } from "@angular/common/http";
+import { environment } from "../../../../environments/environment";
+import { WindowService } from '../../../services/common/window.service';
+import { NgIf } from '@angular/common';
 
 @Component({
   selector: 'app-captcha-challenge',
@@ -22,8 +21,13 @@ export class CaptchaChallengeComponent {
   errorMessage: string | null = null;
   successMessage: string | null = null;
   baseurl = environment.apiUrlSimple
+  siteKey = "6LewCVssAAAAAC8sRDKiAHq7-BZu9A7Km9-QAoQL";
 
   constructor(private http: HttpClient, private windowService: WindowService) {
+  }
+
+  goBack() {
+    this.windowService.nativeWindow?.history.back();
   }
 
   onCaptchaResolved(token: any) {
