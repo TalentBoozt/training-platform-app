@@ -4,10 +4,15 @@
 
     <div class="nav-content d-flex align-items-center gap-4">
       <!-- Desktop Navigation -->
-      <ul class="nav-links d-none d-lg-flex align-items-center gap-2">
+      <ul class="nav-links d-none d-lg-flex align-items-center gap-2" *ngIf="authState.isLoggedIn$ | async">
         <li><a routerLink="/dashboard" routerLinkActive="active">Dashboard</a></li>
         <li><a routerLink="/courses" routerLinkActive="active">My Courses</a></li>
         <li><a routerLink="/post-course" routerLinkActive="active">Post a Course</a></li>
+      </ul>
+
+      <!-- Public Links (Optional, if you want something like 'About' always visible) -->
+      <ul class="nav-links d-none d-lg-flex align-items-center gap-2" *ngIf="(authState.isLoggedIn$ | async) === false">
+        <li><a routerLink="/landing" routerLinkActive="active">Home</a></li>
       </ul>
 
       <!-- Search Bar -->
@@ -43,7 +48,7 @@
             </li>
             <li>
               <a class="dropdown-item"
-                [href]="'https://talnova.io/candidate-profile?id=' + (authState.employee$ | async)?.employee?.id"
+                [href]="'https://learner.talnova.io/profile?id=' + (authState.employee$ | async)?.employee?.id"
                 target="_blank">
                 <i class="material-icons">perm_identity</i>
                 <span>Access Main Profile</span>
@@ -84,9 +89,14 @@
   <!-- Mobile Menu Content -->
   <div class="mobile-menu glass-premium animate-slide-in" *ngIf="isMobileMenuOpen">
     <div class="mobile-nav-links">
-      <a routerLink="/dashboard" (click)="toggleMobileMenu()">Dashboard</a>
-      <a routerLink="/courses" (click)="toggleMobileMenu()">My Courses</a>
-      <a routerLink="/post-course" (click)="toggleMobileMenu()">Post a Course</a>
+      <ng-container *ngIf="authState.isLoggedIn$ | async">
+        <a routerLink="/dashboard" (click)="toggleMobileMenu()">Dashboard</a>
+        <a routerLink="/courses" (click)="toggleMobileMenu()">My Courses</a>
+        <a routerLink="/post-course" (click)="toggleMobileMenu()">Post a Course</a>
+      </ng-container>
+      <ng-container *ngIf="(authState.isLoggedIn$ | async) === false">
+        <a routerLink="/landing" (click)="toggleMobileMenu()">Home</a>
+      </ng-container>
       <hr class="divider">
       <div class="mobile-s-bar">
         <i class="material-icons">search</i>

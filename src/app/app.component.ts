@@ -7,7 +7,7 @@ import { LockScreenComponent } from './components/authenticating/lock-screen/loc
 import { LoginComponent } from './components/authenticating/login/login.component';
 import { RegisterComponent } from './components/authenticating/register/register.component';
 import { ResetPasswordComponent } from './components/authenticating/reset-password/reset-password.component';
-import { NgClass, NgIf } from '@angular/common';
+import { AsyncPipe, NgClass, NgIf } from '@angular/common';
 import { ThemeService } from './services/support/theme.service';
 import { WindowService } from './services/common/window.service';
 import { CommonService } from './services/common/common.service';
@@ -15,9 +15,11 @@ import { AlertsService } from './services/support/alerts.service';
 import { LoginService } from './services/common/login.service';
 import { EmployeeAuthStateService } from './services/cacheStates/employee-auth-state.service';
 
+import { ChatbotComponent } from './components/shared/chatbot/chatbot.component';
+
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet, HeaderComponent, FooterComponent, NgIf, NgClass],
+  imports: [RouterOutlet, HeaderComponent, FooterComponent, ChatbotComponent, NgIf, NgClass, AsyncPipe],
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss',
   standalone: true
@@ -36,7 +38,7 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
   constructor(private route: ActivatedRoute,
     private commonService: CommonService,
     private loginService: LoginService,
-    private authStateService: EmployeeAuthStateService,
+    public authStateService: EmployeeAuthStateService,
     private windowService: WindowService,
     private cookieService: AuthService,
     private alertService: AlertsService,
