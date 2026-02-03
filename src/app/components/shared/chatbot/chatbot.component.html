@@ -1,0 +1,57 @@
+<div class="chatbot-wrapper" [class.open]="isOpen">
+    <!-- Trigger Button -->
+    <button class="chat-trigger" (click)="toggleChat()" [class.hidden]="isOpen">
+        <i class="material-icons">chat</i>
+    </button>
+
+    <!-- Chat Window -->
+    <div class="chat-window shadow-lg animate-fade-in" *ngIf="isOpen">
+        <div class="chat-header">
+            <div class="header-info">
+                <i class="material-icons">smart_toy</i>
+                <span>Talnova Assistant</span>
+            </div>
+            <button class="close-btn" (click)="toggleChat()">
+                <i class="material-icons">close</i>
+            </button>
+        </div>
+
+        <div class="messages-container" #scrollMe>
+            <div *ngFor="let msg of messages" class="message-wrapper" [class.user]="msg.sender === 'user'">
+                <div class="message-bubble" [class.user]="msg.sender === 'user'">
+                    <p>{{ msg.text }}</p>
+
+                    <!-- Help Data (Steps & Route) -->
+                    <div *ngIf="msg.helpData" class="help-content">
+                        <ul class="steps">
+                            <li *ngFor="let step of msg.helpData.steps">
+                                <i class="material-icons">chevron_right</i>
+                                <span>{{ step }}</span>
+                            </li>
+                        </ul>
+                        <button *ngIf="msg.helpData.route" class="nav-btn" (click)="navigateTo(msg.helpData.route)">
+                            <span>Go to Page</span>
+                            <i class="material-icons">arrow_forward</i>
+                        </button>
+                    </div>
+
+                    <!-- Suggestions -->
+                    <div *ngIf="msg.suggestions" class="suggestions">
+                        <button *ngFor="let suggest of msg.suggestions" class="suggest-btn"
+                            (click)="sendMessage(suggest)">
+                            {{ suggest }}
+                        </button>
+                    </div>
+                </div>
+                <span class="timestamp">{{ msg.timestamp | date:'shortTime' }}</span>
+            </div>
+        </div>
+
+        <div class="chat-input-area">
+            <input type="text" [(ngModel)]="userInput" placeholder="Ask a question..." (keyup.enter)="sendMessage()" />
+            <button class="send-btn" (click)="sendMessage()">
+                <i class="material-icons">send</i>
+            </button>
+        </div>
+    </div>
+</div>

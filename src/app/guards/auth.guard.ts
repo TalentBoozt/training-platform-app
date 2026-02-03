@@ -16,9 +16,6 @@ export class AuthGuard implements CanActivate {
     const userId = this.cookieService.userID();
     const companyId = this.cookieService.organization();
     const refreshToken = this.cookieService.isRefreshToken();
-
-    return true;
-
     if (initialized && userId && companyId && refreshToken) {
       return true;
     } else {

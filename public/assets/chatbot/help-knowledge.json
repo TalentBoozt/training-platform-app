@@ -1,0 +1,96 @@
+[
+    {
+        "id": "create-course",
+        "title": "Create a course",
+        "keywords": [
+            "create course",
+            "new course",
+            "add course",
+            "how to start"
+        ],
+        "steps": [
+            "Go to Dashboard → Courses",
+            "Click 'Create Course'",
+            "Fill course details",
+            "Add lectures",
+            "Publish the course"
+        ],
+        "route": "/post-course",
+        "category": "courses"
+    },
+    {
+        "id": "add-lectures",
+        "title": "Add lectures to course",
+        "keywords": [
+            "add lecture",
+            "add content",
+            "upload material",
+            "video upload"
+        ],
+        "steps": [
+            "Open your course from My Courses",
+            "Go to Curriculum tab",
+            "Click 'Add Module' or 'Add Lecture'",
+            "Choose content type (Video, Document, etc.)",
+            "Save changes"
+        ],
+        "route": "/courses",
+        "category": "courses"
+    },
+    {
+        "id": "payments",
+        "title": "Managing payments",
+        "keywords": [
+            "payment",
+            "earnings",
+            "withdraw",
+            "bank",
+            "stripe"
+        ],
+        "steps": [
+            "Navigate to Dashboard → Earnings",
+            "Link your Stripe account if not already connected",
+            "View pending and cleared earnings",
+            "Request a payout manually if required"
+        ],
+        "category": "finance"
+    },
+    {
+        "id": "analytics",
+        "title": "Viewing analytics",
+        "keywords": [
+            "analytics",
+            "statistics",
+            "views",
+            "engagement",
+            "reports"
+        ],
+        "steps": [
+            "Go to the Dashboard",
+            "Scroll to the Analytics section",
+            "Filter by date range or course",
+            "Export data as CSV for deep analysis"
+        ],
+        "route": "/dashboard",
+        "category": "analytics"
+    },
+    {
+        "id": "profile-edit",
+        "title": "Update your profile",
+        "keywords": [
+            "profile",
+            "change name",
+            "photo",
+            "bio",
+            "settings"
+        ],
+        "steps": [
+            "Click on your profile picture in the header",
+            "Select 'Edit Profile'",
+            "Update your information",
+            "Click 'Save Changes'"
+        ],
+        "route": "/my-profile",
+        "category": "settings"
+    }
+]

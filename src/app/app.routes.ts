@@ -2,7 +2,8 @@ import { Routes } from '@angular/router';
 import { AuthGuard } from './guards/auth.guard';
 
 export const routes: Routes = [
-  { path: '', redirectTo: '/dashboard', pathMatch: 'full' },
+  { path: '', redirectTo: '/landing', pathMatch: 'full' },
+  { path: 'landing', loadComponent: () => import('./components/landing/landing.component').then(c => c.LandingComponent) },
   { path: 'dashboard', loadComponent: () => import('./components/dashboard/dashboard.component').then(c => c.DashboardComponent), canActivate: [AuthGuard] },
   { path: 'my-profile', loadComponent: () => import('./components/trainer-profile/trainer-profile.component').then(c => c.TrainerProfileComponent), canActivate: [AuthGuard] },
   { path: 'post-course', loadComponent: () => import('./components/post-course/course-type/course-type.component').then(c => c.CourseTypeComponent), canActivate: [AuthGuard] },

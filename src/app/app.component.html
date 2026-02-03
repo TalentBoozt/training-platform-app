@@ -9,5 +9,6 @@
     </div>
 
     <app-footer *ngIf="showFooter"></app-footer>
+    <app-chatbot *ngIf="showNavbar && (authStateService.isLoggedIn$ | async)"></app-chatbot>
   </div>
 </div>
