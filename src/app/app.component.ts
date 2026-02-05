@@ -76,7 +76,7 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
     });
 
     try {
-      await this.autoLogin();
+      await this.cookieService.autoLogin();
       this.authStateService.initializeUser().subscribe();
     } catch {
       const referrer = this.cookieService.getReferer();
@@ -128,39 +128,6 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
 
   ngOnDestroy() {
     this.removeUnwantedSession()
-  }
-
-  autoLogin(): Promise<boolean> {
-    const alreadyInitialized = sessionStorage.getItem('sso-initialized');
-    if (alreadyInitialized) {
-      return Promise.resolve(true);
-    }
-
-    return new Promise((resolve, reject) => {
-      this.commonService.getSession().subscribe({
-        next: (userData) => {
-          this.cookieService.createUserID(userData.employeeId);
-          this.cookieService.createLevel(userData.userLevel);
-          this.cookieService.unlock();
-
-          userData.organizations?.forEach((organization: any) => {
-            this.cookieService.createOrganizationID(organization.TrainerPlatform || '');
-          });
-
-          this.commonService.getTokens(userData.email).subscribe((tokens) => {
-            this.cookieService.createAuthToken(tokens.accessToken);
-            this.cookieService.createRefreshToken(tokens.refreshToken);
-            if (this.windowService.nativeSessionStorage)
-              sessionStorage.setItem('sso-initialized', 'true');
-            resolve(true);
-          });
-        },
-        error: (err) => {
-          this.alertService.successMessage('Claim your free account today!', 'Talent Boozt ✨');
-          reject(err);
-        }
-      });
-    });
   }
 
   fetchTokensFromLogin(): void {

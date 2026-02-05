@@ -89,16 +89,18 @@
   display: flex;
   align-items: center;
   flex-wrap: wrap;
-  gap: 0.75rem;
-  min-height: 56px;
-  padding: 0.6rem 1.25rem;
-  border-radius: 16px;
+  gap: 0.5rem;
+  min-height: 50px;
+  padding: 0.5rem 1rem;
+  border-radius: 14px;
+  background: hsla(var(--background), 50%);
+  cursor: text;
 
   .tag {
-    background: linear-gradient(135deg, hsla(var(--primary)/ 0.1), hsla(var(--secondary)/ 0.1));
+    background: hsla(var(--primary)/ 0.1);
     color: hsl(var(--primary));
-    padding: 0.4rem 1rem;
-    border-radius: 12px;
+    padding: 0.25rem 0.75rem;
+    border-radius: 8px;
     display: flex;
     align-items: center;
     font-size: 0.85rem;
@@ -108,21 +110,21 @@
     @include utilities.transition-base;
 
     &:hover {
-      transform: scale(1.05);
-      border-color: hsla(var(--primary)/ 0.3);
+      background: hsl(var(--primary));
+      color: white;
+      transform: translateY(-1px);
     }
 
     .remove-tag {
-      margin-left: 0.75rem;
+      margin-left: 0.5rem;
       cursor: pointer;
-      font-size: 1.25rem;
+      font-size: 1.1rem;
       line-height: 1;
       opacity: 0.6;
       @include utilities.transition-base;
 
       &:hover {
         opacity: 1;
-        color: #ff4d4d;
       }
     }
   }
@@ -132,9 +134,10 @@
     border: none !important;
     background: transparent !important;
     color: hsl(var(--foreground));
-    font-size: 0.95rem;
+    font-size: 0.9rem;
     font-weight: 500;
-    padding: 0.4rem 0;
+    padding: 4px 0;
+    min-width: 150px;
     outline: none !important;
     box-shadow: none !important;
 
@@ -145,13 +148,90 @@
   }
 }
 
-.error-msg {
+.banner-upload-wrapper {
+  display: flex;
+  gap: 0.75rem;
+  align-items: center;
+
+  .custom-file-input {
+    position: relative;
+    flex: 1;
+    height: 50px;
+    overflow: hidden;
+
+    input[type="file"] {
+      position: absolute;
+      inset: 0;
+      opacity: 0;
+      z-index: 2;
+      cursor: pointer;
+    }
+
+    .file-dummy {
+      position: absolute;
+      inset: 0;
+      @include utilities.input-premium;
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      pointer-events: none;
+      background: hsla(var(--background), 50%);
+
+      i {
+        font-size: 1.25rem;
+        color: hsl(var(--primary));
+      }
+
+      span {
+        font-size: 0.9rem;
+        color: hsl(var(--muted-foreground));
+        font-weight: 600;
+      }
+    }
+
+    &:hover .file-dummy {
+      border-color: hsla(var(--primary)/ 0.5);
+      background: hsla(var(--primary)/ 0.05);
+    }
+  }
+
+  .btn-preview-sample {
+    width: 50px;
+    height: 50px;
+    border-radius: 12px;
+    @include utilities.flex-center;
+    background: hsla(var(--foreground)/ 0.03);
+    border: 1px solid hsla(var(--foreground)/ 0.05);
+    color: hsl(var(--muted-foreground));
+    @include utilities.transition-base;
+
+    &:hover {
+      background: hsla(var(--primary)/ 0.1);
+      color: hsl(var(--primary));
+      border-color: hsla(var(--primary)/ 0.2);
+    }
+
+    i {
+      font-size: 1.25rem;
+    }
+  }
+}
+
+.helper-text {
   display: block;
   font-size: 0.8rem;
   color: hsl(var(--muted-foreground));
   margin-top: 0.75rem;
   font-weight: 600;
-  opacity: 0.8;
+  opacity: 0.7;
+}
+
+.error-msg {
+  display: block;
+  font-size: 0.8rem;
+  color: hsl(var(--destructive));
+  margin-top: 0.5rem;
+  font-weight: 600;
 }
 
 // Modal Styling
@@ -211,24 +291,48 @@ image-cropper {
 .dropdown-menu {
   @include utilities.glass-premium;
   border: 1px solid hsla(var(--foreground)/ 0.1);
-  border-radius: 18px;
-  padding: 0.6rem;
+  border-radius: 16px;
+  padding: 0.5rem;
   margin-top: 0.5rem;
   box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+  display: flex !important;
+  flex-direction: column;
+  gap: 2px;
+  z-index: 1000;
+
+  &.show {
+    animation: slideDown 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  }
 
   .dropdown-item {
-    border-radius: 12px;
-    padding: 0.75rem 1.25rem;
+    border-radius: 10px;
+    padding: 0.7rem 1rem;
     color: hsl(var(--foreground));
     font-weight: 600;
-    font-size: 0.9rem;
+    font-size: 0.85rem;
+    border: none;
+    background: transparent;
+    text-align: left;
+    width: 100%;
     @include utilities.transition-base;
 
     &:hover {
       background: hsla(var(--primary)/ 0.1);
       color: hsl(var(--primary)) !important;
-      transform: translateX(5px);
+      transform: translateX(4px);
     }
+  }
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
   }
 }
 
