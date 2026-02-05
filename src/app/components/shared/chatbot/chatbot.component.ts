@@ -19,6 +19,7 @@ export class ChatbotComponent implements OnInit, AfterViewChecked {
   @ViewChild('scrollMe') private myScrollContainer!: ElementRef;
 
   isOpen = false;
+  isTyping = false;
   userInput = '';
   messages: ChatbotMessage[] = [];
   suggestions: string[] = [];
@@ -36,9 +37,9 @@ export class ChatbotComponent implements OnInit, AfterViewChecked {
     this.isOpen = !this.isOpen;
   }
 
-  sendMessage(text?: string) {
+  async sendMessage(text?: string) {
     const messageText = text || this.userInput;
-    if (!messageText.trim()) return;
+    if (!messageText.trim() || this.isTyping) return;
 
     // Add user message
     this.messages.push({
@@ -50,24 +51,30 @@ export class ChatbotComponent implements OnInit, AfterViewChecked {
 
     if (!text) this.userInput = '';
 
+    // Simulate typing
+    this.isTyping = true;
+    await new Promise(resolve => setTimeout(resolve, 800)); // Short delay for realism
+
     // Process with chatbot service
-    this.processUserMessage(messageText);
+    await this.processUserMessage(messageText);
+    this.isTyping = false;
   }
 
   private async processUserMessage(text: string) {
-    // Show typing indicator if needed, but for simplicity we'll respond fast
     const match = await this.chatbotService.findMatchingKnowledge(text);
 
     if (match) {
+      const related = this.chatbotService.getRelatedSuggestions(match.category, match.id);
       this.messages.push({
         id: (Date.now() + 1).toString(),
-        text: `I can help with "${match.title}":`,
+        text: `I found information on "${match.title}":`,
         sender: 'bot',
         timestamp: new Date(),
-        helpData: match
+        helpData: match,
+        suggestions: related.length > 0 ? related : undefined
       });
     } else {
-      this.addBotMessage("I couldn't find a direct answer for that. Would you like to try one of these common questions?", this.suggestions);
+      this.addBotMessage("I couldn't find a specific answer for that. Maybe these common questions can help?", this.suggestions);
     }
   }
 

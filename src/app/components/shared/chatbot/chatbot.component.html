@@ -35,15 +35,29 @@
                         </button>
                     </div>
 
-                    <!-- Suggestions -->
+                    <!-- Suggestions / Related Topics -->
                     <div *ngIf="msg.suggestions" class="suggestions">
-                        <button *ngFor="let suggest of msg.suggestions" class="suggest-btn"
-                            (click)="sendMessage(suggest)">
-                            {{ suggest }}
-                        </button>
+                        <span class="suggest-title" *ngIf="msg.helpData">Related Topics:</span>
+                        <div class="suggest-list">
+                            <button *ngFor="let suggest of msg.suggestions" class="suggest-btn"
+                                (click)="sendMessage(suggest)">
+                                {{ suggest }}
+                            </button>
+                        </div>
                     </div>
                 </div>
                 <span class="timestamp">{{ msg.timestamp | date:'shortTime' }}</span>
+            </div>
+
+            <!-- Typing Indicator -->
+            <div *ngIf="isTyping" class="message-wrapper">
+                <div class="message-bubble typing-bubble">
+                    <div class="typing-indicator">
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                    </div>
+                </div>
             </div>
         </div>
 

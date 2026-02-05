@@ -5,14 +5,14 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
-    margin-bottom: 3rem;
+    margin-bottom: 2.5rem;
     padding-bottom: 1.5rem;
-    border-bottom: 1px solid hsla(var(--border)/ 0.5);
+    border-bottom: 1px solid hsla(var(--foreground)/ 0.05);
 
     h5 {
       font-size: 1.5rem;
       font-weight: 900;
-      color: hsl(var(--foreground));
+      @include utilities.gradient-text;
       margin: 0;
       letter-spacing: -0.02em;
     }
@@ -20,6 +20,17 @@
     .action-row {
       display: flex;
       gap: 1rem;
+
+      @include utilities.respond-to(sm) {
+        width: 100%;
+        flex-direction: column;
+      }
+    }
+
+    @include utilities.respond-to(md) {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 1.5rem;
     }
   }
 }
@@ -32,63 +43,52 @@
 
   .hero-section {
     position: relative;
-    padding: 3rem;
-    border-radius: 24px;
-    background: linear-gradient(135deg, hsla(var(--primary)/ 0.1), hsla(var(--secondary)/ 0.05));
-    border: 1px solid hsla(var(--border)/ 0.5);
+    padding: clamp(1.5rem, 5vw, 4rem);
+    border-radius: 28px;
+    background: linear-gradient(135deg, hsla(var(--primary)/ 0.08), hsla(var(--secondary)/ 0.03));
+    border: 1px solid hsla(var(--foreground)/ 0.05);
     overflow: hidden;
-
-    &::before {
-      content: '';
-      position: absolute;
-      top: -50%;
-      right: -10%;
-      width: 400px;
-      height: 400px;
-      background: radial-gradient(circle, hsla(var(--primary)/ 0.2), transparent 70%);
-      filter: blur(60px);
-      z-index: 0;
-    }
+    @include utilities.shadow-soft;
 
     .hero-content {
       position: relative;
       z-index: 1;
-      max-width: 800px;
+      max-width: 900px;
 
       .course-title {
-        font-size: 3.5rem;
-        font-weight: 950;
-        line-height: 1.1;
+        font-size: clamp(2rem, 6vw, 4rem);
+        font-weight: 1000;
+        line-height: 0.95;
         margin-bottom: 1.5rem;
         color: hsl(var(--foreground));
-        letter-spacing: -0.04em;
-        @include utilities.animate-slide-in;
+        letter-spacing: -0.05em;
       }
 
       .course-overview {
-        font-size: 1.15rem;
-        line-height: 1.6;
+        font-size: clamp(1rem, 2vw, 1.25rem);
+        line-height: 1.5;
         color: hsl(var(--muted-foreground));
-        margin-bottom: 2rem;
-        @include utilities.animate-fade-in;
+        margin-bottom: 2.5rem;
+        font-weight: 500;
+        max-width: 700px;
       }
 
       .lecturers {
         display: flex;
         align-items: center;
-        gap: 0.75rem;
-        font-weight: 700;
+        gap: 1rem;
+        font-weight: 800;
         color: hsl(var(--foreground));
         font-size: 1rem;
 
         &::before {
-          content: 'LECTURED BY';
-          font-size: 0.7rem;
-          color: hsl(var(--primary));
+          content: 'CHIEF INSTRUCTOR';
+          font-size: 0.65rem;
+          color: white;
+          background: hsl(var(--primary));
+          padding: 0.3rem 0.8rem;
+          border-radius: 6px;
           letter-spacing: 0.1em;
-          background: hsla(var(--primary)/ 0.1);
-          padding: 0.2rem 0.6rem;
-          border-radius: 4px;
         }
       }
     }
@@ -96,18 +96,18 @@
 
   .details-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-    gap: 1.5rem;
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+    gap: 1rem;
 
     .detail-card {
-      @include utilities.glass;
-      padding: 1.5rem;
+      @include utilities.glass-premium;
+      padding: 1.25rem;
       border-radius: 20px;
       display: flex;
       flex-direction: column;
       gap: 0.5rem;
+      border: 1px solid hsla(var(--foreground)/ 0.05);
       @include utilities.transition-base;
-      @include utilities.animate-fade-in;
 
       &:hover {
         background: hsla(var(--primary)/ 0.05);
@@ -116,7 +116,7 @@
       }
 
       .tag {
-        font-size: 0.7rem;
+        font-size: 0.65rem;
         font-weight: 800;
         color: hsl(var(--muted-foreground));
         text-transform: uppercase;
@@ -124,7 +124,7 @@
       }
 
       .value {
-        font-size: 1.25rem;
+        font-size: 1.1rem;
         font-weight: 800;
         color: hsl(var(--foreground));
         display: flex;
@@ -133,7 +133,7 @@
 
         i {
           color: hsl(var(--primary));
-          font-size: 1.5rem;
+          font-size: 1.25rem;
         }
 
         .star {
@@ -145,8 +145,8 @@
 
   .content-section {
     display: grid;
-    grid-template-columns: 1fr 300px;
-    gap: 4rem;
+    grid-template-columns: 1fr 320px;
+    gap: clamp(2rem, 5vw, 5rem);
 
     @include utilities.respond-to(lg) {
       grid-template-columns: 1fr;
@@ -154,40 +154,42 @@
 
     .main-content {
       .section-title {
-        font-size: 1.75rem;
+        font-size: clamp(1.25rem, 3vw, 1.75rem);
         font-weight: 900;
         margin-bottom: 2rem;
         display: flex;
         align-items: center;
         gap: 1rem;
+        color: hsl(var(--foreground));
 
         &::after {
           content: '';
           flex: 1;
           height: 1px;
-          background: hsla(var(--border)/ 0.5);
+          background: hsla(var(--foreground)/ 0.05);
         }
       }
 
       .skills-cloud {
         display: flex;
         flex-wrap: wrap;
-        gap: 0.75rem;
-        margin-bottom: 4rem;
+        gap: 0.6rem;
+        margin-bottom: 3rem;
 
         .skill-chip {
-          padding: 0.6rem 1.2rem;
-          background: hsla(var(--primary)/ 0.05);
-          border: 1px solid hsla(var(--primary)/ 0.1);
-          border-radius: 50px;
-          font-weight: 600;
-          font-size: 0.9rem;
-          color: hsl(var(--primary));
+          padding: 0.5rem 1rem;
+          background: hsla(var(--foreground)/ 0.03);
+          border: 1px solid hsla(var(--foreground)/ 0.05);
+          border-radius: 12px;
+          font-weight: 700;
+          font-size: 0.85rem;
+          color: hsl(var(--foreground));
           @include utilities.transition-base;
 
           &:hover {
-            background: hsl(var(--primary));
-            color: white;
+            border-color: hsla(var(--primary)/ 0.3);
+            color: hsl(var(--primary));
+            transform: translateY(-2px);
             @include utilities.shadow-soft;
           }
         }
@@ -197,32 +199,50 @@
         font-size: 1.1rem;
         line-height: 1.8;
         color: hsl(var(--foreground));
-        opacity: 0.9;
+
+        p {
+          margin-bottom: 1.5rem;
+        }
       }
     }
 
     .sidebar-actions {
       .cta-card {
-        @include utilities.glass;
-        padding: 2rem;
-        border-radius: 24px;
+        @include utilities.glass-premium;
+        padding: 2.5rem;
+        border-radius: 28px;
         position: sticky;
         top: 2rem;
         display: flex;
         flex-direction: column;
-        gap: 1.5rem;
+        gap: 2rem;
         @include utilities.shadow-premium;
+        border: 1px solid hsla(var(--foreground)/ 0.05);
+
+        @include utilities.respond-to(lg) {
+          position: static;
+          margin-bottom: 4rem;
+        }
 
         .price-display {
-          font-size: 2.5rem;
-          font-weight: 900;
-          color: hsl(var(--foreground));
+          display: flex;
+          flex-direction: column;
+          gap: 0.25rem;
+          line-height: 1;
 
           small {
-            font-size: 1rem;
-            font-weight: 600;
-            color: hsl(var(--muted-foreground));
-            margin-right: 0.25rem;
+            font-size: 0.85rem;
+            font-weight: 800;
+            color: hsl(var(--primary));
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+          }
+
+          span {
+            font-size: 2.75rem;
+            font-weight: 1000;
+            color: hsl(var(--foreground));
+            letter-spacing: -0.04em;
           }
         }
 
@@ -230,12 +250,13 @@
           @include utilities.btn-fill;
           @include utilities.btn-f-3;
           width: 100%;
-          padding: 1.2rem;
-          font-size: 1.1rem;
-          font-weight: 800;
-          border-radius: 12px;
-          text-transform: uppercase;
+          padding: 1rem;
+          height: 54px;
+          font-size: 1rem;
+          font-weight: 900;
+          border-radius: 14px;
           letter-spacing: 0.05em;
+          text-transform: none;
         }
 
         ul {
@@ -244,19 +265,19 @@
           list-style: none;
           display: flex;
           flex-direction: column;
-          gap: 1rem;
+          gap: 1.25rem;
 
           li {
             display: flex;
             align-items: center;
-            gap: 0.75rem;
-            font-size: 0.9rem;
-            font-weight: 600;
+            gap: 1rem;
+            font-size: 0.95rem;
+            font-weight: 700;
             color: hsl(var(--muted-foreground));
 
             i {
               color: hsl(var(--primary));
-              font-size: 1.2rem;
+              font-size: 1.4rem;
             }
           }
         }

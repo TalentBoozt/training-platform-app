@@ -29,32 +29,46 @@ export class ChatbotService {
     }
 
     const query = input.toLowerCase().trim();
+    if (query.length < 2) return null;
+
     const results = this.knowledgeBase.map(item => {
       let score = 0;
+      const titleLower = item.title.toLowerCase();
 
-      // Match title
-      if (item.title.toLowerCase().includes(query)) score += 10;
+      // Exact title match (highest priority)
+      if (titleLower === query) score += 50;
+      else if (titleLower.includes(query)) score += 10;
 
-      // Match keywords
+      // Keyword matching
       item.keywords.forEach(keyword => {
-        if (query.includes(keyword.toLowerCase())) score += 5;
-        if (keyword.toLowerCase().includes(query)) score += 3;
+        const kwLower = keyword.toLowerCase();
+        if (kwLower === query) score += 30; // Exact keyword match
+        else if (query.includes(kwLower)) score += 5; // Long query contains keyword
+        else if (kwLower.includes(query)) score += 3; // Keyword contains short query
       });
 
       return { ...item, score };
     });
 
-    const bestMatch = results.filter(r => r.score > 0).sort((a, b) => b.score - a.score)[0];
-    return bestMatch || null;
+    const matches = results.filter(r => r.score > 0).sort((a, b) => b.score - a.score);
+    return matches.length > 0 ? matches[0] : null;
+  }
+
+  getRelatedSuggestions(category: string, currentId: string): string[] {
+    return this.knowledgeBase
+      .filter(item => item.category === category && item.id !== currentId)
+      .map(item => item.title)
+      .slice(0, 3); // Return top 3 related questions
   }
 
   getSuggestedQuestions(): string[] {
+    // Return a diverse set of starters
     return [
       "How do I create a course?",
-      "How do I add lectures?",
-      "How do payments work?",
+      "How to set pre-recorded course price?",
+      "How to add social media links?",
       "Where can I see analytics?",
-      "How to edit my profile?"
+      "How to add certificates?"
     ];
   }
 }

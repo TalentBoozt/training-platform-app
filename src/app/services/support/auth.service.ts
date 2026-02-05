@@ -204,8 +204,8 @@ export class AuthService {
   }
 
   autoLogin(): Promise<boolean> {
-    if (this.windowService.nativeSessionStorage) {
-      const alreadyInitialized = sessionStorage.getItem('sso-initialized');
+    if (this.windowService.nativeLocalStorage) {
+      const alreadyInitialized = localStorage.getItem('sso-initialized');
       if (alreadyInitialized) {
         return Promise.resolve(true);
       }
@@ -225,13 +225,13 @@ export class AuthService {
           this.commonService.getTokens(userData.email).subscribe((tokens) => {
             this.createAuthToken(tokens.accessToken);
             this.createRefreshToken(tokens.refreshToken);
-            if (this.windowService.nativeSessionStorage)
-              sessionStorage.setItem('sso-initialized', 'true');
+            if (this.windowService.nativeLocalStorage)
+              localStorage.setItem('sso-initialized', 'true');
             resolve(true);
           });
         },
         error: () => {
-          this.alertService.successMessage('Claim your free account today!', 'Talent Boozt ✨');
+          this.alertService.successMessage('Claim your free account today!', 'Talnova ✨');
           reject();
         }
       });
@@ -239,7 +239,7 @@ export class AuthService {
   }
   isAcceptCookies() {
     if (this.windowService.nativeLocalStorage) {
-      return localStorage.getItem('TB_COOKIES_ACCEPTED') === 'true';
+      return localStorage.getItem('TALNOVA_TRACKING_CONSENT') === 'accepted';
     }
     return false;
   }

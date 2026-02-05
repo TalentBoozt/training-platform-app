@@ -4,37 +4,330 @@
         "title": "Create a course",
         "keywords": [
             "create course",
+            "post a course",
+            "course creation",
+            "start teaching",
             "new course",
-            "add course",
-            "how to start"
+            "how to add course"
         ],
         "steps": [
-            "Go to Dashboard → Courses",
-            "Click 'Create Course'",
+            "Go to Post a course or Dashboard → Click 'Post a Course'",
+            "Select course type",
             "Fill course details",
-            "Add lectures",
             "Publish the course"
         ],
         "route": "/post-course",
         "category": "courses"
     },
     {
-        "id": "add-lectures",
-        "title": "Add lectures to course",
+        "id": "create-live-interactive-course",
+        "title": "Create a live interactive course",
         "keywords": [
-            "add lecture",
-            "add content",
-            "upload material",
-            "video upload"
+            "create live course",
+            "add live interactive course",
+            "start live course",
+            "live course setup"
         ],
         "steps": [
-            "Open your course from My Courses",
-            "Go to Curriculum tab",
-            "Click 'Add Module' or 'Add Lecture'",
-            "Choose content type (Video, Document, etc.)",
-            "Save changes"
+            "Go to Post a course or Dashboard → Click 'Post a Course'",
+            "Select course type → Live Interactive Course",
+            "Fill course details",
+            "Publish the course"
         ],
-        "route": "/courses",
+        "route": "/post-live",
+        "category": "courses"
+    },
+    {
+        "id": "create-pre-recorded-course",
+        "title": "Create a pre-recorded course",
+        "keywords": [
+            "create pre-recorded course",
+            "add video course",
+            "start pre-recorded course",
+            "recorded course setup"
+        ],
+        "steps": [
+            "Go to Post a course or Dashboard → Click 'Post a Course'",
+            "Select course type → Pre-recorded course",
+            "Fill course details",
+            "Publish the course"
+        ],
+        "route": "/post-rec",
+        "category": "courses"
+    },
+    {
+        "id": "add-live-interactive-course-details",
+        "title": "Add live interactive course details",
+        "keywords": [
+            "live course basic details",
+            "live interactive course information"
+        ],
+        "steps": [
+            "Go to Post a course or Dashboard → Click 'Post a Course'",
+            "Select course type → Live Interactive Course",
+            "Add course details under basic details tab",
+            "Click 'Save changes'"
+        ],
+        "route": "/post-live",
+        "category": "courses"
+    },
+    {
+        "id": "add-live-interactive-course-Lead-Lecturer-details",
+        "title": "Add lead lecturer details to live interactive course",
+        "keywords": [
+            "live course lead lecturer",
+            "live course instructor details",
+            "live lecturer information"
+        ],
+        "steps": [
+            "Go to Post a course or Dashboard → Click 'Post a Course'",
+            "Select course type → Live Interactive Course",
+            "Scroll down",
+            "Add lectuer details under basic details tab",
+            "Click 'Save changes'"
+        ],
+        "route": "/post-live",
+        "category": "courses"
+    },
+    {
+        "id": "add-live-interactive-course-Language-level-duration",
+        "title": "Add language, target level, and duration to live interactive course",
+        "keywords": [
+            "live course language",
+            "live course level",
+            "live course duration"
+        ],
+        "steps": [
+            "Go to Post a course or Dashboard → Click 'Post a Course'",
+            "Select course type → Live Interactive Course",
+            "Scroll down",
+            "Add language, level, and duration under basic details tab",
+            "Click 'Save changes'"
+        ],
+        "route": "/post-live",
+        "category": "courses"
+    },
+    {
+        "id": "add-live-interactive-course-payment-method",
+        "title": "Add live interactive course payment method",
+        "keywords": [
+            "live course payment method",
+            "live course payment structure"
+        ],
+        "steps": [
+            "Go to Post a course or Dashboard → Click 'Post a Course'",
+            "Select course type → Live Interactive Course",
+            "Scroll down",
+            "Add payment method under basic details tab",
+            "Click 'Save changes'"
+        ],
+        "route": "/post-live",
+        "category": "courses"
+    },
+    {
+        "id": "add-live-interactive-course-overview",
+        "title": "Add live interactive course overview",
+        "keywords": [
+            "live course overview",
+            "live course description"
+        ],
+        "steps": [
+            "Go to Post a course or Dashboard → Click 'Post a Course'",
+            "Select course type → Live Interactive Course",
+            "click 'course overview'",
+            "Scroll down",
+            "Add course overview under course overview tab",
+            "Click 'Save'"
+        ],
+        "route": "/post-live",
+        "category": "courses"
+    },
+    {
+        "id": "add-live-interactive-course-skills-timezone-start-end-times",
+        "title": "Add skills, timezone, start and end time to live interactive course",
+        "keywords": [
+            "live course skills",
+            "live course timezone",
+            "live course schedule"
+        ],
+        "steps": [
+            "Go to Post a course or Dashboard → Click 'Post a Course'",
+            "Select course type → Live Interactive Course",
+            "click 'relevent info'",
+            "Scroll down",
+            "Add skills, timezone, start and end time under relevent info tab",
+            "Click 'Save changes'"
+        ],
+        "route": "/post-live",
+        "category": "courses"
+    },
+    {
+        "id": "add-live-interactive-course-payment-plan",
+        "title": "Add payment plan to live interactive course",
+        "keywords": [
+            "live course pricing plan",
+            "live course payment plan",
+            "live course discounts"
+        ],
+        "steps": [
+            "Go to Post a course or Dashboard → Click 'Post a Course'",
+            "Select course type → Live Interactive Course",
+            "click 'payment plan'",
+            "Add payment plan under payment plan tab",
+            "Click 'Add Plan'"
+        ],
+        "route": "/post-live",
+        "category": "courses"
+    },
+    {
+        "id": "add-live-interactive-course-modules",
+        "title": "Add modules to live interactive course",
+        "keywords": [
+            "live course modules",
+            "live course syllabus",
+            "live course content"
+        ],
+        "steps": [
+            "Go to Post a course or Dashboard → Click 'Post a Course'",
+            "Select course type → Live Interactive Course",
+            "click 'Syllabus'",
+            "Add live interactive course syllabus under syllabus tab",
+            "Click 'Add Module to Syllabus'"
+        ],
+        "route": "/post-live",
+        "category": "courses"
+    },
+    {
+        "id": "add-live-interactive-course-session-link",
+        "title": "Add live session link of live interactive course",
+        "keywords": [
+            "live session link",
+            "live course meeting link",
+            "live class link"
+        ],
+        "steps": [
+            "Go to Post a course or Dashboard → Click 'Post a Course'",
+            "Select course type → Live Interactive Course",
+            "click 'Syllabus'",
+            "scroll down",
+            "Add live interactive course live session link under syllabus tab",
+            "Click 'Add Module to Syllabus'"
+        ],
+        "route": "/post-live",
+        "category": "courses"
+    },
+    {
+        "id": "review-of-live-interactive-course",
+        "title": "Review of live interactive course information",
+        "keywords": [
+            "review live course",
+            "finalize live course",
+            "publish live course"
+        ],
+        "steps": [
+            "Go to Post a course or Dashboard → Click 'Post a Course'",
+            "Select course type → Live Interactive Course",
+            "click 'Final Review'",
+            "Review live interactive course information under final review tab",
+            "After end of the review click 'Go Live & Publish'"
+        ],
+        "route": "/post-live",
+        "category": "courses"
+    },
+    {
+        "id": "add-pre-recorded-course-basic-details",
+        "title": "Add basic details to Pre-recorded course",
+        "keywords": [
+            "pre-recorded course basic details",
+            "video course overview",
+            "video course lecturer details",
+            "recorded course description"
+        ],
+        "steps": [
+            "Go to Post a course or Dashboard → Click 'Post a Course'",
+            "Select course type → Pre-recorded Course",
+            "click 'Basic Details'",
+            "Add pre-recorded course basic details under basic details tab",
+            "Click 'Save Details'"
+        ],
+        "route": "/post-rec/basic",
+        "category": "courses"
+    },
+    {
+        "id": "add-pre-recorded-course-details",
+        "title": "Add course details to Pre-recorded course",
+        "keywords": [
+            "pre-recorded course details",
+            "pre-recorded course requirments",
+            "video course language",
+            "video course category",
+            "video course difficulty level",
+            "video course skills"
+        ],
+        "steps": [
+            "Go to Post a course or Dashboard → Click 'Post a Course'",
+            "Select course type → Pre-recorded Course",
+            "click 'Course Details'",
+            "Add pre-recorded course details under course details tab",
+            "Click 'Save Details'"
+        ],
+        "route": "/post-rec/course",
+        "category": "courses"
+    },
+    {
+        "id": "add-pre-recorded-course-modules-lectures",
+        "title": "Add modules & lectures to Pre-recorded course",
+        "keywords": [
+            "pre-recorded course modules",
+            "video course lectures",
+            "recorded course syllabus"
+        ],
+        "steps": [
+            "Go to Post a course or Dashboard → Click 'Post a Course'",
+            "Select course type → Pre-recorded Course",
+            "click 'Moduls & Lectures'",
+            "Add pre-recorded course modules & lectures under course details tab",
+            "Click 'Add Modules'",
+            "After end of the module adding process click 'Save Draft'"
+        ],
+        "route": "/post-rec/modules",
+        "category": "courses"
+    },
+    {
+        "id": "add-pre-recorded-course-pricing",
+        "title": "Set price for Pre-recorded course",
+        "keywords": [
+            "pre-recorded course pricing",
+            "video course price",
+            "recorded course discount",
+            "recorded course earning calculate"
+        ],
+        "steps": [
+            "Go to Post a course or Dashboard → Click 'Post a Course'",
+            "Select course type → Pre-recorded Course",
+            "click 'Pricing & Access'",
+            "Add pre-recorded course pricing under pricing & access tab",
+            "Click 'Save pricing'"
+        ],
+        "route": "/post-rec/pricing",
+        "category": "courses"
+    },
+    {
+        "id": "preview-of-pre-recorded-course",
+        "title": "Preview of pre-recorded course information",
+        "keywords": [
+            "preview pre-recorded course",
+            "publish recorded course",
+            "final review video course"
+        ],
+        "steps": [
+            "Go to Post a course or Dashboard → Click 'Post a Course'",
+            "Select course type → Pre-recorded Course",
+            "click 'Preview & Publish'",
+            "Review pre-recorded course information preview & publish tab",
+            "After end of the review click 'Publish Now'"
+        ],
+        "route": "/post-rec/preview",
         "category": "courses"
     },
     {
@@ -45,7 +338,11 @@
             "earnings",
             "withdraw",
             "bank",
-            "stripe"
+            "stripe",
+            "money",
+            "payout",
+            "how much I earned",
+            "financials"
         ],
         "steps": [
             "Navigate to Dashboard → Earnings",
@@ -56,31 +353,191 @@
         "category": "finance"
     },
     {
-        "id": "analytics",
-        "title": "Viewing analytics",
+        "id": "view-main-profile",
+        "title": "View main profile",
         "keywords": [
-            "analytics",
-            "statistics",
-            "views",
-            "engagement",
-            "reports"
+            "main",
+            "Access"
         ],
         "steps": [
-            "Go to the Dashboard",
-            "Scroll to the Analytics section",
-            "Filter by date range or course",
-            "Export data as CSV for deep analysis"
+            "Click on your profile picture in the header",
+            "Select 'Access main profile'",
+            "Update your information",
+            "Click 'Save Changes'"
         ],
-        "route": "/dashboard",
-        "category": "analytics"
+        "route": "/profile",
+        "category": "profile"
+    },
+    {
+        "id": "share-profile",
+        "title": "Share profile",
+        "keywords": [
+            "share",
+            "share link"
+        ],
+        "steps": [
+            "Click on your profile picture in the header",
+            "Select 'Access main profile'",
+            "Click 'Share Profile'"
+        ],
+        "route": "/profile",
+        "category": "profile"
+    },
+    {
+        "id": "change-profile-name-email-occupation",
+        "title": "Change profile name, email and occupation",
+        "keywords": [
+            "name",
+            "profile name",
+            "email",
+            "occupation"
+        ],
+        "steps": [
+            "Click on your profile picture in the header",
+            "Select 'Access main profile'",
+            "Click 'Edit Profile'",
+            "Add your details",
+            "Click 'Save Changes'"
+        ],
+        "route": "/profile",
+        "category": "settings"
+    },
+    {
+        "id": "change-profile-cover-image",
+        "title": "Change profile image and cover image",
+        "keywords": [
+            "photo",
+            "profile photo",
+            "cover",
+            "occupation"
+        ],
+        "steps": [
+            "Click on your profile picture in the header",
+            "Select 'Access main profile'",
+            "Click 'Profile Image' and click 'Change Cover'",
+            "Add your profile and cover image"
+        ],
+        "route": "/profile",
+        "category": "settings"
+    },
+    {
+        "id": "add-contact-details",
+        "title": "Add Contact Details",
+        "keywords": [
+            "contact",
+            "mobile number",
+            "address",
+            "city",
+            "country",
+            "zip code"
+        ],
+        "steps": [
+            "Click on your profile picture in the header",
+            "Select 'Access main profile'",
+            "Click 'Edit Mark' in contact information section",
+            "Add your details",
+            "Click 'Save Changes'"
+        ],
+        "route": "/profile",
+        "category": "settings"
+    },
+    {
+        "id": "add-social-details",
+        "title": "Add Social media links",
+        "keywords": [
+            "url",
+            "github",
+            "twitter",
+            "instergram",
+            "facebook"
+        ],
+        "steps": [
+            "Click on your profile picture in the header",
+            "Select 'Access main profile'",
+            "Click 'Edit Mark' in contact information section",
+            "scroll down",
+            "Add your social media links",
+            "Click 'Save Changes'"
+        ],
+        "route": "/profile",
+        "category": "settings"
+    },
+    {
+        "id": "add-work-experience",
+        "title": "Add Work Experience",
+        "keywords": [
+            "work",
+            "experience",
+            "jobs",
+            "companies"
+        ],
+        "steps": [
+            "Click on your profile picture in the header",
+            "Select 'Access main profile'",
+            "Click 'Add' in work experience section",
+            "Add your work experience",
+            "Click 'Save Changes'"
+        ],
+        "route": "/profile",
+        "category": "settings"
+    },
+    {
+        "id": "add-education",
+        "title": "Add your education",
+        "keywords": [
+            "education",
+            "school",
+            "university"
+        ],
+        "steps": [
+            "Click on your profile picture in the header",
+            "Select 'Access main profile'",
+            "Click 'Add' in work education section",
+            "Add your educational details",
+            "Click 'Save Changes'"
+        ],
+        "route": "/profile",
+        "category": "settings"
+    },
+    {
+        "id": "add-skills-projects",
+        "title": "Add skills and project details",
+        "keywords": [
+            "projects",
+            "skills",
+            "Proficiency"
+        ],
+        "steps": [
+            "Click on your profile picture in the header",
+            "Select 'Access main profile'",
+            "Click 'Add' in skills and project sections",
+            "Add your skills and project details",
+            "Click 'Save Changes'"
+        ],
+        "route": "/profile",
+        "category": "settings"
+    },
+    {
+        "id": "add-certificates",
+        "title": "Add certificates",
+        "keywords": [
+            "certificates"
+        ],
+        "steps": [
+            "Click on your profile picture in the header",
+            "Select 'Access main profile'",
+            "Click 'Add' in certificate section",
+            "Add your certificate details",
+            "Click 'Save Changes'"
+        ],
+        "route": "/profile",
+        "category": "settings"
     },
     {
         "id": "profile-edit",
         "title": "Update your profile",
         "keywords": [
-            "profile",
-            "change name",
-            "photo",
+            "headline",
             "bio",
             "settings"
         ],
@@ -88,9 +545,161 @@
             "Click on your profile picture in the header",
             "Select 'Edit Profile'",
             "Update your information",
-            "Click 'Save Changes'"
+            "Click 'Save Profile Changes'"
         ],
         "route": "/my-profile",
         "category": "settings"
+    },
+    {
+        "id": "add-availability-note",
+        "title": "Add availability note",
+        "keywords": [
+            "availability",
+            "booking"
+        ],
+        "steps": [
+            "Click on your profile picture in the header",
+            "Select 'Edit Profile'",
+            "scroll down",
+            "Add availability note",
+            "Click 'Save Profile Changes'"
+        ],
+        "route": "/my-profile",
+        "category": "settings"
+    },
+    {
+        "id": "add-personal-links",
+        "title": "Add personal links",
+        "keywords": [
+            "personal website",
+            "linkedin",
+            "youtube"
+        ],
+        "steps": [
+            "Click on your profile picture in the header",
+            "Select 'Edit Profile'",
+            "scroll down",
+            "Add your personal links",
+            "Click 'Save Profile Changes'"
+        ],
+        "route": "/my-profile",
+        "category": "settings"
+    },
+    {
+        "id": "view-analytics",
+        "title": "Viewing analytics",
+        "keywords": [
+            "analytics",
+            "statistics",
+            "views",
+            "engagement",
+            "reports",
+            "stats",
+            "performance",
+            "charts",
+            "visitor data"
+        ],
+        "steps": [
+            "Go to the Dashboard",
+            "View Analytics section",
+            "View all analatics"
+        ],
+        "route": "/dashboard",
+        "category": "analytics"
+    },
+    {
+        "id": "view-training-hours",
+        "title": "View training hours",
+        "keywords": [
+            "training",
+            "hours"
+        ],
+        "steps": [
+            "Go to the Dashboard",
+            "View Analytics section",
+            "View your training hours"
+        ],
+        "route": "/dashboard",
+        "category": "analytics"
+    },
+    {
+        "id": "view-all-courses",
+        "title": "View all courses",
+        "keywords": [
+            "all courses",
+            "in progress",
+            "upcoming",
+            "completed"
+        ],
+        "steps": [
+            "Go to the Dashboard",
+            "View Analytics section",
+            "View your all courses"
+        ],
+        "route": "/dashboard",
+        "category": "analytics"
+    },
+    {
+        "id": "view-ongoing-courses",
+        "title": "View ongoing courses",
+        "keywords": [
+            "ongoing",
+            "in progress"
+        ],
+        "steps": [
+            "Go to the Dashboard",
+            "View Analytics section",
+            "View your ongoing courses"
+        ],
+        "route": "/dashboard",
+        "category": "analytics"
+    },
+    {
+        "id": "view-upcoming-courses",
+        "title": "View upcoming courses",
+        "keywords": [
+            "upcoming",
+            "not started",
+            "coming soon"
+        ],
+        "steps": [
+            "Go to the Dashboard",
+            "View Analytics section",
+            "View your upcoming courses"
+        ],
+        "route": "/dashboard",
+        "category": "analytics"
+    },
+    {
+        "id": "view-completed-courses",
+        "title": "View completed courses",
+        "keywords": [
+            "completed",
+            "ended",
+            "finished"
+        ],
+        "steps": [
+            "Go to the Dashboard",
+            "View Analytics section",
+            "View your completed courses"
+        ],
+        "route": "/dashboard",
+        "category": "analytics"
+    },
+    {
+        "id": "view-total-parcipants",
+        "title": "View total participants",
+        "keywords": [
+            "total",
+            "participants",
+            "all students"
+        ],
+        "steps": [
+            "Go to the Dashboard",
+            "View Analytics section",
+            "View your total participants"
+        ],
+        "route": "/dashboard",
+        "category": "analytics"
     }
 ]

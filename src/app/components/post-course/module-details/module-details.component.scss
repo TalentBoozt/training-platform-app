@@ -41,6 +41,17 @@
             letter-spacing: 0.05em;
             color: hsl(var(--muted-foreground));
             margin-bottom: 0.75rem;
+            display: block;
+        }
+    }
+
+    .schedule-grid {
+        display: grid;
+        grid-template-columns: 2fr 1fr 1fr;
+        gap: 1.25rem;
+
+        @include utilities.respond-to(md) {
+            grid-template-columns: 1fr;
         }
     }
 }
@@ -70,15 +81,15 @@
     }
 
     .module-item {
-        @include utilities.glass;
-        padding: 1.5rem;
+        @include utilities.glass-premium;
+        padding: 1.25rem 1.5rem;
         border-radius: 20px;
         display: grid;
         grid-template-columns: 1fr auto;
         gap: 1.5rem;
         border: 1px solid hsla(var(--foreground)/ 0.05);
         @include utilities.transition-base;
-        @include utilities.animate-slide-in;
+        animation: slideInRight 0.5s ease-out forwards;
 
         &:hover {
             background: hsla(var(--primary)/ 0.05);
@@ -95,7 +106,7 @@
             .module-name {
                 display: block;
                 font-weight: 800;
-                font-size: 1.15rem;
+                font-size: 1.1rem;
                 color: hsl(var(--foreground));
                 margin-bottom: 0.5rem;
                 @include utilities.transition-base;
@@ -104,19 +115,19 @@
             .module-meta {
                 display: flex;
                 flex-wrap: wrap;
-                gap: 1.5rem;
+                gap: 1.25rem;
 
                 .meta-tag {
                     display: flex;
                     align-items: center;
-                    gap: 0.5rem;
-                    font-size: 0.85rem;
+                    gap: 0.4rem;
+                    font-size: 0.8rem;
                     color: hsl(var(--muted-foreground));
                     font-weight: 600;
 
                     i {
-                        font-size: 1.2rem;
-                        @include utilities.gradient-text;
+                        font-size: 1.1rem;
+                        color: hsl(var(--primary));
                     }
                 }
             }
@@ -127,24 +138,23 @@
             align-items: center;
 
             .btn-delete {
-                width: 44px;
-                height: 44px;
-                border-radius: 14px;
+                width: 40px;
+                height: 40px;
+                border-radius: 12px;
                 @include utilities.flex-center;
-                @include utilities.glass;
-                color: #ff4d4d;
-                border: 1px solid hsla(0, 100%, 50%, 0.1);
+                background: hsla(var(--destructive)/ 0.1);
+                color: hsl(var(--destructive));
+                border: 1px solid hsla(var(--destructive)/ 0.2);
                 @include utilities.transition-base;
 
                 &:hover {
-                    background: #ff4d4d;
-                    color: white;
-                    transform: scale(1.1) rotate(8deg);
-                    @include utilities.shadow-soft;
+                    background: hsl(var(--destructive));
+                    color: hsl(var(--destructive-foreground));
+                    transform: scale(1.1) rotate(5deg);
                 }
 
                 i {
-                    font-size: 1.4rem;
+                    font-size: 1.25rem;
                 }
             }
         }
